@@ -28,6 +28,7 @@
   .i-photo { background:linear-gradient(135deg,#1f6feb33,#1f6feb11); border:1px solid #1f6feb55; }
   .i-vector { background:linear-gradient(135deg,#a371f733,#a371f711); border:1px solid #a371f755; }
   .i-pdf { background:linear-gradient(135deg,#da363333,#da363311); border:1px solid #da363355; }
+  .i-tpl { background:linear-gradient(135deg,#d4af3733,#d4af3711); border:1px solid #d4af3755; }
   footer { text-align:center; padding:26px; color:#6a6a6a; font-size:12.5px; border-top:1px solid #222; }
   footer b { color:#9a9a9a; }
 </style>
@@ -68,12 +69,23 @@
     <p data-i="c3p"></p>
     <span class="go" data-i="go"></span>
   </a>
+  <a class="card" href="templates.html">
+    <div class="icon i-tpl">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <h2 data-i="c4t"></h2>
+    <div class="en" data-i="c4e"></div>
+    <p data-i="c4p"></p>
+    <span class="go" data-i="go"></span>
+  </a>
 </main>
 <footer data-i="foot"></footer>
 <script>
 var LANG = {
   vi: {
-    title: "LEHA Studio",
+    title: "LEHA Studio — Bộ công cụ sáng tạo miễn phí",
+    tagline: "Bộ công cụ sáng tạo miễn phí — mở là dùng, không cần cài đặt, không cần tài khoản.",
+    badge: "100% chạy trên trình duyệt · File không rời khỏi máy bạn",
     c1t: "Chỉnh sửa ảnh", c1e: "Photo Editor · phong cách Photoshop",
     c1p: "Layers, brush, vùng chọn, chữ, shapes, filter và chỉnh màu. Mở và xuất PNG / JPEG / WebP. Ảnh nặng có chế độ thu nhỏ chống lag.",
     c2t: "Vẽ vector", c2e: "Vector Editor · phong cách Illustrator",
@@ -81,10 +93,14 @@ var LANG = {
     c3t: "Công cụ PDF", c3e: "PDF Tools · phong cách PDF24",
     c3p: "14 công cụ: gộp, tách, nối thành 1 trang dài giữ nguyên vector, xoay, watermark, đặt mật khẩu, ảnh ↔ PDF và hơn nữa.",
     go: "Mở công cụ →",
-    foot: "<b>LEHA Studio</b>"
+    c4t: "Thư viện mẫu", c4e: "Templates · bấm là sửa được ngay",
+    c4p: "10+ mẫu thiết kế vẽ sẵn: poster, card visit, logo, icon… mở thẳng trong editor để chỉnh sửa.",
+    foot: "<b>LEHA Studio</b> — miễn phí cho mọi người"
   },
   en: {
-    title: "LEHA Studio",
+    title: "LEHA Studio — Free Creative Tools",
+    tagline: "Free creative toolkit — open and use, no install, no account needed.",
+    badge: "100% in-browser · Your files never leave your device",
     c1t: "Photo Editor", c1e: "Photoshop-style",
     c1p: "Layers, brushes, selections, text, shapes, filters and color adjustments. Open and export PNG / JPEG / WebP. Large images get a downscale option to stay smooth.",
     c2t: "Vector Editor", c2e: "Illustrator-style",
@@ -92,6 +108,8 @@ var LANG = {
     c3t: "PDF Tools", c3e: "PDF24-style",
     c3p: "14 tools: merge, split, single long page with vectors intact, rotate, watermark, password protection, images ↔ PDF and more.",
     go: "Open →",
+    c4t: "Template library", c4e: "Templates · click to edit instantly",
+    c4p: "10+ ready-made designs: posters, business cards, logos, icons… open directly in the editor.",
     foot: "<b>LEHA Studio</b> — free for everyone"
   }
 };

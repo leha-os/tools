@@ -42,6 +42,23 @@ body{background:var(--bg); color:var(--text); font:12px/1.45 "Segoe UI",Arial,He
 .tgl{border:1px solid var(--border); background:var(--panel2); color:var(--text); border-radius:3px; padding:3px 9px; cursor:pointer;}
 .tgl.on{background:var(--accent2); border-color:var(--accent2); color:#fff;}
 
+/* ---- brush preset picker + settings popover ---- */
+.bpbtn{display:flex; align-items:center; gap:7px; border:1px solid var(--border); background:var(--panel2); color:var(--text); border-radius:3px; padding:3px 8px; cursor:pointer;}
+.bpbtn:hover{border-color:var(--accent2);}
+.bpbtn canvas{background:#161616; border-radius:2px;}
+.bpname{font-size:11px; color:var(--dim); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.bppop{position:absolute; z-index:300; background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:10px; box-shadow:0 10px 28px rgba(0,0,0,.55);}
+.bppop.bpgrid{display:grid; grid-template-columns:repeat(5,66px); gap:8px;}
+.bpitem{display:flex; flex-direction:column; align-items:center; gap:5px; background:var(--panel2); border:1px solid var(--border); border-radius:4px; padding:7px 2px; cursor:pointer; color:var(--text);}
+.bpitem:hover{border-color:var(--accent2);}
+.bpitem canvas{background:#161616; border-radius:2px;}
+.bpitem span{font-size:10px; color:var(--dim); text-align:center; line-height:1.25;}
+.bppop.bpset{display:block; width:290px;}
+.bprow{display:flex; align-items:center; gap:8px; margin:9px 2px;}
+.bprow label{font-size:11px; color:var(--dim); width:88px; flex:0 0 auto;}
+.bprow input[type=range]{flex:1; min-width:0;}
+.bpval{font-size:11px; color:var(--text); width:46px; text-align:right; flex:0 0 auto;}
+
 /* ---- main layout ---- */
 #main{flex:1; display:flex; min-height:0;}
 #toolbar{width:52px; flex:0 0 auto; background:var(--panel); border-right:1px solid var(--border);
@@ -156,6 +173,7 @@ label.f{display:flex; flex-direction:column; gap:4px; margin-bottom:10px; font-s
 #toast{position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:#111; color:#fff;
   border:1px solid var(--border); border-radius:5px; padding:9px 18px; z-index:3000; display:none; box-shadow:0 4px 14px rgba(0,0,0,.5);}
 </style>
+<script src="templates-data.js"></script>
 </head>
 <body>
 <div id="app">
@@ -21603,6 +21621,8 @@ m_zoom_in:'Phóng to',m_zoom_out:'Thu nhỏ',m_fit:'Vừa màn hình',m_actual:'
 m_shortcuts:'Phím tắt',m_about:'Giới thiệu',
 t_move:'Công cụ Di chuyển',t_rectsel:'Khung chữ nhật',t_ellipsesel:'Khung elip',t_lasso:'Vùng chọn tự do',t_crop:'Cắt ảnh',t_eyedropper:'Ống hút màu',t_brush:'Cọ vẽ',t_pencil:'Bút chì',t_eraser:'Tẩy',t_bucket:'Thùng sơn',t_gradient:'Chuyển sắc',t_text:'Chữ',t_rectshape:'Hình chữ nhật',t_ellipseshape:'Hình elip',t_line:'Đường thẳng',t_zoom:'Thu phóng',t_hand:'Bàn tay',
 opt_size:'Kích thước',opt_hardness:'Độ cứng',opt_opacity:'Độ mờ',opt_flow:'Lưu lượng',opt_tolerance:'Dung sai',opt_gradient:'Chuyển sắc',opt_fill:'Tô',opt_stroke:'Viền',opt_strokew:'Độ dày viền',opt_fill_on:'Bật tô',opt_stroke_on:'Bật viền',opt_feather:'Làm mờ biên',opt_apply:'Áp dụng',opt_cancel:'Hủy',
+bp_preset:'Đầu bút',bp_settings:'Cài đặt cọ',bp_spacing:'Khoảng cách nét',bp_angle:'Góc đầu bút',bp_roundness:'Độ tròn',bp_scatter:'Phân tán',bp_custom:'Tùy chỉnh',
+bp_p_soft:'Tròn mềm',bp_p_hard:'Tròn cứng',bp_p_chalk:'Phấn vẽ',bp_p_air:'Phun sương',bp_p_flat:'Cọ dẹt',bp_p_tex:'Cọ vân',bp_p_dry:'Cọ khô',bp_p_spray:'Phun tán',bp_p_cali:'Thư pháp',bp_p_softair:'Sương mềm',
 grad_fgbg:'Màu chính → màu phụ',grad_fgtr:'Màu chính → trong suốt',
 hint_bucket:'Tô bằng màu chính. Tôn trọng vùng chọn.',hint_gradient:'Kéo trên canvas để vẽ.',hint_text:'Bấm lên canvas để thêm lớp chữ. Font, cỡ và kiểu chữ đặt trong hộp thoại.',hint_shape:'Shift = hình vuông / tròn / đường thẳng.',hint_sel:'Shift = hình vuông / tròn.',hint_crop:'Kéo khung, rồi Enter / double-click để áp dụng, Esc để hủy.',hint_move:'Kéo để di chuyển nội dung lớp. Phím mũi tên nudge (Shift = 10px).',hint_eye:'Bấm để lấy màu từ mọi lớp hiển thị.',hint_zoom:'Bấm để phóng to, Alt+bấm để thu nhỏ.',hint_hand:'Kéo để di chuyển canvas.',
 tab_layers:'Lớp',tab_adjust:'Chỉnh màu',tab_color:'Màu',tab_history:'Lịch sử',
@@ -21634,6 +21654,15 @@ sc_new:'Tài liệu mới',sc_open:'Mở ảnh',sc_save:'Lưu dự án',sc_undo:
 dlg_about:'Giới thiệu',
 about_body:'<p><b>LEHA Studio · Photo Editor</b> - trình chỉnh sửa ảnh raster một file, chạy offline.<br><span style="color:var(--dim)">Lớp, vùng chọn, cọ vẽ, chữ, hình, bộ lọc và chỉnh màu. Không tài khoản, không upload - mọi thứ chạy ngay trên trình duyệt của bạn.</span></p>',
 toast_undo:'Không còn gì để hoàn tác',toast_redo:'Không còn gì để làm lại',toast_large_doc:'Tài liệu lớn ({w} x {h}) - hiệu năng có thể bị ảnh hưởng.',toast_del_last:'Không thể xóa lớp cuối cùng',toast_no_below:'Không có lớp nào bên dưới để gộp',toast_sel_layer:'Hãy chọn một lớp đang hiển thị',toast_cut:'Đã cắt vào clipboard',toast_copied_sel:'Đã chép vùng chọn',toast_copied_layer:'Đã chép lớp',toast_pasted:'Đã dán thành lớp mới',toast_noimg:'Clipboard không có ảnh',toast_clip_block:'Trình duyệt chặn đọc clipboard',toast_img_added:'Đã thêm ảnh thành lớp mới',toast_cant_open:'Không mở được file này',toast_opened:'Đã mở {w} x {h}px',toast_saved:'Đã lưu dự án ({n} lớp)',toast_bad_proj:'File dự án không hợp lệ',toast_bad_dim:'Kích thước dự án không hợp lệ',toast_loading:'Đang tải dự án...',toast_proj_opened:'Đã mở dự án',toast_proj_fail:'Không khôi phục được các lớp',toast_bad_type:'Loại file không hỗ trợ',toast_png:'Đã xuất PNG',toast_jpg:'Đã xuất JPEG',toast_webp:'Đã xuất WebP',toast_psd:'Đã xuất PSD',toast_psd_fail:'Không xuất được PSD',toast_large_perf:'Tài liệu lớn - hiệu năng có thể bị ảnh hưởng.'
+,
+tpl_poster_sale:'Poster khuyến mãi',
+tpl_business_card:'Card visit',
+tpl_post_square:'Bài đăng vuông',
+tpl_youtube_thumbnail:'Thumbnail YouTube',
+tpl_facebook_cover:'Ảnh bìa Facebook',
+tpl_layer_bg:'Nền',
+tpl_layer_shapes:'Hình trang trí',
+tpl_layer_text:'Chữ',
 },
 en:{
 m_file:'File',m_edit:'Edit',m_image:'Image',m_layer:'Layer',m_select:'Select',m_filter:'Filter',m_view:'View',m_help:'Help',
@@ -21648,6 +21677,8 @@ m_zoom_in:'Zoom In',m_zoom_out:'Zoom Out',m_fit:'Fit on Screen',m_actual:'Actual
 m_shortcuts:'Keyboard Shortcuts',m_about:'About',
 t_move:'Move Tool',t_rectsel:'Rectangular Marquee',t_ellipsesel:'Elliptical Marquee',t_lasso:'Lasso Tool',t_crop:'Crop Tool',t_eyedropper:'Eyedropper Tool',t_brush:'Brush Tool',t_pencil:'Pencil Tool',t_eraser:'Eraser Tool',t_bucket:'Paint Bucket Tool',t_gradient:'Gradient Tool',t_text:'Text Tool',t_rectshape:'Rectangle Tool',t_ellipseshape:'Ellipse Tool',t_line:'Line Tool',t_zoom:'Zoom Tool',t_hand:'Hand Tool',
 opt_size:'Size',opt_hardness:'Hardness',opt_opacity:'Opacity',opt_flow:'Flow',opt_tolerance:'Tolerance',opt_gradient:'Gradient',opt_fill:'Fill',opt_stroke:'Stroke',opt_strokew:'Stroke w.',opt_fill_on:'Fill on',opt_stroke_on:'Stroke on',opt_feather:'Feather',opt_apply:'Apply',opt_cancel:'Cancel',
+bp_preset:'Brush Tip',bp_settings:'Brush Settings',bp_spacing:'Spacing',bp_angle:'Tip Angle',bp_roundness:'Roundness',bp_scatter:'Scatter',bp_custom:'Custom',
+bp_p_soft:'Round Soft',bp_p_hard:'Round Hard',bp_p_chalk:'Chalk',bp_p_air:'Airbrush',bp_p_flat:'Flat Chisel',bp_p_tex:'Textured',bp_p_dry:'Dry Brush',bp_p_spray:'Scatter Spray',bp_p_cali:'Calligraphy',bp_p_softair:'Soft Air',
 grad_fgbg:'Foreground to Background',grad_fgtr:'Foreground to Transparent',
 hint_bucket:'Fills with the foreground color. Respects selection.',hint_gradient:'Drag on canvas to draw.',hint_text:'Click on the canvas to add a text layer. Font, size and style are set in the dialog.',hint_shape:'Shift = square / circle / straight line.',hint_sel:'Shift = square / circle.',hint_crop:'Drag a frame, then Enter / double-click to apply, Esc to cancel.',hint_move:'Drag to move layer content. Arrow keys nudge (Shift = 10px).',hint_eye:'Click to sample a color from all visible layers.',hint_zoom:'Click to zoom in, Alt+click to zoom out.',hint_hand:'Drag to pan the canvas.',
 tab_layers:'Layers',tab_adjust:'Adjustments',tab_color:'Color',tab_history:'History',
@@ -21678,7 +21709,15 @@ dlg_shortcuts:'Keyboard Shortcuts',
 sc_new:'New document',sc_open:'Open image',sc_save:'Save project',sc_undo:'Undo',sc_redo:'Redo',sc_clip:'Cut / Copy / Paste',sc_delsel:'Delete selection',sc_fill:'Fill',sc_sel:'Select all / Deselect',sc_inv:'Inverse selection',sc_imgsize:'Image size',sc_cvsize:'Canvas size',sc_newlayer:'New layer',sc_duplayer:'Duplicate layer',sc_merge:'Merge down',sc_move:'Move layer up / down',sc_tools:'Select tools',sc_pan1:'Pan (temporary hand)',sc_pan2:'Pan',sc_zoomcur:'Zoom at cursor',sc_zoominout:'Zoom in / out',sc_fit:'Fit on screen',sc_actual:'Actual pixels',sc_nudge:'Nudge layer (Shift = 10px)',sc_swap:'Swap foreground/background',sc_def:'Default colors',sc_crop:'Apply crop',sc_esc:'Cancel / Deselect',sc_zoomout:'Zoom out',
 dlg_about:'About',
 about_body:'<p><b>LEHA Studio · Photo Editor</b> - a single-file, offline raster image editor.<br><span style="color:var(--dim)">Layers, selections, brushes, text, shapes, filters and adjustments. No account, no upload - everything runs locally in your browser.</span></p>',
-toast_undo:'Nothing to undo',toast_redo:'Nothing to redo',toast_large_doc:'Large document ({w} x {h}) - performance may be affected.',toast_del_last:'Cannot delete the last layer',toast_no_below:'Nothing below to merge with',toast_sel_layer:'Select a visible layer',toast_cut:'Cut to clipboard',toast_copied_sel:'Copied selection',toast_copied_layer:'Copied layer',toast_pasted:'Pasted as new layer',toast_noimg:'Clipboard has no image',toast_clip_block:'Clipboard read was blocked by the browser',toast_img_added:'Image added as new layer',toast_cant_open:'Cannot open this file',toast_opened:'Opened {w} x {h}px',toast_saved:'Project saved ({n} layers)',toast_bad_proj:'Invalid project file',toast_bad_dim:'Invalid project dimensions',toast_loading:'Loading project...',toast_proj_opened:'Project opened',toast_proj_fail:'Could not restore project layers',toast_bad_type:'Unsupported file type',toast_png:'PNG exported',toast_jpg:'JPEG exported',toast_webp:'WebP exported',toast_psd:'PSD exported',toast_psd_fail:'Could not export PSD',toast_large_perf:'Large document - performance may be affected.'
+toast_undo:'Nothing to undo',toast_redo:'Nothing to redo',toast_large_doc:'Large document ({w} x {h}) - performance may be affected.',toast_del_last:'Cannot delete the last layer',toast_no_below:'Nothing below to merge with',toast_sel_layer:'Select a visible layer',toast_cut:'Cut to clipboard',toast_copied_sel:'Copied selection',toast_copied_layer:'Copied layer',toast_pasted:'Pasted as new layer',toast_noimg:'Clipboard has no image',toast_clip_block:'Clipboard read was blocked by the browser',toast_img_added:'Image added as new layer',toast_cant_open:'Cannot open this file',toast_opened:'Opened {w} x {h}px',toast_saved:'Project saved ({n} layers)',toast_bad_proj:'Invalid project file',toast_bad_dim:'Invalid project dimensions',toast_loading:'Loading project...',toast_proj_opened:'Project opened',toast_proj_fail:'Could not restore project layers',toast_bad_type:'Unsupported file type',toast_png:'PNG exported',toast_jpg:'JPEG exported',toast_webp:'WebP exported',toast_psd:'PSD exported',toast_psd_fail:'Could not export PSD',toast_large_perf:'Large document - performance may be affected.',
+tpl_poster_sale:'Sale poster',
+tpl_business_card:'Business card',
+tpl_post_square:'Square post',
+tpl_youtube_thumbnail:'YouTube thumbnail',
+tpl_facebook_cover:'Facebook cover',
+tpl_layer_bg:'Background',
+tpl_layer_shapes:'Shapes',
+tpl_layer_text:'Text',
 }
 };
 function t(k,vars){
@@ -21709,7 +21748,22 @@ let maskCache=null, maskKey='';
 let clipboard=null;           // {cv,x,y}
 let spaceDown=false, altDown=false;
 let cropState=null, shapePrev=null, lassoPts=null, movePrev=null;
-let brushOpt={size:24, hardness:60, opacity:100, flow:100};
+let brushOpt={size:24, hardness:60, opacity:100, flow:100, tip:'round', spacing:18, angle:0, roundness:100, scatter:0, presetName:'bp_p_soft'};
+function hashStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function mulberry(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const BRUSH_PRESETS=[
+ {nameKey:'bp_p_soft', tip:'round',   size:24,  hardness:0,   opacity:100, flow:100, spacing:18, angle:0,  roundness:100, scatter:0},
+ {nameKey:'bp_p_hard', tip:'round',   size:24,  hardness:100, opacity:100, flow:100, spacing:18, angle:0,  roundness:100, scatter:0},
+ {nameKey:'bp_p_chalk',tip:'chalk',   size:48,  hardness:60,  opacity:90,  flow:90,  spacing:15, angle:0,  roundness:100, scatter:0},
+ {nameKey:'bp_p_air',  tip:'airbrush',size:60,  hardness:0,   opacity:40,  flow:30,  spacing:10, angle:0,  roundness:100, scatter:0},
+ {nameKey:'bp_p_flat', tip:'flat',    size:48,  hardness:80,  opacity:100, flow:100, spacing:12, angle:45, roundness:40,  scatter:0},
+ {nameKey:'bp_p_tex',  tip:'texture', size:56,  hardness:70,  opacity:100, flow:100, spacing:20, angle:0,  roundness:100, scatter:0},
+ {nameKey:'bp_p_dry',  tip:'chalk',   size:64,  hardness:80,  opacity:70,  flow:80,  spacing:25, angle:0,  roundness:100, scatter:60},
+ {nameKey:'bp_p_spray',tip:'round',   size:16,  hardness:50,  opacity:100, flow:100, spacing:40, angle:0,  roundness:100, scatter:300},
+ {nameKey:'bp_p_cali', tip:'flat',    size:36,  hardness:90,  opacity:100, flow:100, spacing:10, angle:60, roundness:25,  scatter:0},
+ {nameKey:'bp_p_softair',tip:'airbrush',size:100,hardness:0,  opacity:25,  flow:20,  spacing:8,  angle:0,  roundness:100, scatter:0}
+];
+function applyBrushPreset(pr){ Object.assign(brushOpt,{tip:pr.tip,size:pr.size,hardness:pr.hardness,opacity:pr.opacity,flow:pr.flow,spacing:pr.spacing,angle:pr.angle,roundness:pr.roundness,scatter:pr.scatter,presetName:pr.nameKey}); }
 let pencilOpt={size:4, opacity:100};
 let eraserOpt={size:32, hardness:60, opacity:100, flow:100};
 let bucketOpt={tolerance:32};
@@ -22149,20 +22203,58 @@ function cycleToolKey(key){
 
 /* ---------------- brush engine ---------------- */
 let tipCache={};
-function brushTip(size,hardness,hex,forEraser){
-  const key=size+'|'+hardness+'|'+hex+'|'+(forEraser?1:0);
+function brushTip(size,hardness,hex,forEraser,tip,angle,roundness){
+  tip=tip||'round'; angle=angle||0; roundness=(roundness==null)?100:roundness;
+  const key=size+'|'+hardness+'|'+hex+'|'+(forEraser?1:0)+'|'+tip+'|'+angle+'|'+roundness;
   if(tipCache[key]) return tipCache[key];
   const r=Math.max(1,Math.ceil(size/2)), S=r*2;
   const c=document.createElement('canvas'); c.width=c.height=S;
   const g=c.getContext('2d');
   const col=forEraser?{r:0,g:0,b:0}:hexRgb(hex);
   const hard=clamp(hardness/100,0,1);
-  const gr=g.createRadialGradient(r,r,0,r,r,r);
+  const rnd=mulberry(hashStr(key));
   const op=`rgba(${col.r},${col.g},${col.b},1)`, tr=`rgba(${col.r},${col.g},${col.b},0)`;
-  gr.addColorStop(0,op);
-  if(hard>=0.99){ gr.addColorStop(0.93,op); gr.addColorStop(1,tr); }
-  else { gr.addColorStop(Math.max(0.02,hard*0.85),op); gr.addColorStop(1,tr); }
-  g.fillStyle=gr; g.fillRect(0,0,S,S);
+  const tmp=document.createElement('canvas'); tmp.width=tmp.height=S;
+  const tg=tmp.getContext('2d');
+  if(tip==='airbrush'){
+    const n=Math.max(24,Math.floor(S*1.2));
+    for(let i=0;i<n;i++){
+      const a=rnd()*Math.PI*2, rr2=r*Math.sqrt(rnd())*0.95, x=r+Math.cos(a)*rr2, y=r+Math.sin(a)*rr2;
+      const dr=Math.max(1,r*0.10*(0.5+rnd()));
+      const dg=tg.createRadialGradient(x,y,0,x,y,dr);
+      dg.addColorStop(0,`rgba(${col.r},${col.g},${col.b},${(0.25+rnd()*0.4).toFixed(2)})`);
+      dg.addColorStop(1,tr);
+      tg.fillStyle=dg; tg.beginPath(); tg.arc(x,y,dr,0,6.3); tg.fill();
+    }
+  } else {
+    const gr=tg.createRadialGradient(r,r,0,r,r,r);
+    gr.addColorStop(0,op);
+    if(hard>=0.99){ gr.addColorStop(0.93,op); gr.addColorStop(1,tr); }
+    else { gr.addColorStop(Math.max(0.02,hard*0.85),op); gr.addColorStop(1,tr); }
+    tg.fillStyle=gr; tg.fillRect(0,0,S,S);
+    if(tip==='chalk'||tip==='texture'){
+      const n=tip==='chalk'?Math.floor(S*S/28):Math.floor(S*S/16);
+      tg.globalCompositeOperation='destination-out';
+      for(let i=0;i<n;i++){
+        const a=rnd()*Math.PI*2, rr2=r*(0.45+rnd()*0.55), x=r+Math.cos(a)*rr2, y=r+Math.sin(a)*rr2;
+        tg.globalAlpha=0.25+rnd()*0.6;
+        tg.beginPath(); tg.arc(x,y,1+rnd()*Math.max(1.5,r*0.12),0,6.3); tg.fill();
+      }
+      tg.globalAlpha=1; tg.globalCompositeOperation='source-over';
+      if(tip==='texture'){
+        for(let i=0;i<n;i++){
+          tg.globalAlpha=0.10+rnd()*0.16;
+          tg.fillStyle=rnd()<0.5?'#000000':'#ffffff';
+          tg.beginPath(); tg.arc(rnd()*S,rnd()*S,1+rnd()*2,0,6.3); tg.fill();
+        }
+        tg.globalAlpha=1;
+      }
+    }
+  }
+  g.save(); g.translate(r,r); g.rotate(angle*Math.PI/180);
+  const ry=clamp(roundness/100,0.01,1);
+  g.drawImage(tmp,-r,-r*ry,S,S*ry);
+  g.restore();
   if(Object.keys(tipCache).length>80) tipCache={};
   tipCache[key]=c; return c;
 }
@@ -22177,15 +22269,18 @@ function strokeBegin(L,pt,opt,eraser){
 }
 function strokeTo(st,pt){
   const {opt,eraser,target}=st;
-  const tip=brushTip(opt.size,opt.hardness==null?100:opt.hardness,eraser?'#000':fg,eraser);
+  const tip=brushTip(opt.size,opt.hardness==null?100:opt.hardness,eraser?'#000':fg,eraser,opt.tip,opt.angle,opt.roundness);
   target.save();
   target.globalCompositeOperation=eraser?'destination-out':'source-over';
   target.globalAlpha=clamp((opt.opacity/100)*(opt.flow==null?1:opt.flow/100),0,1);
   const dx=pt.x-st.last.x, dy=pt.y-st.last.y, dist=Math.hypot(dx,dy);
   const steps=Math.max(1,Math.floor(dist/st.spacing));
-  const hr=tip.width/2+1;
+  const scat=(opt.scatter||0)/100*(opt.size/2);
+  const hr=tip.width/2+1+scat;
   for(let i=(dist<0.5?0:1);i<=steps;i++){
-    const t=i/steps, x=st.last.x+dx*t, y=st.last.y+dy*t;
+    const t=i/steps;
+    let x=st.last.x+dx*t, y=st.last.y+dy*t;
+    if(scat>0){ x+=(Math.random()*2-1)*scat; y+=(Math.random()*2-1)*scat; }
     target.drawImage(tip,x-tip.width/2,y-tip.height/2);
     const b=st.bbox;
     b.x0=Math.min(b.x0,x-hr); b.y0=Math.min(b.y0,y-hr);
@@ -22307,7 +22402,7 @@ const Tools={
   eyedropper:{ down(e,pt){ const col=sampleColor(pt); if(col){ fg=col; renderColorPane(); } },
     move(e,pt){ const col=sampleColor(pt); if(col){ fg=col; renderColorPane(); } } },
   brush:{ down(e,pt){ const L=activeLayer(); if(!L||!L.visible){toast(t('toast_sel_layer'));return;}
-      curStroke=strokeBegin(L,pt,{size:brushOpt.size,hardness:brushOpt.hardness,opacity:brushOpt.opacity,flow:brushOpt.flow},false);
+      curStroke=strokeBegin(L,pt,{size:brushOpt.size,hardness:brushOpt.hardness,opacity:brushOpt.opacity,flow:brushOpt.flow,tip:brushOpt.tip,spacing:Math.max(1,brushOpt.size*brushOpt.spacing/100),angle:brushOpt.angle,roundness:brushOpt.roundness,scatter:brushOpt.scatter},false);
       strokeTo(curStroke,pt); },
     move(e,pt){ if(curStroke) strokeTo(curStroke,pt); },
     up(){ if(curStroke){ strokeEnd(curStroke,t('hist_brush')); curStroke=null; } } },
@@ -23133,18 +23228,87 @@ function optToggle(label,on,set){
   b.addEventListener('click',()=>{ b.classList.toggle('on'); set(b.classList.contains('on')); });
   return b;
 }
+/* ---------------- brush preset picker + settings popover ---------------- */
+let openPop=null, brushPkRefresh=null;
+function closePops(){ if(openPop){ openPop.remove(); openPop=null; } }
+function placePop(p,anchor){
+  document.body.appendChild(p);
+  const r=anchor.getBoundingClientRect();
+  p.style.left=Math.max(8,Math.min(r.left,window.innerWidth-p.offsetWidth-8))+'px';
+  p.style.top=(r.bottom+6+window.scrollY)+'px';
+  openPop=p;
+}
+function drawTipThumb(cv,thumbSize){
+  const g=cv.getContext('2d'); g.clearRect(0,0,cv.width,cv.height);
+  const s=Math.min(40,Math.max(16,thumbSize||28));
+  const tip=brushTip(s,brushOpt.hardness,'#ffffff',false,brushOpt.tip,brushOpt.angle,brushOpt.roundness);
+  g.drawImage(tip,(cv.width-tip.width)/2,(cv.height-tip.height)/2);
+}
+function drawPresetThumb(c,pr){
+  const g=c.getContext('2d'); g.clearRect(0,0,c.width,c.height);
+  const tip=brushTip(40,pr.hardness,'#ffffff',false,pr.tip,pr.angle,pr.roundness);
+  g.drawImage(tip,(c.width-tip.width)/2,(c.height-tip.height)/2);
+}
+function togglePresetPop(anchor){
+  if(openPop&&openPop._kind==='preset'){ closePops(); return; }
+  closePops();
+  const p=el('div','bppop bpgrid'); p._kind='preset';
+  BRUSH_PRESETS.forEach(pr=>{
+    const it=el('button','bpitem');
+    const c=el('canvas'); c.width=c.height=46;
+    drawPresetThumb(c,pr);
+    const lb=el('span'); lb.textContent=t(pr.nameKey);
+    it.appendChild(c); it.appendChild(lb); it.title=t(pr.nameKey);
+    it.addEventListener('click',()=>{ applyBrushPreset(pr); closePops(); renderOptions(); });
+    p.appendChild(it);
+  });
+  placePop(p,anchor);
+}
+function toggleBrushSettingsPop(anchor){
+  if(openPop&&openPop._kind==='settings'){ closePops(); return; }
+  closePops();
+  const p=el('div','bppop bpset'); p._kind='settings';
+  const mk=(key,min,max,val,suffix,set)=>{
+    const row=el('div','bprow');
+    const lb=el('label'); lb.textContent=t(key); row.appendChild(lb);
+    const r=el('input'); r.type='range'; r.min=min; r.max=max; r.step=1; r.value=val;
+    const n=el('span','bpval'); n.textContent=val+(suffix||'');
+    r.addEventListener('input',()=>{ n.textContent=r.value+(suffix||''); set(parseFloat(r.value)); brushOpt.presetName=null; if(brushPkRefresh) brushPkRefresh(); });
+    row.appendChild(r); row.appendChild(n); p.appendChild(row);
+  };
+  mk('bp_spacing',1,200,brushOpt.spacing,'%',v=>brushOpt.spacing=v);
+  mk('bp_angle',0,180,brushOpt.angle,'\u00B0',v=>brushOpt.angle=v);
+  mk('bp_roundness',1,100,brushOpt.roundness,'%',v=>brushOpt.roundness=v);
+  mk('bp_scatter',0,500,brushOpt.scatter,'%',v=>brushOpt.scatter=v);
+  placePop(p,anchor);
+}
+document.addEventListener('pointerdown',e=>{ if(openPop&&!openPop.contains(e.target)&&!e.target.closest('.bpbtn')) closePops(); });
 function renderOptions(){
+  closePops();
   const bar=$('#optionsbar'); bar.innerHTML='';
   const td=TOOLS.find(x=>x.id===tool);
   bar.appendChild(el('span','toolname',td?t(td.name):''));
   const hint=txt=>bar.appendChild(el('span','ohint',txt));
   switch(tool){
-    case 'brush':
-      bar.appendChild(optSlider(t('opt_size'),1,300,brushOpt.size,1,v=>brushOpt.size=v));
-      bar.appendChild(optSlider(t('opt_hardness'),0,100,brushOpt.hardness,1,v=>brushOpt.hardness=v));
-      bar.appendChild(optSlider(t('opt_opacity'),1,100,brushOpt.opacity,1,v=>brushOpt.opacity=v));
-      bar.appendChild(optSlider(t('opt_flow'),1,100,brushOpt.flow,1,v=>brushOpt.flow=v));
-      break;
+    case 'brush':{
+      const pk=el('button','bpbtn');
+      const pvc=el('canvas'); pvc.width=pvc.height=28;
+      const pnm=el('span'); pnm.className='bpname';
+      pk.appendChild(pvc); pk.appendChild(pnm); pk.title=t('bp_preset');
+      const refreshPk=()=>{ drawTipThumb(pvc,28); pnm.textContent=brushOpt.presetName?t(brushOpt.presetName):t('bp_custom'); };
+      brushPkRefresh=refreshPk; refreshPk();
+      pk.addEventListener('click',ev=>{ ev.stopPropagation(); togglePresetPop(pk); });
+      bar.appendChild(pk);
+      const sb=el('button','bpbtn'); sb.title=t('bp_settings');
+      sb.innerHTML='<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M2 8h12M2 12h12"/><circle cx="6" cy="4" r="1.8" style="fill:var(--panel)"/><circle cx="11" cy="8" r="1.8" style="fill:var(--panel)"/><circle cx="5" cy="12" r="1.8" style="fill:var(--panel)"/></svg>';
+      sb.addEventListener('click',ev=>{ ev.stopPropagation(); toggleBrushSettingsPop(sb); });
+      bar.appendChild(sb);
+      const mc=()=>{ brushOpt.presetName=null; if(brushPkRefresh) brushPkRefresh(); };
+      bar.appendChild(optSlider(t('opt_size'),1,300,brushOpt.size,1,v=>{brushOpt.size=v;mc();}));
+      bar.appendChild(optSlider(t('opt_hardness'),0,100,brushOpt.hardness,1,v=>{brushOpt.hardness=v;mc();}));
+      bar.appendChild(optSlider(t('opt_opacity'),1,100,brushOpt.opacity,1,v=>{brushOpt.opacity=v;mc();}));
+      bar.appendChild(optSlider(t('opt_flow'),1,100,brushOpt.flow,1,v=>{brushOpt.flow=v;mc();}));
+      break;}
     case 'pencil':
       bar.appendChild(optSlider(t('opt_size'),1,100,pencilOpt.size,1,v=>pencilOpt.size=v));
       bar.appendChild(optSlider(t('opt_opacity'),1,100,pencilOpt.opacity,1,v=>pencilOpt.opacity=v));
@@ -23522,6 +23686,27 @@ $('#fileproj').addEventListener('change',e=>{
 });
 
 /* ---------------- init ---------------- */
+
+/* ============ LEHA templates: hash loader (#tpl=id) ============ */
+function loadTemplateFromHash(){
+  var m=(location.hash||'').match(/^#tpl=([a-z0-9-]+)/i);
+  if(!m||!window.LEHA_TEMPLATES||!LEHA_TEMPLATES.photo[m[1]])return;
+  var T=LEHA_TEMPLATES.photo[m[1]];
+  createDocument(T.w,T.h,'blank',t(T.nameKey));
+  doc.layers=[];
+  for(var i=0;i<T.layers.length;i++){
+    var ld=T.layers[i];
+    var L=makeLayer(t(ld.nameKey),T.w,T.h);
+    if(ld.blend)L.blend=ld.blend;
+    if(ld.opacity!=null)L.opacity=ld.opacity;
+    try{ ld.draw(layerCtx(L),T.w,T.h,lang); }catch(e){}
+    doc.layers.push(L);
+  }
+  doc.active=doc.layers.length-1;
+  renderLayersPane(); renderOptions(); updateStatus(); fitView(); dirty=true;
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+}
+
 function init(){
   try{ const s=localStorage.getItem('leha_lang'); if(s==='en'||s==='vi') lang=s; }catch(_){}
   document.documentElement.lang=lang;
@@ -23530,6 +23715,7 @@ function init(){
   buildDock();
   $$('#docktabs .dtab').forEach(b=>{ b.textContent=t('tab_'+b.dataset.tab); });
   createDocument(1600,900,'white','Untitled-1');
+  loadTemplateFromHash();
   setTool('brush');
   window.addEventListener('resize',()=>{ resizeView(); dirty=true; });
   requestAnimationFrame(loop);

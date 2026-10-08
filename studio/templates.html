@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thư viện mẫu — LEHA Studio</title>
+<meta name="description" content="Mẫu thiết kế miễn phí cho LEHA Studio: bấm vào là mở thẳng trong editor để chỉnh sửa ngay.">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#141414; color:#e8e8e8; font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; min-height:100vh; }
+  header { padding:40px 24px 8px; text-align:center; position:relative; max-width:1100px; margin:0 auto; }
+  .back { position:absolute; top:22px; left:24px; color:#d4af37; text-decoration:none; font-size:14px; font-weight:600; }
+  .back:hover { text-decoration:underline; }
+  .lang { position:absolute; top:18px; right:22px; display:flex; border:1px solid #333; border-radius:20px; overflow:hidden; }
+  .lang button { background:transparent; border:0; color:#8a8a8a; font-size:12px; font-weight:700; padding:7px 13px; cursor:pointer; }
+  .lang button.on { background:#d4af37; color:#141414; }
+  h1 { font-size:30px; } h1 .gold { color:#d4af37; }
+  .sub { margin-top:10px; color:#9a9a9a; font-size:14px; max-width:640px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  main { max-width:1100px; margin:0 auto; padding:26px 24px 50px; }
+  .sec { font-size:19px; margin:34px 0 16px; padding-bottom:8px; border-bottom:1px solid #262626; }
+  .sec .cnt { color:#777; font-size:13px; font-weight:400; margin-left:8px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px; }
+  .card { background:#1e1e1e; border:1px solid #2c2c2c; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s, border-color .15s; }
+  .card:hover { transform:translateY(-3px); border-color:#d4af37; }
+  .thumb { background:#0d0d0d; display:flex; align-items:center; justify-content:center; min-height:150px; max-height:230px; overflow:hidden; }
+  .thumb canvas, .thumb svg { display:block; max-width:100%; max-height:230px; }
+  .cbody { padding:16px 16px 18px; display:flex; flex-direction:column; flex:1; }
+  .cbody h3 { font-size:16px; margin-bottom:6px; }
+  .cbody p { font-size:12.5px; color:#a5a5a5; line-height:1.55; flex:1; }
+  .meta { margin-top:10px; font-size:11.5px; color:#6f6f6f; }
+  .btn { display:inline-block; margin-top:12px; text-align:center; background:#d4af37; color:#141414; font-weight:700; font-size:13.5px; padding:10px 14px; border-radius:8px; text-decoration:none; border:0; cursor:pointer; width:100%; }
+  .btn:hover { background:#e3c04f; }
+  .btn:disabled { opacity:.6; cursor:wait; }
+  footer { text-align:center; padding:26px; color:#6a6a6a; font-size:12.5px; border-top:1px solid #222; }
+  footer b { color:#9a9a9a; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html" data-i="back"></a>
+  <div class="lang"><button id="lvi" class="on">VI</button><button id="len">EN</button></div>
+  <h1><span class="gold">LEHA</span> <span data-i="lib"></span></h1>
+  <p class="sub" data-i="subtitle"></p>
+</header>
+<main>
+  <h2 class="sec"><span data-i="sec_photo"></span><span class="cnt" id="cnt-photo"></span></h2>
+  <div class="grid" id="grid-photo"></div>
+  <h2 class="sec"><span data-i="sec_vector"></span><span class="cnt" id="cnt-vector"></span></h2>
+  <div class="grid" id="grid-vector"></div>
+  <h2 class="sec"><span data-i="sec_pdf"></span></h2>
+  <div class="grid">
+    <div class="card">
+      <div class="thumb">
+        <svg width="120" height="150" viewBox="0 0 120 150" fill="none" stroke="#ff7b72" stroke-width="3">
+          <path d="M20 8 H74 L100 34 V142 H20 Z" fill="#1e1e1e"/>
+          <path d="M74 8 V34 H100" /><path d="M36 70 H84 M36 88 H84 M36 106 H68" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="cbody">
+        <h3 data-i="tpl_pdf_sample"></h3>
+        <p data-i="tpl_pdf_sample_d"></p>
+        <div class="meta" data-i="meta_pages"></div>
+        <button class="btn" id="btn-pdf" data-i="dl_pdf"></button>
+      </div>
+    </div>
+  </div>
+</main>
+<footer data-i="foot"></footer>
+
+<script src="templates-data.js"></script>
+<script src="pdf-tools/libs/pdf-lib.min.js"></script>
+<script>
+var LANG = {
+  vi: {
+    title: "Thư viện mẫu — LEHA Studio",
+    back: "← LEHA Studio", lib: "THƯ VIỆN MẪU",
+    subtitle: "Bấm vào mẫu để mở thẳng trong editor và chỉnh sửa ngay. Mọi mẫu đều được vẽ bằng code — không cần tải thêm gì, mở offline vẫn chạy.",
+    sec_photo: "Mẫu cho Photo Editor", sec_vector: "Mẫu cho Vector Editor", sec_pdf: "Mẫu cho PDF Tools",
+    edit_now: "Sửa ngay →", dl_pdf: "Tải PDF mẫu", dl_pdf_busy: "Đang tạo…", meta_pages: "5 trang · A4",
+    foot: "<b>LEHA Studio</b> — miễn phí cho mọi người",
+    tpl_poster_sale: "Poster khuyến mãi", tpl_poster_sale_d: "Poster dọc 1080×1350 cho chiến dịch sale: nền gradient đỏ, badge 12.12, chữ nổi bật.",
+    tpl_business_card: "Card visit", tpl_business_card_d: "Danh thiếp 1050×600 phong cách sang trọng: nền navy, điểm nhấn vàng gold.",
+    tpl_post_square: "Bài đăng vuông", tpl_post_square_d: "Mẫu quảng cáo vuông 1080×1080: tách cà phê vẽ tay, badge giảm giá 30%.",
+    tpl_youtube_thumbnail: "Thumbnail YouTube", tpl_youtube_thumbnail_d: "Ảnh bìa video 1280×720: nền neon, nút play, chữ viền đậm bắt mắt.",
+    tpl_facebook_cover: "Ảnh bìa Facebook", tpl_facebook_cover_d: "Cover 1640×924: sóng trừu tượng trên nền teal, tagline thương hiệu.",
+    tpl_logo_cafe: "Logo quán cà phê", tpl_logo_cafe_d: "Logo vector tách cà phê trong vòng tròn — chỉnh được từng node.",
+    tpl_logo_tech: "Logo công nghệ", tpl_logo_tech_d: "Logo hexagon kết hợp tia sét, phong cách startup công nghệ.",
+    tpl_icons_8: "Bộ 8 icon", tpl_icons_8_d: "8 icon vector thông dụng: nhà, tim, sao, giỏ hàng, điện thoại, thư, máy ảnh, nhạc.",
+    tpl_badge: "Huy hiệu tròn", tpl_badge_d: "Badge tròn premium: chữ chạy vòng quanh, ngôi sao ở giữa.",
+    tpl_pdf_sample: "PDF mẫu 5 trang", tpl_pdf_sample_d: "File PDF mẫu để thử các công cụ: gộp, tách, nối 1 trang dài, watermark, đặt mật khẩu."
+  },
+  en: {
+    title: "Template library — LEHA Studio",
+    back: "← LEHA Studio", lib: "TEMPLATE LIBRARY",
+    subtitle: "Click a template to open it directly in the editor and start editing. Every template is drawn in code — nothing extra to download, works offline.",
+    sec_photo: "Photo Editor templates", sec_vector: "Vector Editor templates", sec_pdf: "PDF Tools samples",
+    edit_now: "Edit now →", dl_pdf: "Download sample PDF", dl_pdf_busy: "Generating…", meta_pages: "5 pages · A4",
+    foot: "<b>LEHA Studio</b> — free for everyone",
+    tpl_poster_sale: "Sale poster", tpl_poster_sale_d: "Vertical 1080×1350 poster for sale campaigns: red gradient, 12.12 badge, bold headline.",
+    tpl_business_card: "Business card", tpl_business_card_d: "Luxury 1050×600 card: navy background, gold accents.",
+    tpl_post_square: "Square post", tpl_post_square_d: "1080×1080 ad template: hand-drawn coffee cup, 30% off badge.",
+    tpl_youtube_thumbnail: "YouTube thumbnail", tpl_youtube_thumbnail_d: "1280×720 video cover: neon background, play button, bold outlined text.",
+    tpl_facebook_cover: "Facebook cover", tpl_facebook_cover_d: "1640×924 cover: abstract waves on teal, brand tagline.",
+    tpl_logo_cafe: "Coffee shop logo", tpl_logo_cafe_d: "Vector coffee-cup logo in a circle — every node editable.",
+    tpl_logo_tech: "Tech logo", tpl_logo_tech_d: "Hexagon + lightning bolt logo, tech startup style.",
+    tpl_icons_8: "8-icon set", tpl_icons_8_d: "8 common vector icons: home, heart, star, cart, phone, mail, camera, music.",
+    tpl_badge: "Round badge", tpl_badge_d: "Premium round badge: circular text, star in the center.",
+    tpl_pdf_sample: "Sample 5-page PDF", tpl_pdf_sample_d: "A sample PDF to try the tools: merge, split, single page, watermark, protect."
+  }
+};
+
+var curLang = "vi";
+function t(k){ return (LANG[curLang]&&LANG[curLang][k]!=null)?LANG[curLang][k]:(LANG.en[k]||k); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function renderPhotoThumb(canvas, T, lang){
+  var maxW = 340, s = Math.min(1, maxW / T.w);
+  canvas.width = Math.max(1, Math.round(T.w*s));
+  canvas.height = Math.max(1, Math.round(T.h*s));
+  var ctx = canvas.getContext("2d");
+  ctx.scale(s, s);
+  T.layers.forEach(function(ld){ try{ ld.draw(ctx, T.w, T.h, lang); }catch(e){} });
+}
+
+function renderVectorSVG(T, lang){
+  var s = '<svg viewBox="0 0 '+T.w+' '+T.h+'" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;height:auto;max-height:230px;background:#fff">';
+  if(T.defs) s += T.defs;
+  T.objects.forEach(function(o){
+    var a="", st="", k;
+    for(k in (o.attrs||{})) a += " "+k+'="'+esc(o.attrs[k])+'"';
+    for(k in (o.style||{})) st += " "+k+'="'+esc(o.style[k])+'"';
+    var inner = "";
+    (o.children||[]).forEach(function(c){
+      var ca=""; for(k in (c.attrs||{})) ca += " "+k+'="'+esc(c.attrs[k])+'"';
+      var ctxt = (c.text && typeof c.text==="object") ? (c.text[lang]||c.text.en||"") : (c.text||"");
+      inner += "<"+c.tag+ca+">"+esc(ctxt)+"</"+c.tag+">";
+    });
+    var txt = (o.text && typeof o.text==="object") ? (o.text[lang]||o.text.en||"") : (o.text||"");
+    if(o.tag==="text" && !inner) inner = esc(txt);
+    s += "<"+o.tag+a+st+">"+inner+"</"+o.tag+">";
+  });
+  return s + "</svg>";
+}
+
+function cardHTML(id, T, editorFile){
+  var name = t(T.nameKey), desc = t(T.descKey);
+  return '<div class="card"><div class="thumb" data-thumb="'+id+'"></div>'+
+    '<div class="cbody"><h3>'+esc(name)+'</h3><p>'+esc(desc)+'</p>'+
+    '<div class="meta">'+T.w+' × '+T.h+' px</div>'+
+    '<a class="btn" target="_blank" rel="noopener" href="'+editorFile+'#tpl='+id+'">'+esc(t("edit_now"))+'</a>'+
+    '</div></div>';
+}
+
+function renderGallery(){
+  var lang = curLang, gp = document.getElementById("grid-photo"), gv = document.getElementById("grid-vector");
+  var P = window.LEHA_TEMPLATES.photo, V = window.LEHA_TEMPLATES.vector, ids, i;
+  ids = Object.keys(P);
+  document.getElementById("cnt-photo").textContent = "("+ids.length+")";
+  gp.innerHTML = ids.map(function(id){ return cardHTML(id, P[id], "photo-editor.html"); }).join("");
+  ids = Object.keys(V);
+  document.getElementById("cnt-vector").textContent = "("+ids.length+")";
+  gv.innerHTML = ids.map(function(id){ return cardHTML(id, V[id], "vector-editor.html"); }).join("");
+  ids = Object.keys(P);
+  ids.forEach(function(id){
+    var box = gp.querySelector('[data-thumb="'+id+'"]');
+    if(box){ var cv = document.createElement("canvas"); box.appendChild(cv); renderPhotoThumb(cv, P[id], lang); }
+  });
+  ids = Object.keys(V);
+  ids.forEach(function(id){
+    var box2 = gv.querySelector('[data-thumb="'+id+'"]');
+    if(box2){ box2.innerHTML = renderVectorSVG(V[id], lang); }
+  });
+}
+
+function applyLang(l){
+  curLang = LANG[l] ? l : "vi";
+  try{ localStorage.setItem("leha_lang", curLang); }catch(e){}
+  document.documentElement.lang = curLang;
+  document.title = t("title");
+  document.querySelectorAll("[data-i]").forEach(function(el){
+    el.innerHTML = t(el.getAttribute("data-i"));
+  });
+  document.getElementById("lvi").className = curLang==="vi" ? "on" : "";
+  document.getElementById("len").className = curLang==="en" ? "on" : "";
+  renderGallery();
+}
+
+/* ---------- sample PDF (5 pages, via pdf-lib) ---------- */
+function wrapLines(text, font, size, maxW){
+  var words = String(text).split(" "), lines = [], line = "";
+  words.forEach(function(wd){
+    var tr = line ? line+" "+wd : wd;
+    if(font.widthOfTextAtSize(tr, size) > maxW && line){ lines.push(line); line = wd; }
+    else line = tr;
+  });
+  if(line) lines.push(line);
+  return lines;
+}
+async function downloadSamplePDF(){
+  var btn = document.getElementById("btn-pdf");
+  var old = btn.textContent; btn.disabled = true; btn.textContent = t("dl_pdf_busy");
+  try{
+    var PDFLib = window.PDFLib;
+    var doc = await PDFLib.PDFDocument.create();
+    var helv = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+    var bold = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    var W = 595, H = 842;
+    var black = PDFLib.rgb(0.12,0.12,0.12), gray = PDFLib.rgb(0.45,0.45,0.45);
+    /* p1 — title + paragraph */
+    var p1 = doc.addPage([W,H]);
+    p1.drawRectangle({x:0, y:H-230, width:W, height:230, color:PDFLib.rgb(0.08,0.25,0.45)});
+    p1.drawText("LEHA Studio", {x:60, y:H-115, size:42, font:bold, color:PDFLib.rgb(1,1,1)});
+    p1.drawText("Sample PDF - 5 pages", {x:60, y:H-158, size:18, font:helv, color:PDFLib.rgb(1,1,1)});
+    p1.drawText("Welcome to LEHA Studio", {x:60, y:H-300, size:22, font:bold, color:black});
+    var yy1 = H-345;
+    wrapLines("This is a sample paragraph to demonstrate text extraction and rendering. LEHA Studio PDF tools run entirely in your browser, so your files never leave your device. Try the Single Page tool to join all five pages into one long page while keeping every vector perfectly sharp.", helv, 12, W-120).forEach(function(ln){ p1.drawText(ln, {x:60, y:yy1, size:12, font:helv, color:black}); yy1 -= 20; });
+    yy1 -= 15;
+    wrapLines("Second paragraph: the quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. How vexingly quick daft zebras jump!", helv, 12, W-120).forEach(function(ln){ p1.drawText(ln, {x:60, y:yy1, size:12, font:helv, color:black}); yy1 -= 20; });
+    p1.drawText("Page 1 of 5", {x:60, y:50, size:11, font:helv, color:gray});
+    /* p2 — shapes */
+    var p2 = doc.addPage([W,H]);
+    p2.drawText("1. Shapes page", {x:60, y:H-80, size:22, font:bold, color:black});
+    p2.drawRectangle({x:60, y:H-280, width:200, height:120, color:PDFLib.rgb(0.85,0.30,0.25)});
+    p2.drawEllipse({x:400, y:H-220, xScale:95, yScale:62, color:PDFLib.rgb(0.20,0.50,0.85)});
+    p2.drawCircle({x:150, y:H-470, xScale:60, yScale:60, color:PDFLib.rgb(0.95,0.75,0.20)});
+    p2.drawLine({start:{x:60, y:H-580}, end:{x:535, y:H-580}, thickness:4, color:black});
+    p2.drawText("Page 2 of 5", {x:60, y:50, size:11, font:helv, color:gray});
+    /* p3 — table */
+    var p3 = doc.addPage([W,H]);
+    p3.drawText("2. Table page", {x:60, y:H-80, size:22, font:bold, color:black});
+    var rows = [["Item","Qty","Price"],
+      ["Coffee beans","2","120,000"],["Milk","5","150,000"],
+      ["Sugar","3","45,000"],["Cups","100","200,000"],["Total","","515,000"]];
+    var cw = [250,100,125], rh = 34, tx = 60, ty = H-140;
+    rows.forEach(function(r, ri){
+      var xx = tx;
+      r.forEach(function(cell, ci){
+        p3.drawRectangle({x:xx, y:ty-rh, width:cw[ci], height:rh,
+          borderColor:PDFLib.rgb(0.45,0.45,0.45), borderWidth:1,
+          color: ri===0 ? PDFLib.rgb(0.90,0.93,0.97) : PDFLib.rgb(1,1,1)});
+        p3.drawText(cell, {x:xx+10, y:ty-rh+12, size:12, font:ri===0?bold:helv, color:black});
+        xx += cw[ci];
+      });
+      ty -= rh;
+    });
+    p3.drawText("Page 3 of 5", {x:60, y:50, size:11, font:helv, color:gray});
+    /* p4 — test content */
+    var p4 = doc.addPage([W,H]);
+    p4.drawText("3. Try these tools", {x:60, y:H-80, size:22, font:bold, color:black});
+    var bullets = [
+      "Single Page: join all pages into one long page, vectors stay sharp.",
+      "Watermark: stamp your brand text on every page.",
+      "Protect: set a password for this file, then Unlock it again.",
+      "PDF to Images: export any page as PNG up to 600 DPI."
+    ];
+    var by = H-135;
+    bullets.forEach(function(b){
+      wrapLines(b, helv, 12, W-150).forEach(function(ln){
+        p4.drawText(ln, {x:80, y:by, size:12, font:helv, color:black}); by -= 20;
+      });
+      by -= 12;
+    });
+    p4.drawText("Page 4 of 5", {x:60, y:50, size:11, font:helv, color:gray});
+    /* p5 — more test content */
+    var p5 = doc.addPage([W,H]);
+    p5.drawText("4. Split & merge test", {x:60, y:H-80, size:22, font:bold, color:black});
+    var yy5 = H-135;
+    wrapLines("Use this page to test Split (extract pages 4-5), Merge (combine with another file) and Rotate. Delete this page with the Extract tool, or reorder pages and export again.", helv, 12, W-120).forEach(function(ln){ p5.drawText(ln, {x:60, y:yy5, size:12, font:helv, color:black}); yy5 -= 20; });
+    p5.drawRectangle({x:60, y:yy5-90, width:160, height:70, color:PDFLib.rgb(0.30,0.65,0.35)});
+    p5.drawEllipse({x:420, y:yy5-55, xScale:80, yScale:40, color:PDFLib.rgb(0.85,0.55,0.20)});
+    p5.drawText("Page 5 of 5", {x:60, y:50, size:11, font:helv, color:gray});
+    var bytes = await doc.save();
+    var blob = new Blob([bytes], {type:"application/pdf"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "leha-mau.pdf";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+  }catch(err){
+    alert("Error: " + (err && err.message || err));
+  }
+  btn.disabled = false; btn.textContent = old;
+}
+
+document.getElementById("lvi").onclick = function(){ applyLang("vi"); };
+document.getElementById("len").onclick = function(){ applyLang("en"); };
+document.getElementById("btn-pdf").onclick = downloadSamplePDF;
+(function(){
+  var l = "vi";
+  try{ l = localStorage.getItem("leha_lang") || "vi"; }catch(e){}
+  applyLang(l);
+})();
+</script>
+</body>
+</html>
