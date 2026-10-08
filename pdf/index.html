@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEHA Studio · PDF Tools — Free, Private, In-Browser</title>
+<meta name="description" content="Free PDF tools that run 100% in your browser. Merge, split, compress, protect, watermark and more. Your files never leave your device.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+  <a class="brand" href="#/">
+    <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 3h12l6 6v20H6z"/><path d="M18 3v6h6"/><path d="M10 17h12M10 21h12M10 25h8"/>
+    </svg>
+    <span>LEHA Studio · PDF<b>Tools</b></span>
+  </a>
+  <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Ngôn ngữ">
+    <button type="button" data-lang="vi">VI</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+  </div>
+  <div class="privacy-badge" data-i18n-attr="title:hdr.privacy_title" title="All processing happens locally in your browser">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+    </svg>
+    <span data-i18n="hdr.privacy">100% private — files never leave your device</span>
+  </div>
+</header>
+
+<main id="app">
+  <section id="view-hub">
+    <div class="hero">
+      <h1 data-i18n="hub.h1">Free PDF tools, right in your browser</h1>
+      <p class="sub" data-i18n-html="hub.sub">Merge, split, compress, protect and more — no uploads, no accounts, no watermarks on output.
+        <strong>Every vector operation keeps your PDF razor-sharp</strong>: pages are never rasterized unless you explicitly export to images.</p>
+      <div class="privacy-note">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/>
+        </svg>
+        <span data-i18n-html="hub.note">Unlike online services, your files are processed <strong>locally on your machine</strong>. Nothing is uploaded anywhere — this page even works offline.</span>
+      </div>
+    </div>
+    <div id="tool-grid" class="tool-grid"></div>
+  </section>
+
+  <section id="view-tool" hidden>
+    <button id="back-btn" class="back-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      <span data-i18n="hub.back">All tools</span>
+    </button>
+    <div class="tool-head">
+      <div id="tool-icon" class="tool-head-icon"></div>
+      <div>
+        <h2 id="tool-title"></h2>
+        <p id="tool-desc" class="sub"></p>
+      </div>
+    </div>
+    <div id="tool-body"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <span data-i18n-html="foot.text">LEHA Studio · PDF Tools — free for everyone. Runs 100% in your browser. Built with pdf-lib (MIT) &amp; PDF.js (Apache-2.0).</span>
+</footer>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="libs/pdf-lib.min.js"></script>
+<script src="libs/pdf.min.js"></script>
+<script src="libs/pdf.worker.b64.js"></script>
+<script src="assets/crypto.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
