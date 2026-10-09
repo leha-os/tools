@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thư viện mẫu — LEHA Studio</title>
-<meta name="description" content="Mẫu thiết kế LEHA Studio">
+<meta name="description" content="Mẫu thiết kế miễn phí cho LEHA Studio: bấm vào là mở thẳng trong editor để chỉnh sửa ngay.">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:#141414; color:#e8e8e8; font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; min-height:100vh; }
@@ -33,6 +33,27 @@
   .btn:disabled { opacity:.6; cursor:wait; }
   footer { text-align:center; padding:26px; color:#6a6a6a; font-size:12.5px; border-top:1px solid #222; }
   footer b { color:#9a9a9a; }
+  /* ---------- mobile-first overhaul ---------- */
+  @media (max-width:768px){
+    header { padding:28px 16px 4px; }
+    h1 { font-size:24px; }
+    .sub { font-size:13px; }
+    .back { top:14px; left:14px; min-height:44px; display:inline-flex; align-items:center; padding:6px 4px; }
+    .lang { top:12px; right:14px; }
+    .lang button { min-height:44px; min-width:48px; padding:10px 14px; font-size:13px; }
+    main { padding:18px 14px 40px; }
+    .sec { font-size:17px; margin:24px 0 12px; }
+    .grid { grid-template-columns:1fr 1fr; gap:12px; }
+    .thumb { min-height:120px; }
+    .cbody { padding:12px 12px 14px; }
+    .cbody h3 { font-size:14px; }
+    .cbody p { font-size:12px; }
+    .card .btn { min-height:48px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+    #btn-pdf { min-height:48px; }
+  }
+  @media (max-width:420px){
+    .grid { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -67,7 +88,11 @@
 </main>
 <footer data-i="foot"></footer>
 
-<script src="templates-data.js"></script>
+<script src="templates-core.js"></script>
+<script src="templates-photo-1.js"></script>
+<script src="templates-photo-2.js"></script>
+<script src="templates-vector.js"></script>
+<script src="templates-index.js"></script>
 <script src="pdf-tools/libs/pdf-lib.min.js"></script>
 <script>
 var LANG = {
@@ -88,6 +113,58 @@ var LANG = {
     tpl_icons_8: "Bộ 8 icon", tpl_icons_8_d: "8 icon vector thông dụng: nhà, tim, sao, giỏ hàng, điện thoại, thư, máy ảnh, nhạc.",
     tpl_badge: "Huy hiệu tròn", tpl_badge_d: "Badge tròn premium: chữ chạy vòng quanh, ngôi sao ở giữa.",
     tpl_pdf_sample: "PDF mẫu 5 trang", tpl_pdf_sample_d: "File PDF mẫu để thử các công cụ: gộp, tách, nối 1 trang dài, watermark, đặt mật khẩu."
+    tpl_poster_sale: "Poster Sale Noir Gold", tpl_poster_sale_d: "Poster khuyến mãi phong cách Noir Gold — sang trọng, thu hút",
+    tpl_business_card: "Card visit Navy Gold", tpl_business_card_d: "Card visit navy/gold tinh tế cho doanh nghiệp",
+    tpl_post_square: "Quảng cáo Cà phê", tpl_post_square_d: "Bài đăng vuông quảng cáo cà phê phong cách tối giản ấm áp",
+    tpl_youtube_thumbnail: "Thumbnail YouTube", tpl_youtube_thumbnail_d: "Thumbnail bắt mắt nhưng sang, tăng lượt click",
+    tpl_facebook_cover: "Cover Facebook Teal Gold", tpl_facebook_cover_d: "Ảnh bìa Facebook teal/gold tinh tế",
+    tpl_youtube_banner: "Banner kênh YouTube", tpl_youtube_banner_d: "Channel art, nội dung nằm gọn trong vùng an toàn",
+    tpl_ig_story: "Story Instagram Sale", tpl_ig_story_d: "Story dọc gradient hoàng hôn với nút kêu gọi hành động",
+    tpl_sale_flash: "Poster Flash Sale", tpl_sale_flash_d: "Flash sale rực rỡ với chữ khổng lồ bắt mắt",
+    tpl_livestream: "Thông báo Livestream", tpl_livestream_d: "Thông báo live bán hàng với badge LIVE đỏ",
+    tpl_cafe_menu: "Menu Cà phê", tpl_cafe_menu_d: "Bảng menu cà phê với món và giá có đường chấm",
+    tpl_voucher: "Voucher giảm giá", tpl_voucher_d: "Voucher giảm giá với viền đục lỗ",
+    tpl_certificate: "Giấy chứng nhận", tpl_certificate_d: "Giấy chứng nhận trang trọng cho vinh danh, khóa học",
+    tpl_quotation: "Báo giá", tpl_quotation_d: "Báo giá công ty chuyên nghiệp, bảng giá rõ ràng",
+    tpl_loyalty_card: "Thẻ thành viên", tpl_loyalty_card_d: "Thẻ thành viên tích điểm sang trọng",
+    tpl_wedding_invitation: "Thiệp cưới thanh lịch", tpl_wedding_invitation_d: "Thiệp cưới tông blush/cream/gold, chữ serif sang trọng, khung viền đôi.",
+    tpl_grand_opening: "Poster khai trương", tpl_grand_opening_d: "Poster khai trương rực rỡ tông đỏ/gold, tia nắng lan tỏa, huy hiệu ngày khai trương.",
+    tpl_event_ticket: "Vé sự kiện", tpl_event_ticket_d: "Vé sự kiện kem trên nền navy, viền đục lỗ 2 đầu, số seri và mã vạch.",
+    tpl_travel_poster: "Poster du lịch vintage", tpl_travel_poster_d: "Poster du lịch phong cách retro: mặt trời hoàng hôn, núi lớp lớp, chim bay.",
+    tpl_movie_poster: "Poster phim điện ảnh", tpl_movie_poster_d: "Poster phim tông tối, mặt trăng đỏ rực, skyline thành phố, phong cách điện ảnh.",
+    tpl_tet_poster: "Poster Tết", tpl_tet_poster_d: "Poster Tết Bính Ngọ 2026: lồng đèn đỏ, hoa mai vàng, pháo hoa.",
+    tpl_tet_card: "Thiệp chúc Tết", tpl_tet_card_d: "Thiệp chúc Tết vuông: huy hiệu đỏ viền gold, hoa đào góc, viền kim cương.",
+    tpl_tet_sale: "Poster sale Tết", tpl_tet_sale_d: "Poster khuyến mãi Tết rực rỡ: giảm đến 50%, huy hiệu SALE xoay, lì xì may mắn.",
+    tpl_tet_banner: "Banner Tết", tpl_tet_banner_d: "Banner ngang Tết cho website/fanpage: sóng gold, lồng đèn treo, hoa mai.",
+    tpl_mockup_phone: "Mockup điện thoại", tpl_mockup_phone_d: "Điện thoại nghiêng trên nền studio tối, màn hình chờ gắn thiết kế của bạn.",
+    tpl_mockup_cards: "Mockup card visit", tpl_mockup_cards_d: "Chồng 3 card visit xòe trên bàn gỗ, mặt trước chờ gắn thiết kế.",
+    tpl_mockup_posterwall: "Mockup poster treo tường", tpl_mockup_posterwall_d: "Poster đóng khung treo tường trong phòng, có cây xanh tạo chiều sâu.",
+    tpl_mockup_laptop: "Mockup laptop", tpl_mockup_laptop_d: "Laptop trên bàn làm việc cạnh ly cà phê, màn hình chờ gắn thiết kế.",
+    tpl_mockup_tshirt: "Mockup áo thun", tpl_mockup_tshirt_d: "Áo thun phẳng tông xám, vùng ngực chờ gắn thiết kế.",
+    tpl_mockup_tote: "Mockup túi tote", tpl_mockup_tote_d: "Túi tote vải canvas, quai xách, mặt trước chờ gắn thiết kế.",
+    tpl_mockup_box: "Mockup hộp sản phẩm", tpl_mockup_box_d: "Hộp sản phẩm 3D tông kem, băng keo niêm phong, mặt trước chờ gắn thiết kế.",
+    tpl_logo_cafe: "Logo quán cà phê", tpl_logo_cafe_d: "Logo vector quán cà phê phong cách premium — vòng tròn đôi, tách cà phê vẽ tay, chỉnh được từng node.",
+    tpl_logo_tech: "Logo công nghệ", tpl_logo_tech_d: "Logo công nghệ hiện đại — huy hiệu lục giác, mạch điện và monogram trên nền navy.",
+    tpl_icons_8: "Bộ 8 icon", tpl_icons_8_d: "Bộ 8 icon line đồng nhất: cà phê, túi mua sắm, trái tim, xe tải, điện thoại, thư, máy ảnh, quà tặng.",
+    tpl_badge: "Huy hiệu tròn", tpl_badge_d: "Huy hiệu tròn sang trọng — chữ chạy vòng cung, ngôi sao vàng trên nền xanh đậm.",
+    tpl_restaurant_logo: "Logo nhà hàng", tpl_restaurant_logo_d: "Logo nhà hàng fine dining — chuông đậy món, monogram serif, vòng vàng đôi.",
+    tpl_spa_logo: "Logo spa", tpl_spa_logo_d: "Logo spa tối giản — hoa sen vẽ tay, tông xanh ngọc và kem thư giãn.",
+    tpl_gym_logo: "Logo phòng gym", tpl_gym_logo_d: "Logo gym mạnh mẽ — tia sét gradient lửa trên huy hiệu lục giác đen.",
+    tpl_fashion_logo: "Logo thời trang", tpl_fashion_logo_d: "Logo thời trang tối giản — monogram serif thanh mảnh, vòng đen kép.",
+    tpl_realestate_logo: "Logo bất động sản", tpl_realestate_logo_d: "Logo bất động sản cao cấp — skyline vàng trên nền navy.",
+    tpl_bubbletea_logo: "Logo trà sữa", tpl_bubbletea_logo_d: "Logo trà sữa trẻ trung — ly trà sữa trân châu, tông hồng kem ngọt ngào.",
+    tpl_icons_food: "Bộ 8 icon ẩm thực", tpl_icons_food_d: "Bộ 8 icon ẩm thực line đồng nhất: burger, pizza, cupcake, mì, kem, trứng, donut, cà phê.",
+    tpl_icons_travel: "Bộ 8 icon du lịch", tpl_icons_travel_d: "Bộ 8 icon du lịch line đồng nhất: máy bay, vali, ghim bản đồ, địa cầu, la bàn, dừa, hộ chiếu, lều.",
+    tpl_badge_vintage: "Huy hiệu vintage", tpl_badge_vintage_d: "Huy hiệu vintage — ruy băng, chữ vòng cung, tông nâu giấy cũ.",
+    tpl_monogram: "Chữ lồng sang trọng", tpl_monogram_d: "Chữ lồng LH sang trọng — serif vàng gold trên nền đen, letterspacing rộng.",
+    tpl_patterns: "Bộ 4 pattern hình học", tpl_patterns_d: "4 ô pattern hình học có thể lặp: chevron, chấm bi, đường chéo, hình thoi.",
+    tpl_pattern_tet: "Pattern Tết", tpl_pattern_tet_d: "Pattern Tết — hoa mai vàng và đồng tiền trên nền đỏ, lặp liền mạch.",
+    tpl_cv_resume: "CV 1 trang", tpl_cv_resume_d: "CV 1 trang khổ A4 — sidebar tối, thanh kỹ năng, timeline kinh nghiệm.",
+    tpl_infographic: "Infographic số liệu", tpl_infographic_d: "Infographic số liệu — thẻ chỉ số, biểu đồ cột, donut, timeline.",
+    tpl_sticker_pack: "Bộ 6 sticker", tpl_sticker_pack_d: "Bộ 6 sticker viền trắng: sao, tim, SALE, tia sét, cà phê, hoa.",
+    cat_all: "Tất cả", cat_social: "Mạng xã hội", cat_business: "Kinh doanh",
+    cat_event: "Sự kiện", cat_tet: "Tết", cat_logovec: "Logo & Vector", cat_mockup: "Mockup",
+    search_ph: "Tìm mẫu...", type_photo: "Ảnh", type_vector: "Vector",
   },
   en: {
     title: "Template library — LEHA Studio",
@@ -106,6 +183,58 @@ var LANG = {
     tpl_icons_8: "8-icon set", tpl_icons_8_d: "8 common vector icons: home, heart, star, cart, phone, mail, camera, music.",
     tpl_badge: "Round badge", tpl_badge_d: "Premium round badge: circular text, star in the center.",
     tpl_pdf_sample: "Sample 5-page PDF", tpl_pdf_sample_d: "A sample PDF to try the tools: merge, split, single page, watermark, protect."
+    tpl_poster_sale: "Noir Gold Sale Poster", tpl_poster_sale_d: "Noir Gold sale poster — elegant and eye-catching",
+    tpl_business_card: "Navy Gold Business Card", tpl_business_card_d: "Sophisticated navy/gold business card",
+    tpl_post_square: "Coffee Promo Post", tpl_post_square_d: "Warm minimalist coffee promo square post",
+    tpl_youtube_thumbnail: "YouTube Thumbnail", tpl_youtube_thumbnail_d: "Striking yet classy thumbnail for higher clicks",
+    tpl_facebook_cover: "Teal Gold Facebook Cover", tpl_facebook_cover_d: "Sophisticated teal/gold Facebook cover",
+    tpl_youtube_banner: "YouTube Channel Banner", tpl_youtube_banner_d: "Channel art with content inside the safe area",
+    tpl_ig_story: "Instagram Sale Story", tpl_ig_story_d: "Vertical sunset-gradient story with call-to-action",
+    tpl_sale_flash: "Flash Sale Poster", tpl_sale_flash_d: "Vivid flash sale with giant typography",
+    tpl_livestream: "Livestream Announcement", tpl_livestream_d: "Live shopping announcement with red LIVE badge",
+    tpl_cafe_menu: "Coffee Menu", tpl_cafe_menu_d: "Coffee menu board with dotted price leaders",
+    tpl_voucher: "Discount Voucher", tpl_voucher_d: "Discount voucher with perforated edge",
+    tpl_certificate: "Certificate", tpl_certificate_d: "Formal certificate for awards and courses",
+    tpl_quotation: "Quotation", tpl_quotation_d: "Professional company quotation with clear pricing",
+    tpl_loyalty_card: "Loyalty Card", tpl_loyalty_card_d: "Premium loyalty points card",
+    tpl_wedding_invitation: "Elegant Wedding Invitation", tpl_wedding_invitation_d: "Blush, cream and gold wedding invitation with elegant serif typography and a double frame.",
+    tpl_grand_opening: "Grand Opening Poster", tpl_grand_opening_d: "Festive grand opening poster in red and gold with radiating sunburst and a date badge.",
+    tpl_event_ticket: "Event Ticket", tpl_event_ticket_d: "Cream event ticket on a navy backdrop with perforated edges, serial number and barcode.",
+    tpl_travel_poster: "Vintage Travel Poster", tpl_travel_poster_d: "Retro-style travel poster with a sunset, layered mountains and birds in flight.",
+    tpl_movie_poster: "Cinematic Movie Poster", tpl_movie_poster_d: "Dark cinematic movie poster with a glowing red moon over a city skyline.",
+    tpl_tet_poster: "Tet Poster", tpl_tet_poster_d: "Tet 2026 poster with red lanterns, golden apricot blossoms and fireworks.",
+    tpl_tet_card: "Tet Greeting Card", tpl_tet_card_d: "Square Tet greeting card with a red-and-gold medallion, peach blossoms and a diamond border.",
+    tpl_tet_sale: "Tet Sale Poster", tpl_tet_sale_d: "Festive Tet sale poster: up to 50% off, tilted SALE badge and lucky gifts.",
+    tpl_tet_banner: "Tet Banner", tpl_tet_banner_d: "Wide Tet banner for websites and fanpages with gold waves, hanging lanterns and blossoms.",
+    tpl_mockup_phone: "Phone Mockup", tpl_mockup_phone_d: "Tilted smartphone on a dark studio backdrop; screen ready for your design.",
+    tpl_mockup_cards: "Business Card Mockup", tpl_mockup_cards_d: "Fanned stack of business cards on a wooden table; front card ready for your design.",
+    tpl_mockup_posterwall: "Wall Poster Mockup", tpl_mockup_posterwall_d: "Framed poster on a wall in a styled room scene with a plant for depth.",
+    tpl_mockup_laptop: "Laptop Mockup", tpl_mockup_laptop_d: "Laptop on a desk beside a coffee cup; screen ready for your design.",
+    tpl_mockup_tshirt: "T-Shirt Mockup", tpl_mockup_tshirt_d: "Flat heather-grey t-shirt with the chest area ready for your design.",
+    tpl_mockup_tote: "Tote Bag Mockup", tpl_mockup_tote_d: "Canvas tote bag with handles; front face ready for your design.",
+    tpl_mockup_box: "Product Box Mockup", tpl_mockup_box_d: "3D kraft-style product box with tape seal; front face ready for your design.",
+    tpl_logo_cafe: "Coffee shop logo", tpl_logo_cafe_d: "Premium vector coffee-shop logo — double gold ring, hand-drawn cup, every node editable.",
+    tpl_logo_tech: "Tech logo", tpl_logo_tech_d: "Modern tech logo — hexagonal badge, circuit traces and monogram on navy.",
+    tpl_icons_8: "8-icon set", tpl_icons_8_d: "Uniform 8-icon line set: coffee, shopping bag, heart, truck, phone, mail, camera, gift.",
+    tpl_badge: "Round badge", tpl_badge_d: "Luxury round badge — circular text, gold star on deep green.",
+    tpl_restaurant_logo: "Restaurant logo", tpl_restaurant_logo_d: "Fine-dining restaurant logo — serving cloche, serif monogram, double gold ring.",
+    tpl_spa_logo: "Spa logo", tpl_spa_logo_d: "Minimal spa logo — hand-drawn lotus in teal and cream.",
+    tpl_gym_logo: "Gym logo", tpl_gym_logo_d: "Bold gym logo — fire-gradient lightning bolt on black hex badge.",
+    tpl_fashion_logo: "Fashion logo", tpl_fashion_logo_d: "Minimal fashion logo — elegant serif monogram, double black ring.",
+    tpl_realestate_logo: "Real estate logo", tpl_realestate_logo_d: "Premium real-estate logo — gold skyline on navy.",
+    tpl_bubbletea_logo: "Bubble tea logo", tpl_bubbletea_logo_d: "Playful bubble-tea logo — boba cup in sweet pink-cream tones.",
+    tpl_icons_food: "8 food icons", tpl_icons_food_d: "Uniform 8 food line icons: burger, pizza, cupcake, ramen, ice cream, egg, donut, coffee.",
+    tpl_icons_travel: "8 travel icons", tpl_icons_travel_d: "Uniform 8 travel line icons: plane, suitcase, map pin, globe, compass, palm, passport, tent.",
+    tpl_badge_vintage: "Vintage badge", tpl_badge_vintage_d: "Vintage badge — ribbon, circular text, aged-paper browns.",
+    tpl_monogram: "Luxury monogram", tpl_monogram_d: "Luxury LH monogram — gold serif on black, wide letterspacing.",
+    tpl_patterns: "4 geometric patterns", tpl_patterns_d: "4 repeatable geometric pattern tiles: chevron, dots, diagonal, diamonds.",
+    tpl_pattern_tet: "Tet pattern", tpl_pattern_tet_d: "Tet pattern — golden apricot blossoms and coins on red, seamless repeat.",
+    tpl_cv_resume: "One-page CV", tpl_cv_resume_d: "One-page A4 CV — dark sidebar, skill bars, experience timeline.",
+    tpl_infographic: "Data infographic", tpl_infographic_d: "Data infographic — stat cards, bar chart, donut chart, timeline.",
+    tpl_sticker_pack: "6-sticker pack", tpl_sticker_pack_d: "6 white-bordered stickers: star, heart, SALE, bolt, coffee, flower.",
+    cat_all: "All", cat_social: "Social media", cat_business: "Business",
+    cat_event: "Events", cat_tet: "Tet", cat_logovec: "Logos & Vectors", cat_mockup: "Mockups",
+    search_ph: "Search templates...", type_photo: "Photo", type_vector: "Vector",
   }
 };
 

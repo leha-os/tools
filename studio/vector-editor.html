@@ -140,12 +140,57 @@ kbd{background:#111; border:1px solid #4a4a4a; border-bottom-width:2px; border-r
 ::-webkit-scrollbar{width:10px; height:10px;}
 ::-webkit-scrollbar-thumb{background:#4a4a4a; border-radius:5px; border:2px solid var(--bg2);}
 ::-webkit-scrollbar-track{background:transparent;}
+/* ---------- mobile-first overhaul ---------- */
+#menu-btn{display:none;}
+#flyout-root{position:fixed; inset:0; z-index:300; pointer-events:none;}
+.tflyout{position:absolute; display:flex; flex-direction:column; gap:4px; background:#2b2b2b; border:1px solid #111; box-shadow:0 8px 24px rgba(0,0,0,.55); border-radius:8px; padding:6px; pointer-events:auto;}
+.tbtn{position:relative; -webkit-touch-callout:none;}
+.tbtn .tri{position:absolute; right:3px; bottom:3px; width:0; height:0; border-left:6px solid transparent; border-top:6px solid #8a8a8a; pointer-events:none;}
+.tbtn.active{box-shadow:0 0 0 2px rgba(14,124,192,.5);}
+.tbtn.active .tri{border-top-color:#fff;}
+#toolbar{overscroll-behavior:contain;}
+@media (max-width:768px){
+  #menubar{height:48px;}
+  #menu-btn{display:flex; align-items:center; justify-content:center; width:48px; height:48px; flex:0 0 auto; background:transparent; border:0; color:#fff; font-size:20px; cursor:pointer;}
+  #menubar .logo{padding:0 8px; font-size:11px;}
+  #menus{display:none;}
+  body.menu-open #menus{display:block; position:fixed; top:48px; left:0; bottom:0; width:min(320px,84vw); background:var(--bg2); border-right:1px solid var(--line); z-index:150; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  body.menu-open #menus .menu{display:block; border-bottom:1px solid var(--line);}
+  body.menu-open #menus .menu>span{min-height:48px; padding:0 16px; font-weight:600;}
+  body.menu-open #menus .dropdown{position:static; display:block; box-shadow:none; border:0; border-top:1px solid var(--line); background:var(--bg);}
+  body.menu-open #menus .msep{margin:6px 0;}
+  .mi{min-height:44px; align-items:center; padding:10px 16px; cursor:pointer;}
+  #lang-toggle button{min-height:44px; min-width:48px; font-size:12px;}
+  #toolbar{width:58px; padding:8px 0;}
+  .tbtn{width:44px; height:44px;}
+  .tbtn svg{width:22px; height:22px;}
+  .tflyout .tbtn{width:48px; height:48px;}
+  #optionsbar{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; gap:8px;}
+  #optionsbar .opt{flex:0 0 auto;}
+  .opt button{min-height:40px; min-width:44px; padding:8px 12px; font-size:12px;}
+  .opt input[type=number]{min-height:40px;}
+  .opt input[type=color]{width:40px; height:40px;}
+  #dock{position:fixed; left:0; right:0; bottom:0; top:auto; width:auto; border-left:0; border-top:1px solid var(--line); z-index:90; transform:translateY(calc(100% - 52px)); transition:transform .22s ease; background:var(--bg2);}
+  #dock.sheet-open{transform:none; box-shadow:0 -8px 30px rgba(0,0,0,.5);}
+  #dock-tabs{min-height:52px;}
+  .dtab{min-height:52px; display:flex; align-items:center; justify-content:center; padding:8px 2px; font-size:12px;}
+  #dock-panels{max-height:46vh; overflow-y:auto;}
+  .prow input[type=number]{min-height:40px;}
+  .seg button,.agrid button,.pfgrid button,#layer-tools button{min-height:44px; font-size:12px;}
+  #statusbar{display:none;}
+  .modal{min-width:0; width:calc(100vw - 32px); max-width:520px;}
+}
 </style>
-<script src="templates-data.js"></script>
+<script src="templates-core.js"></script>
+<script src="templates-photo-1.js"></script>
+<script src="templates-photo-2.js"></script>
+<script src="templates-vector.js"></script>
+<script src="templates-index.js"></script>
 </head>
 <body>
 <div id="app">
   <header id="menubar">
+    <button id="menu-btn" aria-label="Menu">☰</button>
     <div class="logo"><b>◈</b> LEHA Studio · Vector</div>
     <nav id="menus">
       <div class="menu" data-menu="file"><span data-i18n="menu_file">File</span><div class="dropdown">
@@ -322,6 +367,7 @@ kbd{background:#111; border:1px solid #4a4a4a; border-bottom-width:2px; border-r
     <span id="sb-pos">0, 0</span>
   </footer>
 </div>
+<div id="flyout-root"></div>
 <div id="modal-root"></div>
 <div id="toast-root"></div>
 <input type="file" id="file-open" accept=".svg,image/svg+xml" style="display:none">
@@ -353,7 +399,7 @@ const S={
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; $('#toast-root').appendChild(t); setTimeout(()=>t.remove(),2200); }
 
 /* ================= 1b. i18n (VI/EN) ================= */
-const LANG={vi:{"menu_file":"Tệp","menu_edit":"Sửa","menu_object":"Đối tượng","menu_path":"Đường dẫn","menu_view":"Xem","menu_help":"Trợ giúp","mi_new":"Tài liệu mới…","mi_open_svg":"Mở SVG…","mi_save_project":"Lưu dự án","mi_open_project":"Mở dự án…","mi_export_svg":"Xuất SVG","mi_export_png":"Xuất PNG…","mi_export_jpeg":"Xuất JPEG…","mi_artboard_add":"Artboard mới…","mi_artboard_del":"Xoá artboard đang dùng","mi_undo":"Hoàn tác","mi_redo":"Làm lại","mi_cut":"Cắt","mi_copy":"Sao chép","mi_paste":"Dán","mi_paste_inplace":"Dán đúng vị trí","mi_delete":"Xoá","mi_duplicate":"Nhân đôi","mi_select_all":"Chọn tất cả","mi_deselect":"Bỏ chọn","mi_group":"Nhóm","mi_ungroup":"Rã nhóm","mi_front":"Đưa lên trên cùng","mi_bring_forward":"Đưa lên một lớp","mi_send_backward":"Đưa xuống một lớp","mi_back":"Đưa xuống dưới cùng","mi_lock":"Khoá vùng chọn","mi_unlock_all":"Mở khoá tất cả","mi_hide":"Ẩn vùng chọn","mi_show_all":"Hiện tất cả","mi_join":"Nối","mi_simplify":"Đơn giản hoá…","mi_convert_to_path":"Chuyển thành Path","mi_zoom_in":"Phóng to","mi_zoom_out":"Thu nhỏ","mi_fit":"Vừa màn hình","mi_actual":"Kích thước thật","mi_toggle_grid":"Hiện lưới","mi_toggle_snap":"Bắt dính lưới","mi_toggle_rulers":"Hiện thước","mi_shortcuts":"Phím tắt","mi_about":"Giới thiệu","tab_layers":"Lớp","tab_props":"Thuộc tính","tab_align":"Căn chỉnh","tab_pf":"Pathfinder","btn_add_layer":"+ Lớp","btn_del_layer":"Xoá","tip_show_hide":"Hiện/Ẩn","tip_lock":"Khoá/Mở khoá","sec_fill":"Tô","ft_none":"Không","ft_solid":"Màu đặc","ft_linear":"Tuyến tính","ft_radial":"Xuyên tâm","lbl_color":"Màu","lbl_stop1":"Điểm 1","lbl_stop2":"Điểm 2","lbl_angle":"Góc","lbl_cx":"CX","lbl_cy":"CY","lbl_radius":"Bán kính","sec_stroke":"Viền","lbl_width":"Độ dày","lbl_dash":"Nét đứt","dash_solid":"Liền","dash_dashed":"Gạch ngang","dash_dotted":"Chấm","dash_dot":"Gạch-chấm","lbl_cap":"Đầu nét","cap_butt":"Vuông","cap_round":"Tròn","cap_square":"Vuông dài","lbl_join":"Khớp nét","join_miter":"Nhọn","join_round":"Tròn","join_bevel":"Vát","sec_transform":"Biến đổi","sec_align_to":"Căn theo","align_sel":"Vùng chọn","align_art":"Artboard đang dùng","sec_align_obj":"Căn đối tượng","al_l":"Trái","al_hc":"Giữa ngang","al_r":"Phải","al_t":"Trên","al_vc":"Giữa dọc","al_b":"Dưới","sec_distribute":"Phân bố","al_dh":"Theo ngang","al_dv":"Theo dọc","sec_shape_modes":"Chế độ hình","pf_unite":"Hợp nhất","pf_minus":"Trừ mặt trước","pf_intersect":"Giao nhau","pf_exclude":"Loại trừ","pf_note":"Chọn 2 hình tô màu trở lên. Đường cong sẽ được làm phẳng để tính toán. Không hỗ trợ chữ.","tool_select":"Chọn","tool_direct":"Chọn trực tiếp","tool_pen":"Bút Pen","tool_addAnchor":"Thêm điểm neo","tool_delAnchor":"Xoá điểm neo","tool_line":"Đoạn thẳng","tool_rect":"Hình chữ nhật","tool_ellipse":"Hình ellipse","tool_polygon":"Đa giác","tool_star":"Ngôi sao","tool_brush":"Cọ vẽ","tool_pencil":"Bút chì","tool_text":"Chữ","tool_eyedropper":"Ống hút màu","tool_zoom":"Thu phóng","tool_hand":"Bàn tay","opt_fill":"Tô","opt_stroke":"Viền","opt_font":"Phông","opt_size":"Cỡ","opt_color":"Màu","opt_sides":"Số cạnh","opt_points":"Số đỉnh","opt_inner":"Trong","opt_smoothing":"Làm mượt","tip_fill_color":"Màu tô","tip_no_fill":"Không tô","tip_stroke_color":"Màu viền","tip_no_stroke":"Không viền","tip_stroke_width":"Độ dày viền","hint_select":"Kéo để di chuyển · Alt+kéo để nhân đôi · Phím mũi tên nudge","hint_direct":"Bấm vào path để sửa điểm neo · Kéo điểm & tay cầm","hint_pen":"Bấm: điểm góc · Kéo: đường cong · Bấm điểm đầu: đóng · Enter: xong · Esc: huỷ","hint_hand":"Kéo để di chuyển khung nhìn · giữ Space bất cứ lúc nào","hint_zoom":"Bấm: phóng to · Alt+bấm: thu nhỏ · Kéo: thu phóng vùng","hint_eyedropper":"Bấm vào đối tượng để lấy màu tô & viền","hint_addAnchor":"Bấm lên path để thêm điểm","hint_delAnchor":"Bấm vào điểm neo để xoá","dlg_new_doc":"Tài liệu mới","dlg_preset":"Mẫu","preset_web":"Web · 1920 × 1080","preset_square":"Vuông · 1080 × 1080","preset_a4p":"A4 dọc","preset_a4l":"A4 ngang","preset_custom":"Tuỳ chỉnh…","dlg_width":"Rộng (px)","dlg_height":"Cao (px)","btn_cancel":"Huỷ","btn_create":"Tạo","dlg_export_png":"Xuất PNG","dlg_export_jpeg":"Xuất JPEG","dlg_artboard":"Artboard","dlg_scale":"Tỉ lệ","dlg_quality":"Chất lượng","dlg_bg":"Nền","dlg_export_note":"Chỉ xuất artboard đang chọn.","btn_export":"Xuất","dlg_new_artboard":"Artboard mới","dlg_name":"Tên","dlg_artboard_note":"Đặt cạnh artboard đang dùng. Mọi artboard dùng chung một canvas.","btn_add":"Thêm","dlg_simplify":"Đơn giản hoá path","dlg_tolerance":"Dung sai (px)","dlg_simplify_note":"Dung sai càng lớn = càng ít điểm.","btn_apply":"Áp dụng","dlg_shortcuts":"Phím tắt","dlg_about":"Giới thiệu","about_body":"LEHA Studio · Vector Editor — trình chỉnh sửa vector gọn trong một file duy nhất.<br><br>Pen & bezier, hình khối, chữ, gradient, lớp, artboard, pathfinder boolean, xuất SVG/PNG/JPEG.<br><br>Chạy 100% trên trình duyệt. File của bạn không rời khỏi máy.","sc_sel":"Chọn / Chọn trực tiếp / Bút Pen","sc_rect":"Chữ nhật / Ellipse","sc_brush":"Cọ vẽ / Bút chì","sc_type":"Chữ / Ống hút màu","sc_zoom":"Thu phóng / Bàn tay (Space = tay tạm)","sc_anchor":"Thêm / xoá điểm neo","sc_undo":"Hoàn tác / Làm lại","sc_copy":"Sao chép / Cắt / Dán","sc_paste_place":"Dán đúng vị trí","sc_dup":"Nhân đôi","sc_group":"Nhóm / Rã nhóm","sc_join":"Nối path","sc_lock":"Khoá / Ẩn vùng chọn","sc_arrange":"Đưa lên / xuống một lớp","sc_del":"Xoá vùng chọn","sc_nudge":"Nudge (Shift = ×10)","sc_zoom2":"Phóng to / thu nhỏ / vừa màn hình / 100%","sc_save":"Lưu / Tài liệu mới","sc_pen2":"Xong / huỷ path","toast_del_artboard":"Không thể xoá artboard cuối cùng","toast_del_layer":"Không thể xoá lớp cuối cùng","toast_nothing_undo":"Không có gì để hoàn tác","toast_nothing_redo":"Không có gì để làm lại","toast_sample_hint":"Bấm vào đối tượng để lấy kiểu","toast_sampled":"Đã lấy kiểu","toast_path_first":"Bấm vào một path trước","toast_closer_path":"Bấm gần path hơn","toast_closer_anchor":"Bấm gần điểm neo hơn","toast_min_points":"Path cần ít nhất 2 điểm","toast_pf_sel":"Chọn ít nhất 2 hình (bỏ qua chữ & đường thẳng)","toast_no_result":"Không tạo được hình","toast_pf_done":"Pathfinder: {op} xong","toast_pf_fail":"Pathfinder thất bại với các hình này","toast_shape_first":"Chọn một hình trước","toast_converted":"{n} đối tượng đã chuyển thành path","toast_nothing_convert":"Không có gì để chuyển","toast_2paths":"Chọn đúng 2 path","toast_joined":"Đã nối path","toast_join_fail":"Nối thất bại","toast_simplified":"Đã đơn giản hoá","toast_nothing_sel":"Chưa chọn gì","toast_no_active_art":"Không có artboard đang dùng","toast_3objs":"Chọn ít nhất 3 đối tượng","toast_cut":"Đã cắt","toast_copied":"Đã sao chép","toast_clip_empty":"Clipboard trống","toast_pasted":"Đã dán","toast_2objs":"Chọn ít nhất 2 đối tượng","toast_grouped":"Đã nhóm","toast_group_first":"Chọn một nhóm trước","toast_ungrouped":"Đã rã nhóm","toast_locked":"Đã khoá","toast_unlocked":"Đã mở khoá tất cả","toast_duplicated":"Đã nhân đôi","toast_invalid_size":"Kích thước không hợp lệ","toast_new_doc":"Đã tạo tài liệu mới","toast_no_svg":"Không tìm thấy nội dung vector để nhập","toast_svg_imported":"Đã nhập SVG","toast_svg_parse_fail":"Không đọc được file SVG này","toast_svg_exported":"Đã xuất SVG","toast_no_artboard":"Không có artboard","toast_png_exported":"Đã xuất PNG","toast_jpeg_exported":"Đã xuất JPEG","toast_export_fail":"Xuất thất bại","toast_raster_browser":"Trình duyệt này không xuất raster được","toast_raster_fail":"Xuất raster thất bại","toast_saved":"Đã lưu dự án","toast_opened":"Đã mở dự án","toast_open_fail":"Không mở được file dự án này","toast_artboard_added":"Đã thêm artboard","toast_snap_on":"Bắt dính lưới: BẬT","toast_snap_off":"Bắt dính lưới: TẮT","sb_nothing":"Chưa chọn gì","sb_sel_n":"{n} đối tượng được chọn","sb_artboard":"Artboard","shape_path":"Path","shape_rect":"Chữ nhật","shape_ellipse":"Ellipse","shape_circle":"Tròn","shape_polygon":"Đa giác","shape_line":"Đường thẳng","shape_text":"Chữ","shape_group":"Nhóm","def_layer":"Lớp","def_artboard":"Artboard","btn_ok":"OK","tpl_logo_cafe":"Logo quán cà phê","tpl_logo_tech":"Logo công nghệ","tpl_icons_8":"Bộ 8 icon","tpl_badge":"Huy hiệu tròn","tpl_p_bg":"Nền","tpl_p_shape":"Hình","tpl_p_text":"Chữ","tpl_p_ring":"Vòng","tpl_p_icon":"Biểu tượng"},en:{"menu_file":"File","menu_edit":"Edit","menu_object":"Object","menu_path":"Path","menu_view":"View","menu_help":"Help","mi_new":"New…","mi_open_svg":"Open SVG…","mi_save_project":"Save Project","mi_open_project":"Open Project…","mi_export_svg":"Export SVG","mi_export_png":"Export PNG…","mi_export_jpeg":"Export JPEG…","mi_artboard_add":"New Artboard…","mi_artboard_del":"Delete Active Artboard","mi_undo":"Undo","mi_redo":"Redo","mi_cut":"Cut","mi_copy":"Copy","mi_paste":"Paste","mi_paste_inplace":"Paste in Place","mi_delete":"Delete","mi_duplicate":"Duplicate","mi_select_all":"Select All","mi_deselect":"Deselect","mi_group":"Group","mi_ungroup":"Ungroup","mi_front":"Bring to Front","mi_bring_forward":"Bring Forward","mi_send_backward":"Send Backward","mi_back":"Send to Back","mi_lock":"Lock Selection","mi_unlock_all":"Unlock All","mi_hide":"Hide Selection","mi_show_all":"Show All","mi_join":"Join","mi_simplify":"Simplify…","mi_convert_to_path":"Convert to Path","mi_zoom_in":"Zoom In","mi_zoom_out":"Zoom Out","mi_fit":"Fit on Screen","mi_actual":"Actual Size","mi_toggle_grid":"Show Grid","mi_toggle_snap":"Snap to Grid","mi_toggle_rulers":"Show Rulers","mi_shortcuts":"Keyboard Shortcuts","mi_about":"About","tab_layers":"Layers","tab_props":"Properties","tab_align":"Align","tab_pf":"Pathfinder","btn_add_layer":"+ Layer","btn_del_layer":"Delete","tip_show_hide":"Show/Hide","tip_lock":"Lock/Unlock","sec_fill":"Fill","ft_none":"None","ft_solid":"Solid","ft_linear":"Linear","ft_radial":"Radial","lbl_color":"Color","lbl_stop1":"Stop 1","lbl_stop2":"Stop 2","lbl_angle":"Angle","lbl_cx":"CX","lbl_cy":"CY","lbl_radius":"Radius","sec_stroke":"Stroke","lbl_width":"Width","lbl_dash":"Dash","dash_solid":"Solid","dash_dashed":"Dashed","dash_dotted":"Dotted","dash_dot":"Dash-dot","lbl_cap":"Cap","cap_butt":"Butt","cap_round":"Round","cap_square":"Square","lbl_join":"Join","join_miter":"Miter","join_round":"Round","join_bevel":"Bevel","sec_transform":"Transform","sec_align_to":"Align To","align_sel":"Selection","align_art":"Active Artboard","sec_align_obj":"Align Objects","al_l":"Left","al_hc":"H Center","al_r":"Right","al_t":"Top","al_vc":"V Center","al_b":"Bottom","sec_distribute":"Distribute","al_dh":"Horizontally","al_dv":"Vertically","sec_shape_modes":"Shape Modes","pf_unite":"Unite","pf_minus":"Minus Front","pf_intersect":"Intersect","pf_exclude":"Exclude","pf_note":"Select 2 or more filled shapes. Curves are flattened for the calculation. Text is not supported.","tool_select":"Selection","tool_direct":"Direct Selection","tool_pen":"Pen","tool_addAnchor":"Add Anchor Point","tool_delAnchor":"Delete Anchor Point","tool_line":"Line Segment","tool_rect":"Rectangle","tool_ellipse":"Ellipse","tool_polygon":"Polygon","tool_star":"Star","tool_brush":"Paintbrush","tool_pencil":"Pencil","tool_text":"Type","tool_eyedropper":"Eyedropper","tool_zoom":"Zoom","tool_hand":"Hand","opt_fill":"Fill","opt_stroke":"Stroke","opt_font":"Font","opt_size":"Size","opt_color":"Color","opt_sides":"Sides","opt_points":"Points","opt_inner":"Inner","opt_smoothing":"Smoothing","tip_fill_color":"Fill color","tip_no_fill":"No fill","tip_stroke_color":"Stroke color","tip_no_stroke":"No stroke","tip_stroke_width":"Stroke width","hint_select":"Drag to move · Alt-drag duplicates · Arrow keys nudge","hint_direct":"Click a path to edit anchors · Drag points & handles","hint_pen":"Click: corner · Drag: curve · Click start point: close · Enter: finish · Esc: cancel","hint_hand":"Drag to pan · hold Space anytime","hint_zoom":"Click: zoom in · Alt+click: zoom out · Drag: marquee zoom","hint_eyedropper":"Click an object to sample its fill & stroke","hint_addAnchor":"Click on a path to add a point","hint_delAnchor":"Click an anchor point to delete it","dlg_new_doc":"New Document","dlg_preset":"Preset","preset_web":"Web · 1920 × 1080","preset_square":"Square · 1080 × 1080","preset_a4p":"A4 portrait","preset_a4l":"A4 landscape","preset_custom":"Custom…","dlg_width":"Width (px)","dlg_height":"Height (px)","btn_cancel":"Cancel","btn_create":"Create","dlg_export_png":"Export PNG","dlg_export_jpeg":"Export JPEG","dlg_artboard":"Artboard","dlg_scale":"Scale","dlg_quality":"Quality","dlg_bg":"Background","dlg_export_note":"Exports the selected artboard only.","btn_export":"Export","dlg_new_artboard":"New Artboard","dlg_name":"Name","dlg_artboard_note":"Placed next to the active artboard. All artboards share one canvas.","btn_add":"Add","dlg_simplify":"Simplify Path","dlg_tolerance":"Tolerance (px)","dlg_simplify_note":"Higher tolerance = fewer points.","btn_apply":"Apply","dlg_shortcuts":"Keyboard Shortcuts","dlg_about":"About","about_body":"LEHA Studio · Vector Editor — a single-file vector graphics editor.<br><br>Pen &amp; bezier editing, shapes, text, gradients, layers, artboards, boolean pathfinder, SVG/PNG/JPEG export.<br><br>Runs 100% in your browser. Your files never leave your computer.","sc_sel":"Selection / Direct selection / Pen","sc_rect":"Rectangle / Ellipse","sc_brush":"Paintbrush / Pencil","sc_type":"Type / Eyedropper","sc_zoom":"Zoom / Hand (Space = temp hand)","sc_anchor":"Add / delete anchor point","sc_undo":"Undo / Redo","sc_copy":"Copy / Cut / Paste","sc_paste_place":"Paste in place","sc_dup":"Duplicate","sc_group":"Group / Ungroup","sc_join":"Join paths","sc_lock":"Lock / Hide selection","sc_arrange":"Arrange forward / backward","sc_del":"Delete selection","sc_nudge":"Nudge (Shift = ×10)","sc_zoom2":"Zoom in / out / fit / 100%","sc_save":"Save / New project","sc_pen2":"Finish / cancel path","toast_del_artboard":"Cannot delete the last artboard","toast_del_layer":"Cannot delete the last layer","toast_nothing_undo":"Nothing to undo","toast_nothing_redo":"Nothing to redo","toast_sample_hint":"Click an object to sample its style","toast_sampled":"Style sampled","toast_path_first":"Click a path first","toast_closer_path":"Click closer to the path","toast_closer_anchor":"Click closer to an anchor point","toast_min_points":"A path needs at least 2 points","toast_pf_sel":"Select at least 2 shapes (text & lines are skipped)","toast_no_result":"No resulting shape","toast_pf_done":"Pathfinder: {op} done","toast_pf_fail":"Pathfinder failed on these shapes","toast_shape_first":"Select a shape first","toast_converted":"{n} object(s) converted to path","toast_nothing_convert":"Nothing to convert","toast_2paths":"Select exactly 2 paths","toast_joined":"Paths joined","toast_join_fail":"Join failed","toast_simplified":"Simplified","toast_nothing_sel":"Nothing selected","toast_no_active_art":"No active artboard","toast_3objs":"Select at least 3 objects","toast_cut":"Cut","toast_copied":"Copied","toast_clip_empty":"Clipboard is empty","toast_pasted":"Pasted","toast_2objs":"Select at least 2 objects","toast_grouped":"Grouped","toast_group_first":"Select a group first","toast_ungrouped":"Ungrouped","toast_locked":"Locked","toast_unlocked":"All unlocked","toast_duplicated":"Duplicated","toast_invalid_size":"Invalid size","toast_new_doc":"New document","toast_no_svg":"No importable vector content found","toast_svg_imported":"SVG imported","toast_svg_parse_fail":"Could not parse this SVG file","toast_svg_exported":"SVG exported","toast_no_artboard":"No artboard","toast_png_exported":"PNG exported","toast_jpeg_exported":"JPEG exported","toast_export_fail":"Export failed","toast_raster_browser":"Raster export failed in this browser","toast_raster_fail":"Raster export failed","toast_saved":"Project saved","toast_opened":"Project opened","toast_open_fail":"Could not open this project file","toast_artboard_added":"Artboard added","toast_snap_on":"Snap to grid ON","toast_snap_off":"Snap to grid OFF","sb_nothing":"Nothing selected","sb_sel_n":"{n} objects selected","sb_artboard":"Artboard","shape_path":"Path","shape_rect":"Rectangle","shape_ellipse":"Ellipse","shape_circle":"Circle","shape_polygon":"Polygon","shape_line":"Line","shape_text":"Text","shape_group":"Group","def_layer":"Layer","def_artboard":"Artboard","btn_ok":"OK","tpl_logo_cafe":"Coffee shop logo","tpl_logo_tech":"Tech logo","tpl_icons_8":"8-icon set","tpl_badge":"Round badge","tpl_p_bg":"Background","tpl_p_shape":"Shape","tpl_p_text":"Text","tpl_p_ring":"Ring","tpl_p_icon":"Icon"}};
+const LANG={vi:{"menu_file":"Tệp","menu_edit":"Sửa","menu_object":"Đối tượng","menu_path":"Đường dẫn","menu_view":"Xem","menu_help":"Trợ giúp","mi_new":"Tài liệu mới…","mi_open_svg":"Mở SVG…","mi_save_project":"Lưu dự án","mi_open_project":"Mở dự án…","mi_export_svg":"Xuất SVG","mi_export_png":"Xuất PNG…","mi_export_jpeg":"Xuất JPEG…","mi_artboard_add":"Artboard mới…","mi_artboard_del":"Xoá artboard đang dùng","mi_undo":"Hoàn tác","mi_redo":"Làm lại","mi_cut":"Cắt","mi_copy":"Sao chép","mi_paste":"Dán","mi_paste_inplace":"Dán đúng vị trí","mi_delete":"Xoá","mi_duplicate":"Nhân đôi","mi_select_all":"Chọn tất cả","mi_deselect":"Bỏ chọn","mi_group":"Nhóm","mi_ungroup":"Rã nhóm","mi_front":"Đưa lên trên cùng","mi_bring_forward":"Đưa lên một lớp","mi_send_backward":"Đưa xuống một lớp","mi_back":"Đưa xuống dưới cùng","mi_lock":"Khoá vùng chọn","mi_unlock_all":"Mở khoá tất cả","mi_hide":"Ẩn vùng chọn","mi_show_all":"Hiện tất cả","mi_join":"Nối","mi_simplify":"Đơn giản hoá…","mi_convert_to_path":"Chuyển thành Path","mi_zoom_in":"Phóng to","mi_zoom_out":"Thu nhỏ","mi_fit":"Vừa màn hình","mi_actual":"Kích thước thật","mi_toggle_grid":"Hiện lưới","mi_toggle_snap":"Bắt dính lưới","mi_toggle_rulers":"Hiện thước","mi_shortcuts":"Phím tắt","mi_about":"Giới thiệu","tab_layers":"Lớp","tab_props":"Thuộc tính","tab_align":"Căn chỉnh","tab_pf":"Pathfinder","btn_add_layer":"+ Lớp","btn_del_layer":"Xoá","tip_show_hide":"Hiện/Ẩn","tip_lock":"Khoá/Mở khoá","sec_fill":"Tô","ft_none":"Không","ft_solid":"Màu đặc","ft_linear":"Tuyến tính","ft_radial":"Xuyên tâm","lbl_color":"Màu","lbl_stop1":"Điểm 1","lbl_stop2":"Điểm 2","lbl_angle":"Góc","lbl_cx":"CX","lbl_cy":"CY","lbl_radius":"Bán kính","sec_stroke":"Viền","lbl_width":"Độ dày","lbl_dash":"Nét đứt","dash_solid":"Liền","dash_dashed":"Gạch ngang","dash_dotted":"Chấm","dash_dot":"Gạch-chấm","lbl_cap":"Đầu nét","cap_butt":"Vuông","cap_round":"Tròn","cap_square":"Vuông dài","lbl_join":"Khớp nét","join_miter":"Nhọn","join_round":"Tròn","join_bevel":"Vát","sec_transform":"Biến đổi","sec_align_to":"Căn theo","align_sel":"Vùng chọn","align_art":"Artboard đang dùng","sec_align_obj":"Căn đối tượng","al_l":"Trái","al_hc":"Giữa ngang","al_r":"Phải","al_t":"Trên","al_vc":"Giữa dọc","al_b":"Dưới","sec_distribute":"Phân bố","al_dh":"Theo ngang","al_dv":"Theo dọc","sec_shape_modes":"Chế độ hình","pf_unite":"Hợp nhất","pf_minus":"Trừ mặt trước","pf_intersect":"Giao nhau","pf_exclude":"Loại trừ","pf_note":"Chọn 2 hình tô màu trở lên. Đường cong sẽ được làm phẳng để tính toán. Không hỗ trợ chữ.","tool_select":"Chọn","tool_direct":"Chọn trực tiếp","tool_pen":"Bút Pen","tool_addAnchor":"Thêm điểm neo","tool_delAnchor":"Xoá điểm neo","tool_line":"Đoạn thẳng","tool_rect":"Hình chữ nhật","tool_ellipse":"Hình ellipse","tool_polygon":"Đa giác","tool_star":"Ngôi sao","tool_brush":"Cọ vẽ","tool_pencil":"Bút chì","tool_text":"Chữ","tool_eyedropper":"Ống hút màu","tool_zoom":"Thu phóng","tool_hand":"Bàn tay","ui_menu":"Menu","opt_fill":"Tô","opt_stroke":"Viền","opt_font":"Phông","opt_size":"Cỡ","opt_color":"Màu","opt_sides":"Số cạnh","opt_points":"Số đỉnh","opt_inner":"Trong","opt_smoothing":"Làm mượt","tip_fill_color":"Màu tô","tip_no_fill":"Không tô","tip_stroke_color":"Màu viền","tip_no_stroke":"Không viền","tip_stroke_width":"Độ dày viền","hint_select":"Kéo để di chuyển · Alt+kéo để nhân đôi · Phím mũi tên nudge","hint_direct":"Bấm vào path để sửa điểm neo · Kéo điểm & tay cầm","hint_pen":"Bấm: điểm góc · Kéo: đường cong · Bấm điểm đầu: đóng · Enter: xong · Esc: huỷ","hint_hand":"Kéo để di chuyển khung nhìn · giữ Space bất cứ lúc nào","hint_zoom":"Bấm: phóng to · Alt+bấm: thu nhỏ · Kéo: thu phóng vùng","hint_eyedropper":"Bấm vào đối tượng để lấy màu tô & viền","hint_addAnchor":"Bấm lên path để thêm điểm","hint_delAnchor":"Bấm vào điểm neo để xoá","dlg_new_doc":"Tài liệu mới","dlg_preset":"Mẫu","preset_web":"Web · 1920 × 1080","preset_square":"Vuông · 1080 × 1080","preset_a4p":"A4 dọc","preset_a4l":"A4 ngang","preset_custom":"Tuỳ chỉnh…","dlg_width":"Rộng (px)","dlg_height":"Cao (px)","btn_cancel":"Huỷ","btn_create":"Tạo","dlg_export_png":"Xuất PNG","dlg_export_jpeg":"Xuất JPEG","dlg_artboard":"Artboard","dlg_scale":"Tỉ lệ","dlg_quality":"Chất lượng","dlg_bg":"Nền","dlg_export_note":"Chỉ xuất artboard đang chọn.","btn_export":"Xuất","dlg_new_artboard":"Artboard mới","dlg_name":"Tên","dlg_artboard_note":"Đặt cạnh artboard đang dùng. Mọi artboard dùng chung một canvas.","btn_add":"Thêm","dlg_simplify":"Đơn giản hoá path","dlg_tolerance":"Dung sai (px)","dlg_simplify_note":"Dung sai càng lớn = càng ít điểm.","btn_apply":"Áp dụng","dlg_shortcuts":"Phím tắt","dlg_about":"Giới thiệu","about_body":"LEHA Studio · Vector Editor — trình chỉnh sửa vector gọn trong một file duy nhất.<br><br>Pen & bezier, hình khối, chữ, gradient, lớp, artboard, pathfinder boolean, xuất SVG/PNG/JPEG.<br><br>Chạy 100% trên trình duyệt. File của bạn không rời khỏi máy.","sc_sel":"Chọn / Chọn trực tiếp / Bút Pen","sc_rect":"Chữ nhật / Ellipse","sc_brush":"Cọ vẽ / Bút chì","sc_type":"Chữ / Ống hút màu","sc_zoom":"Thu phóng / Bàn tay (Space = tay tạm)","sc_anchor":"Thêm / xoá điểm neo","sc_undo":"Hoàn tác / Làm lại","sc_copy":"Sao chép / Cắt / Dán","sc_paste_place":"Dán đúng vị trí","sc_dup":"Nhân đôi","sc_group":"Nhóm / Rã nhóm","sc_join":"Nối path","sc_lock":"Khoá / Ẩn vùng chọn","sc_arrange":"Đưa lên / xuống một lớp","sc_del":"Xoá vùng chọn","sc_nudge":"Nudge (Shift = ×10)","sc_zoom2":"Phóng to / thu nhỏ / vừa màn hình / 100%","sc_save":"Lưu / Tài liệu mới","sc_pen2":"Xong / huỷ path","toast_del_artboard":"Không thể xoá artboard cuối cùng","toast_del_layer":"Không thể xoá lớp cuối cùng","toast_nothing_undo":"Không có gì để hoàn tác","toast_nothing_redo":"Không có gì để làm lại","toast_sample_hint":"Bấm vào đối tượng để lấy kiểu","toast_sampled":"Đã lấy kiểu","toast_path_first":"Bấm vào một path trước","toast_closer_path":"Bấm gần path hơn","toast_closer_anchor":"Bấm gần điểm neo hơn","toast_min_points":"Path cần ít nhất 2 điểm","toast_pf_sel":"Chọn ít nhất 2 hình (bỏ qua chữ & đường thẳng)","toast_no_result":"Không tạo được hình","toast_pf_done":"Pathfinder: {op} xong","toast_pf_fail":"Pathfinder thất bại với các hình này","toast_shape_first":"Chọn một hình trước","toast_converted":"{n} đối tượng đã chuyển thành path","toast_nothing_convert":"Không có gì để chuyển","toast_2paths":"Chọn đúng 2 path","toast_joined":"Đã nối path","toast_join_fail":"Nối thất bại","toast_simplified":"Đã đơn giản hoá","toast_nothing_sel":"Chưa chọn gì","toast_no_active_art":"Không có artboard đang dùng","toast_3objs":"Chọn ít nhất 3 đối tượng","toast_cut":"Đã cắt","toast_copied":"Đã sao chép","toast_clip_empty":"Clipboard trống","toast_pasted":"Đã dán","toast_2objs":"Chọn ít nhất 2 đối tượng","toast_grouped":"Đã nhóm","toast_group_first":"Chọn một nhóm trước","toast_ungrouped":"Đã rã nhóm","toast_locked":"Đã khoá","toast_unlocked":"Đã mở khoá tất cả","toast_duplicated":"Đã nhân đôi","toast_invalid_size":"Kích thước không hợp lệ","toast_new_doc":"Đã tạo tài liệu mới","toast_no_svg":"Không tìm thấy nội dung vector để nhập","toast_svg_imported":"Đã nhập SVG","toast_svg_parse_fail":"Không đọc được file SVG này","toast_svg_exported":"Đã xuất SVG","toast_no_artboard":"Không có artboard","toast_png_exported":"Đã xuất PNG","toast_jpeg_exported":"Đã xuất JPEG","toast_export_fail":"Xuất thất bại","toast_raster_browser":"Trình duyệt này không xuất raster được","toast_raster_fail":"Xuất raster thất bại","toast_saved":"Đã lưu dự án","toast_opened":"Đã mở dự án","toast_open_fail":"Không mở được file dự án này","toast_artboard_added":"Đã thêm artboard","toast_snap_on":"Bắt dính lưới: BẬT","toast_snap_off":"Bắt dính lưới: TẮT","sb_nothing":"Chưa chọn gì","sb_sel_n":"{n} đối tượng được chọn","sb_artboard":"Artboard","shape_path":"Path","shape_rect":"Chữ nhật","shape_ellipse":"Ellipse","shape_circle":"Tròn","shape_polygon":"Đa giác","shape_line":"Đường thẳng","shape_text":"Chữ","shape_group":"Nhóm","def_layer":"Lớp","def_artboard":"Artboard","btn_ok":"OK","tpl_logo_cafe":"Logo quán cà phê","tpl_logo_tech":"Logo công nghệ","tpl_icons_8":"Bộ 8 icon","tpl_badge":"Huy hiệu tròn","tpl_p_bg":"Nền","tpl_p_shape":"Hình","tpl_p_text":"Chữ","tpl_p_ring":"Vòng","tpl_p_icon":"Biểu tượng","tpl_restaurant_logo":"Logo nhà hàng","tpl_spa_logo":"Logo spa","tpl_gym_logo":"Logo phòng gym","tpl_fashion_logo":"Logo thời trang","tpl_realestate_logo":"Logo bất động sản","tpl_bubbletea_logo":"Logo trà sữa","tpl_icons_food":"Bộ 8 icon ẩm thực","tpl_icons_travel":"Bộ 8 icon du lịch","tpl_badge_vintage":"Huy hiệu vintage","tpl_monogram":"Chữ lồng sang trọng","tpl_patterns":"Bộ 4 pattern hình học","tpl_pattern_tet":"Pattern Tết","tpl_cv_resume":"CV 1 trang","tpl_infographic":"Infographic số liệu","tpl_sticker_pack":"Bộ 6 sticker","tpl_p_logo":"Logo","tpl_p_badge":"Huy hiệu"},en:{"menu_file":"File","menu_edit":"Edit","menu_object":"Object","menu_path":"Path","menu_view":"View","menu_help":"Help","mi_new":"New…","mi_open_svg":"Open SVG…","mi_save_project":"Save Project","mi_open_project":"Open Project…","mi_export_svg":"Export SVG","mi_export_png":"Export PNG…","mi_export_jpeg":"Export JPEG…","mi_artboard_add":"New Artboard…","mi_artboard_del":"Delete Active Artboard","mi_undo":"Undo","mi_redo":"Redo","mi_cut":"Cut","mi_copy":"Copy","mi_paste":"Paste","mi_paste_inplace":"Paste in Place","mi_delete":"Delete","mi_duplicate":"Duplicate","mi_select_all":"Select All","mi_deselect":"Deselect","mi_group":"Group","mi_ungroup":"Ungroup","mi_front":"Bring to Front","mi_bring_forward":"Bring Forward","mi_send_backward":"Send Backward","mi_back":"Send to Back","mi_lock":"Lock Selection","mi_unlock_all":"Unlock All","mi_hide":"Hide Selection","mi_show_all":"Show All","mi_join":"Join","mi_simplify":"Simplify…","mi_convert_to_path":"Convert to Path","mi_zoom_in":"Zoom In","mi_zoom_out":"Zoom Out","mi_fit":"Fit on Screen","mi_actual":"Actual Size","mi_toggle_grid":"Show Grid","mi_toggle_snap":"Snap to Grid","mi_toggle_rulers":"Show Rulers","mi_shortcuts":"Keyboard Shortcuts","mi_about":"About","tab_layers":"Layers","tab_props":"Properties","tab_align":"Align","tab_pf":"Pathfinder","btn_add_layer":"+ Layer","btn_del_layer":"Delete","tip_show_hide":"Show/Hide","tip_lock":"Lock/Unlock","sec_fill":"Fill","ft_none":"None","ft_solid":"Solid","ft_linear":"Linear","ft_radial":"Radial","lbl_color":"Color","lbl_stop1":"Stop 1","lbl_stop2":"Stop 2","lbl_angle":"Angle","lbl_cx":"CX","lbl_cy":"CY","lbl_radius":"Radius","sec_stroke":"Stroke","lbl_width":"Width","lbl_dash":"Dash","dash_solid":"Solid","dash_dashed":"Dashed","dash_dotted":"Dotted","dash_dot":"Dash-dot","lbl_cap":"Cap","cap_butt":"Butt","cap_round":"Round","cap_square":"Square","lbl_join":"Join","join_miter":"Miter","join_round":"Round","join_bevel":"Bevel","sec_transform":"Transform","sec_align_to":"Align To","align_sel":"Selection","align_art":"Active Artboard","sec_align_obj":"Align Objects","al_l":"Left","al_hc":"H Center","al_r":"Right","al_t":"Top","al_vc":"V Center","al_b":"Bottom","sec_distribute":"Distribute","al_dh":"Horizontally","al_dv":"Vertically","sec_shape_modes":"Shape Modes","pf_unite":"Unite","pf_minus":"Minus Front","pf_intersect":"Intersect","pf_exclude":"Exclude","pf_note":"Select 2 or more filled shapes. Curves are flattened for the calculation. Text is not supported.","tool_select":"Selection","tool_direct":"Direct Selection","tool_pen":"Pen","tool_addAnchor":"Add Anchor Point","tool_delAnchor":"Delete Anchor Point","tool_line":"Line Segment","tool_rect":"Rectangle","tool_ellipse":"Ellipse","tool_polygon":"Polygon","tool_star":"Star","tool_brush":"Paintbrush","tool_pencil":"Pencil","tool_text":"Type","tool_eyedropper":"Eyedropper","tool_zoom":"Zoom","tool_hand":"Hand","ui_menu":"Menu","opt_fill":"Fill","opt_stroke":"Stroke","opt_font":"Font","opt_size":"Size","opt_color":"Color","opt_sides":"Sides","opt_points":"Points","opt_inner":"Inner","opt_smoothing":"Smoothing","tip_fill_color":"Fill color","tip_no_fill":"No fill","tip_stroke_color":"Stroke color","tip_no_stroke":"No stroke","tip_stroke_width":"Stroke width","hint_select":"Drag to move · Alt-drag duplicates · Arrow keys nudge","hint_direct":"Click a path to edit anchors · Drag points & handles","hint_pen":"Click: corner · Drag: curve · Click start point: close · Enter: finish · Esc: cancel","hint_hand":"Drag to pan · hold Space anytime","hint_zoom":"Click: zoom in · Alt+click: zoom out · Drag: marquee zoom","hint_eyedropper":"Click an object to sample its fill & stroke","hint_addAnchor":"Click on a path to add a point","hint_delAnchor":"Click an anchor point to delete it","dlg_new_doc":"New Document","dlg_preset":"Preset","preset_web":"Web · 1920 × 1080","preset_square":"Square · 1080 × 1080","preset_a4p":"A4 portrait","preset_a4l":"A4 landscape","preset_custom":"Custom…","dlg_width":"Width (px)","dlg_height":"Height (px)","btn_cancel":"Cancel","btn_create":"Create","dlg_export_png":"Export PNG","dlg_export_jpeg":"Export JPEG","dlg_artboard":"Artboard","dlg_scale":"Scale","dlg_quality":"Quality","dlg_bg":"Background","dlg_export_note":"Exports the selected artboard only.","btn_export":"Export","dlg_new_artboard":"New Artboard","dlg_name":"Name","dlg_artboard_note":"Placed next to the active artboard. All artboards share one canvas.","btn_add":"Add","dlg_simplify":"Simplify Path","dlg_tolerance":"Tolerance (px)","dlg_simplify_note":"Higher tolerance = fewer points.","btn_apply":"Apply","dlg_shortcuts":"Keyboard Shortcuts","dlg_about":"About","about_body":"LEHA Studio · Vector Editor — a single-file vector graphics editor.<br><br>Pen &amp; bezier editing, shapes, text, gradients, layers, artboards, boolean pathfinder, SVG/PNG/JPEG export.<br><br>Runs 100% in your browser. Your files never leave your computer.","sc_sel":"Selection / Direct selection / Pen","sc_rect":"Rectangle / Ellipse","sc_brush":"Paintbrush / Pencil","sc_type":"Type / Eyedropper","sc_zoom":"Zoom / Hand (Space = temp hand)","sc_anchor":"Add / delete anchor point","sc_undo":"Undo / Redo","sc_copy":"Copy / Cut / Paste","sc_paste_place":"Paste in place","sc_dup":"Duplicate","sc_group":"Group / Ungroup","sc_join":"Join paths","sc_lock":"Lock / Hide selection","sc_arrange":"Arrange forward / backward","sc_del":"Delete selection","sc_nudge":"Nudge (Shift = ×10)","sc_zoom2":"Zoom in / out / fit / 100%","sc_save":"Save / New project","sc_pen2":"Finish / cancel path","toast_del_artboard":"Cannot delete the last artboard","toast_del_layer":"Cannot delete the last layer","toast_nothing_undo":"Nothing to undo","toast_nothing_redo":"Nothing to redo","toast_sample_hint":"Click an object to sample its style","toast_sampled":"Style sampled","toast_path_first":"Click a path first","toast_closer_path":"Click closer to the path","toast_closer_anchor":"Click closer to an anchor point","toast_min_points":"A path needs at least 2 points","toast_pf_sel":"Select at least 2 shapes (text & lines are skipped)","toast_no_result":"No resulting shape","toast_pf_done":"Pathfinder: {op} done","toast_pf_fail":"Pathfinder failed on these shapes","toast_shape_first":"Select a shape first","toast_converted":"{n} object(s) converted to path","toast_nothing_convert":"Nothing to convert","toast_2paths":"Select exactly 2 paths","toast_joined":"Paths joined","toast_join_fail":"Join failed","toast_simplified":"Simplified","toast_nothing_sel":"Nothing selected","toast_no_active_art":"No active artboard","toast_3objs":"Select at least 3 objects","toast_cut":"Cut","toast_copied":"Copied","toast_clip_empty":"Clipboard is empty","toast_pasted":"Pasted","toast_2objs":"Select at least 2 objects","toast_grouped":"Grouped","toast_group_first":"Select a group first","toast_ungrouped":"Ungrouped","toast_locked":"Locked","toast_unlocked":"All unlocked","toast_duplicated":"Duplicated","toast_invalid_size":"Invalid size","toast_new_doc":"New document","toast_no_svg":"No importable vector content found","toast_svg_imported":"SVG imported","toast_svg_parse_fail":"Could not parse this SVG file","toast_svg_exported":"SVG exported","toast_no_artboard":"No artboard","toast_png_exported":"PNG exported","toast_jpeg_exported":"JPEG exported","toast_export_fail":"Export failed","toast_raster_browser":"Raster export failed in this browser","toast_raster_fail":"Raster export failed","toast_saved":"Project saved","toast_opened":"Project opened","toast_open_fail":"Could not open this project file","toast_artboard_added":"Artboard added","toast_snap_on":"Snap to grid ON","toast_snap_off":"Snap to grid OFF","sb_nothing":"Nothing selected","sb_sel_n":"{n} objects selected","sb_artboard":"Artboard","shape_path":"Path","shape_rect":"Rectangle","shape_ellipse":"Ellipse","shape_circle":"Circle","shape_polygon":"Polygon","shape_line":"Line","shape_text":"Text","shape_group":"Group","def_layer":"Layer","def_artboard":"Artboard","btn_ok":"OK","tpl_logo_cafe":"Coffee shop logo","tpl_logo_tech":"Tech logo","tpl_icons_8":"8-icon set","tpl_badge":"Round badge","tpl_p_bg":"Background","tpl_p_shape":"Shape","tpl_p_text":"Text","tpl_p_ring":"Ring","tpl_p_icon":"Icon","tpl_restaurant_logo":"Restaurant logo","tpl_spa_logo":"Spa logo","tpl_gym_logo":"Gym logo","tpl_fashion_logo":"Fashion logo","tpl_realestate_logo":"Real estate logo","tpl_bubbletea_logo":"Bubble tea logo","tpl_icons_food":"8 food icons","tpl_icons_travel":"8 travel icons","tpl_badge_vintage":"Vintage badge","tpl_monogram":"Luxury monogram","tpl_patterns":"4 geometric patterns","tpl_pattern_tet":"Tet pattern","tpl_cv_resume":"One-page CV","tpl_infographic":"Data infographic","tpl_sticker_pack":"6-sticker pack","tpl_p_logo":"Logo","tpl_p_badge":"Badge"}};
 let lang='vi'; try{ lang=localStorage.getItem('leha_lang')||'vi'; }catch(e){}
 if(!LANG[lang])lang='vi';
 function t(key){ const d=LANG[lang]||LANG.vi; const v=d[key]; return v!==undefined?v:(LANG.en[key]!==undefined?LANG.en[key]:key); }
@@ -361,6 +407,7 @@ function setLang(l){ lang=LANG[l]?l:'vi'; try{localStorage.setItem('leha_lang',l
 function applyLang(){
   document.documentElement.lang=lang;
   $$('#lang-toggle button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  const mb=$('#menu-btn'); if(mb)mb.setAttribute('aria-label',t('ui_menu'));
   $$('[data-i18n]').forEach(el=>{
     const v=t(el.dataset.i18n);
     const tn=[...el.childNodes].find(n=>n.nodeType===3&&n.nodeValue.trim());
@@ -806,10 +853,48 @@ function drawDirect(){
 /* ================= 11. POINTER INTERACTION ================= */
 let drag=null;
 const snapPt=p=>({x:S.snap?Math.round(p.x/10)*10:p.x, y:S.snap?Math.round(p.y/10)*10:p.y});
-svg.addEventListener('pointerdown',onDown);
+svg.addEventListener('pointerdown',stagePointerDown);
 svg.addEventListener('dblclick',onDbl);
 window.addEventListener('pointermove',onMove);
 window.addEventListener('pointerup',onUp);
+/* ---- two-finger pinch-zoom + pan (mobile); a single pointer keeps tool behaviour ---- */
+const gPts=new Map();
+let gState=null; // null | {d0,mx0,my0,s0,tx0,ty0} | 'lock'
+function stagePointerDown(e){
+  closeMobileUI();
+  gPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(gState==='lock')return;
+  if(gPts.size===2){
+    if(pen){ try{finishPen();}catch(_){} }
+    drag=null;
+    const pts=[...gPts.values()],a=pts[0],b=pts[1];
+    gState={d0:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),mx0:(a.x+b.x)/2,my0:(a.y+b.y)/2,s0:S.view.s,tx0:S.view.tx,ty0:S.view.ty};
+    refreshAll();
+    return;
+  }
+  if(gPts.size>2){ gState='lock'; return; }
+  onDown(e);
+}
+function doPinch(){
+  if(!gState||gState==='lock'||gPts.size<2)return;
+  const pts=[...gPts.values()],a=pts[0],b=pts[1];
+  const d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y));
+  const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+  const r=svg.getBoundingClientRect();
+  const ns=clamp(gState.s0*(d/gState.d0),0.02,64);
+  const wx=mx-r.left,wy=my-r.top;
+  S.view.s=ns;
+  S.view.tx=wx-(wx-gState.tx0)*(ns/gState.s0)+(mx-gState.mx0);
+  S.view.ty=wy-(wy-gState.ty0)*(ns/gState.s0)+(my-gState.my0);
+  applyView(); refreshOverlay();
+}
+window.addEventListener('pointercancel',e=>{
+  if(gPts.has(e.pointerId)){ gPts.delete(e.pointerId); if(gPts.size===0)gState=null; }
+});
+function closeMobileUI(){
+  closeFlyout();
+  document.body.classList.remove('menu-open');
+}
 
 function onDown(e){
   if(e.button===1||S.tool==='hand'||(S.tool==='select'&&e.shiftKey&&false)){/*noop*/}
@@ -958,6 +1043,11 @@ function doDirect(p){
 }
 /* ---- move/up dispatch ---- */
 function onMove(e){
+  if(gPts.has(e.pointerId)){
+    gPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(gState&&gState!=='lock')doPinch();
+    return;
+  }
   const r=svg.getBoundingClientRect();
   $('#sb-pos').textContent=`${Math.round((e.clientX-r.left-S.view.tx)/S.view.s)}, ${Math.round((e.clientY-r.top-S.view.ty)/S.view.s)}`;
   if(!drag)return;
@@ -976,6 +1066,12 @@ function onMove(e){
   }
 }
 function onUp(e){
+  if(gPts.has(e.pointerId)){
+    gPts.delete(e.pointerId);
+    if(gPts.size===0)gState=null;
+    else if(gState&&gState!=='lock')gState='lock';
+    return;
+  }
   if(!drag)return;
   const d=drag; drag=null;
   if(d.mode==='marquee')finishMarquee(d);
@@ -1266,22 +1362,102 @@ const TOOLS=[
  ['brush','B','tool_brush'],['pencil','N','tool_pencil'],['text','T','tool_text'],['eyedropper','I','tool_eyedropper'],'sep',
  ['zoom','Z','tool_zoom'],['hand','H','tool_hand']
 ];
+/* ================= 18b. TOOLBAR GROUPS + FLYOUT (mobile overhaul) ================= */
+const TOOL_GROUPS=[['select'],['direct'],['pen'],['addAnchor','delAnchor'],['line','rect','ellipse','polygon','star'],['brush','pencil'],['text'],['eyedropper'],['zoom','hand']];
+const TOOL_INFO={};
+TOOLS.forEach(te=>{ if(te!=='sep')TOOL_INFO[te[0]]={key:te[1],name:te[2]}; });
+const toolGroupSel={};
+let lpTimer=null;
+function groupOfTool(id){ for(let i=0;i<TOOL_GROUPS.length;i++)if(TOOL_GROUPS[i].indexOf(id)>=0)return i; return -1; }
+function toolIcon(id){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]}</svg>`; }
 function buildToolbar(){
   const tb=$('#toolbar'); tb.innerHTML='';
-  TOOLS.forEach(te=>{
-    if(te==='sep'){ const s=document.createElement('div'); s.className='tsep'; tb.appendChild(s); return; }
-    const [id,key,name]=te;
-    const b=document.createElement('div'); b.className='tbtn'+(S.tool===id?' active':''); b.dataset.tool=id;
-    b.title=t(name)+(key?` (${key})`:'');
-    b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]}</svg>`;
-    b.onclick=()=>setTool(id);
+  tb.addEventListener('contextmenu',e=>e.preventDefault());
+  TOOL_GROUPS.forEach((g,gi)=>{
+    const cur=g.indexOf(S.tool)>=0?S.tool:(toolGroupSel[gi]||g[0]);
+    toolGroupSel[gi]=cur;
+    const b=document.createElement('div');
+    b.className='tbtn'+(g.indexOf(S.tool)>=0?' active':'')+(g.length>1?' multi':'');
+    b.dataset.group=gi; b.dataset.tool=cur;
+    const info=TOOL_INFO[cur];
+    b.title=t(info.name)+(info.key?` (${info.key})`:'');
+    b.innerHTML=toolIcon(cur)+(g.length>1?'<span class="tri"></span>':'');
+    b.addEventListener('pointerdown',e=>startLongPress(e,gi,b));
     tb.appendChild(b);
   });
 }
+function refreshToolbarIcons(){
+  $$('#toolbar .tbtn').forEach(b=>{
+    const gi=+b.dataset.group, g=TOOL_GROUPS[gi];
+    if(g.indexOf(S.tool)>=0)toolGroupSel[gi]=S.tool;
+    const cur=toolGroupSel[gi]||g[0];
+    b.dataset.tool=cur;
+    b.classList.toggle('active',g.indexOf(S.tool)>=0);
+    const info=TOOL_INFO[cur];
+    b.title=t(info.name)+(info.key?` (${info.key})`:'');
+    b.innerHTML=toolIcon(cur)+(g.length>1?'<span class="tri"></span>':'');
+  });
+}
+/* long-press (~350ms) opens flyout; plain tap selects the group's current tool */
+function startLongPress(e,gi,b){
+  if(e.button!==undefined&&e.button>0)return;
+  closeFlyout();
+  const sx=e.clientX, sy=e.clientY;
+  let fired=false;
+  clearTimeout(lpTimer);
+  lpTimer=setTimeout(()=>{ fired=true; openFlyout(gi,b); },350);
+  const cleanup=()=>{
+    clearTimeout(lpTimer);
+    b.removeEventListener('pointerup',up);
+    b.removeEventListener('pointercancel',cancel);
+    b.removeEventListener('pointermove',onMv);
+  };
+  const cancel=()=>cleanup();
+  const onMv=ev=>{ if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>10)cancel(); };
+  const up=()=>{ cleanup(); if(!fired)setTool(toolGroupSel[gi]||TOOL_GROUPS[gi][0]); };
+  b.addEventListener('pointerup',up);
+  b.addEventListener('pointercancel',cancel);
+  b.addEventListener('pointermove',onMv);
+}
+function openFlyout(gi,btn){
+  closeFlyout();
+  const root=$('#flyout-root'); if(!root)return;
+  const g=TOOL_GROUPS[gi];
+  const fl=document.createElement('div');
+  fl.className='tflyout'; fl.id='tflyout';
+  g.forEach(id=>{
+    const info=TOOL_INFO[id];
+    const d=document.createElement('div');
+    d.className='tbtn'+(id===toolGroupSel[gi]?' active':'');
+    d.title=t(info.name);
+    d.innerHTML=toolIcon(id);
+    d.addEventListener('pointerdown',e=>e.stopPropagation());
+    d.addEventListener('click',()=>{ toolGroupSel[gi]=id; setTool(id); closeFlyout(); });
+    fl.appendChild(d);
+  });
+  root.appendChild(fl);
+  const r=btn.getBoundingClientRect();
+  let left=r.right+6;
+  if(left+60>window.innerWidth-8)left=Math.max(8,r.left-60);
+  fl.style.left=left+'px';
+  fl.style.top=Math.max(8,r.top)+'px';
+  const fr=fl.getBoundingClientRect();
+  if(fr.bottom>window.innerHeight-8)fl.style.top=Math.max(8,window.innerHeight-8-fr.height)+'px';
+  setTimeout(()=>document.addEventListener('pointerdown',flyoutOutside,{capture:true}),0);
+}
+function flyoutOutside(e){
+  if(e.target&&e.target.closest&&!e.target.closest('#tflyout')&&!e.target.closest('#toolbar .tbtn'))closeFlyout();
+}
+function closeFlyout(){
+  const fl=$('#tflyout'); if(fl)fl.remove();
+  document.removeEventListener('pointerdown',flyoutOutside,{capture:true});
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeFlyout(); });
 function setTool(id){
   if(pen&&(id!=='pen'))cancelPen();
   S.tool=id; S.dsel=null;
-  $$('#toolbar .tbtn').forEach(b=>b.classList.toggle('active',b.dataset.tool===id));
+  closeFlyout();
+  refreshToolbarIcons();
   svg.style.cursor=id==='hand'?'grab':id==='zoom'?'zoom-in':'default';
   renderOptions(); refreshOverlay();
 }
@@ -1788,8 +1964,15 @@ function doDistribute(horiz){
 /* ================= 24. DOCK / LAYER BUTTONS ================= */
 function initDock(){
   $$('#dock-tabs .dtab').forEach(t=>t.onclick=()=>{
+    const dock=$('#dock');
+    const wasActive=t.classList.contains('active');
+    const sheetWasOpen=dock.classList.contains('sheet-open');
     $$('#dock-tabs .dtab').forEach(x=>x.classList.toggle('active',x===t));
     $$('#dock-panels .dpanel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+t.dataset.tab));
+    if(window.matchMedia('(max-width:768px)').matches){
+      /* mobile: dock is a bottom sheet — tapping the active tab collapses it */
+      dock.classList.toggle('sheet-open',!(wasActive&&sheetWasOpen));
+    }
   });
   $('#btn-add-layer').onclick=()=>{ pushUndo(); addLayer(); refreshOverlay(); };
   $('#btn-del-layer').onclick=()=>deleteActiveLayer();
@@ -2106,12 +2289,14 @@ function doAction(a){
   if(M[a])M[a]();
 }
 function initMenus(){
+  const mb=$('#menu-btn');
+  if(mb)mb.addEventListener('click',e=>{ e.stopPropagation(); document.body.classList.toggle('menu-open'); });
   $$('#menus .menu > span').forEach(sp=>{
     sp.addEventListener('click',e=>{ const m=sp.parentElement,was=m.classList.contains('open'); closeMenus(); if(!was)m.classList.add('open'); e.stopPropagation(); });
     sp.addEventListener('mouseenter',()=>{ if($('#menus .menu.open')){ closeMenus(); sp.parentElement.classList.add('open'); } });
   });
-  document.addEventListener('click',e=>{ if(!e.target.closest('#menus'))closeMenus(); });
-  $$('.mi[data-act]').forEach(mi=>mi.addEventListener('click',()=>{ closeMenus(); doAction(mi.dataset.act); }));
+  document.addEventListener('click',e=>{ if(!e.target.closest('#menus'))closeMenus(); if(!e.target.closest('#menus')&&!e.target.closest('#menu-btn'))document.body.classList.remove('menu-open'); });
+  $$('.mi[data-act]').forEach(mi=>mi.addEventListener('click',()=>{ closeMenus(); document.body.classList.remove('menu-open'); doAction(mi.dataset.act); }));
   syncViewMenu();
 }
 /* ================= 29. KEYBOARD ================= */

@@ -173,7 +173,59 @@ label.f{display:flex; flex-direction:column; gap:4px; margin-bottom:10px; font-s
 #toast{position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:#111; color:#fff;
   border:1px solid var(--border); border-radius:5px; padding:9px 18px; z-index:3000; display:none; box-shadow:0 4px 14px rgba(0,0,0,.5);}
 </style>
-<script src="templates-data.js"></script>
+<style id="leha-mobile">
+/* ============ LEHA Studio mobile additions ============ */
+.tbtn{position:relative;}
+.flytri{position:absolute; right:4px; bottom:4px; width:0; height:0;
+  border-left:8px solid transparent; border-bottom:8px solid #8a8a8a; pointer-events:none;}
+.tbtn.active .flytri{border-bottom-color:#fff;}
+.flypop{position:fixed; z-index:1200; background:var(--panel); border:1px solid var(--border);
+  border-radius:8px; padding:8px; display:flex; gap:8px; box-shadow:0 12px 30px rgba(0,0,0,.6);}
+.flyitem{width:48px; height:48px; display:flex; align-items:center; justify-content:center;
+  background:none; border:1px solid transparent; border-radius:6px; color:#cfcfcf; cursor:pointer;}
+.flyitem svg{width:26px; height:26px;}
+.flyitem.active{background:var(--accent2); border-color:var(--accent2); color:#fff;}
+#hamb{display:none;}
+#mmenu{display:none;}
+#canvaswrap{touch-action:none;}
+@media (max-width:768px){
+  #toolbar{width:60px; padding:8px 0;}
+  .tbtn{width:48px; height:48px;}
+  .tbtn svg{width:24px; height:24px;}
+  #optionsbar{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; gap:12px;}
+  #optionsbar .toolname{min-width:0; flex:0 0 auto;}
+  .opt{flex:0 0 auto;}
+  #menubar{height:44px; align-items:center;}
+  #menubar .menu{display:none;}
+  #menubar .apptitle{font-size:12px; max-width:36vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  #hamb{display:flex; flex-direction:column; justify-content:center; align-items:center; gap:5px;
+    width:44px; height:44px; background:none; border:0; cursor:pointer; flex:0 0 auto;}
+  #hamb span{display:block; width:22px; height:2px; background:#fff; border-radius:1px;}
+  #mmenu{display:block; position:fixed; top:44px; left:0; bottom:0; width:min(80vw,300px);
+    background:#262626; border-right:1px solid var(--border); z-index:1100; overflow-y:auto;
+    padding:8px 0 24px; transform:translateX(-105%); transition:transform .22s ease;
+    box-shadow:8px 0 24px rgba(0,0,0,.5);}
+  #mmenu.open{transform:translateX(0);}
+  #mmenu .mmhead{padding:10px 16px 4px; font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--accent);}
+  #mmenu .mi{padding:12px 16px; font-size:14px;}
+  #dock{position:fixed; left:0; right:0; bottom:0; top:auto; width:auto; height:56vh; max-height:72vh;
+    border-left:0; border-top:1px solid var(--border); z-index:900;
+    transform:translateY(calc(100% - 54px)); transition:transform .24s ease;
+    box-shadow:0 -10px 28px rgba(0,0,0,.55); border-radius:12px 12px 0 0;}
+  #dock.sheet-open{transform:translateY(0);}
+  #docktabs{min-height:54px; border-radius:12px 12px 0 0;}
+  .dtab{min-height:54px; padding:14px 2px; font-size:12px;}
+  #statusbar{display:none;}
+  #dlg{max-width:94vw;}
+  #dlgbody{max-height:62vh; overflow-y:auto;}
+  .bppop.bpgrid{grid-template-columns:repeat(4,64px);}
+}
+</style>
+<script src="templates-core.js"></script>
+<script src="templates-photo-1.js"></script>
+<script src="templates-photo-2.js"></script>
+<script src="templates-vector.js"></script>
+<script src="templates-index.js"></script>
 </head>
 <body>
 <div id="app">
@@ -21619,7 +21671,7 @@ m_sel_all:'Chọn tất cả',m_desel:'Bỏ chọn',m_inverse:'Đảo vùng ch�
 m_gauss:'Mờ Gaussian...',m_sharpen:'Sắc nét...',m_noise:'Thêm nhiễu...',m_pixelate:'Điểm ảnh...',m_emboss:'Nổi khối',
 m_zoom_in:'Phóng to',m_zoom_out:'Thu nhỏ',m_fit:'Vừa màn hình',m_actual:'Điểm ảnh thật',
 m_shortcuts:'Phím tắt',m_about:'Giới thiệu',
-t_move:'Công cụ Di chuyển',t_rectsel:'Khung chữ nhật',t_ellipsesel:'Khung elip',t_lasso:'Vùng chọn tự do',t_crop:'Cắt ảnh',t_eyedropper:'Ống hút màu',t_brush:'Cọ vẽ',t_pencil:'Bút chì',t_eraser:'Tẩy',t_bucket:'Thùng sơn',t_gradient:'Chuyển sắc',t_text:'Chữ',t_rectshape:'Hình chữ nhật',t_ellipseshape:'Hình elip',t_line:'Đường thẳng',t_zoom:'Thu phóng',t_hand:'Bàn tay',
+t_move:'Công cụ Di chuyển',t_rectsel:'Khung chữ nhật',t_ellipsesel:'Khung elip',t_lasso:'Vùng chọn tự do',t_crop:'Cắt ảnh',t_eyedropper:'Ống hút màu',t_brush:'Cọ vẽ',t_pencil:'Bút chì',t_eraser:'Tẩy',t_bucket:'Thùng sơn',t_gradient:'Chuyển sắc',t_text:'Chữ',t_rectshape:'Hình chữ nhật',t_ellipseshape:'Hình elip',t_line:'Đường thẳng',t_zoom:'Thu phóng',t_hand:'Bàn tay',m_menu:'Trình đơn',
 opt_size:'Kích thước',opt_hardness:'Độ cứng',opt_opacity:'Độ mờ',opt_flow:'Lưu lượng',opt_tolerance:'Dung sai',opt_gradient:'Chuyển sắc',opt_fill:'Tô',opt_stroke:'Viền',opt_strokew:'Độ dày viền',opt_fill_on:'Bật tô',opt_stroke_on:'Bật viền',opt_feather:'Làm mờ biên',opt_apply:'Áp dụng',opt_cancel:'Hủy',
 bp_preset:'Đầu bút',bp_settings:'Cài đặt cọ',bp_spacing:'Khoảng cách nét',bp_angle:'Góc đầu bút',bp_roundness:'Độ tròn',bp_scatter:'Phân tán',bp_custom:'Tùy chỉnh',
 bp_p_soft:'Tròn mềm',bp_p_hard:'Tròn cứng',bp_p_chalk:'Phấn vẽ',bp_p_air:'Phun sương',bp_p_flat:'Cọ dẹt',bp_p_tex:'Cọ vân',bp_p_dry:'Cọ khô',bp_p_spray:'Phun tán',bp_p_cali:'Thư pháp',bp_p_softair:'Sương mềm',
@@ -21663,6 +21715,35 @@ tpl_facebook_cover:'Ảnh bìa Facebook',
 tpl_layer_bg:'Nền',
 tpl_layer_shapes:'Hình trang trí',
 tpl_layer_text:'Chữ',
+tpl_youtube_banner:'Banner kênh YouTube',
+tpl_ig_story:'Story Instagram Sale',
+tpl_sale_flash:'Poster Flash Sale',
+tpl_livestream:'Thông báo Livestream',
+tpl_cafe_menu:'Menu Cà phê',
+tpl_voucher:'Voucher giảm giá',
+tpl_certificate:'Giấy chứng nhận',
+tpl_quotation:'Báo giá',
+tpl_loyalty_card:'Thẻ thành viên',
+tpl_wedding_invitation:'Thiệp cưới thanh lịch',
+tpl_grand_opening:'Poster khai trương',
+tpl_event_ticket:'Vé sự kiện',
+tpl_travel_poster:'Poster du lịch vintage',
+tpl_movie_poster:'Poster phim điện ảnh',
+tpl_tet_poster:'Poster Tết',
+tpl_tet_card:'Thiệp chúc Tết',
+tpl_tet_sale:'Poster sale Tết',
+tpl_tet_banner:'Banner Tết',
+tpl_mockup_phone:'Mockup điện thoại',
+tpl_mockup_cards:'Mockup card visit',
+tpl_mockup_posterwall:'Mockup poster treo tường',
+tpl_mockup_laptop:'Mockup laptop',
+tpl_mockup_tshirt:'Mockup áo thun',
+tpl_mockup_tote:'Mockup túi tote',
+tpl_mockup_box:'Mockup hộp sản phẩm',
+tpl_layer_decor:'Trang trí',
+tpl_layer_artwork:'Hình minh họa',
+tpl_layer_headline:'Tiêu đề',
+tpl_layer_shadow:'Bóng đổ',
 },
 en:{
 m_file:'File',m_edit:'Edit',m_image:'Image',m_layer:'Layer',m_select:'Select',m_filter:'Filter',m_view:'View',m_help:'Help',
@@ -21675,7 +21756,7 @@ m_sel_all:'Select All',m_desel:'Deselect',m_inverse:'Inverse',
 m_gauss:'Gaussian Blur...',m_sharpen:'Sharpen...',m_noise:'Add Noise...',m_pixelate:'Pixelate...',m_emboss:'Emboss',
 m_zoom_in:'Zoom In',m_zoom_out:'Zoom Out',m_fit:'Fit on Screen',m_actual:'Actual Pixels',
 m_shortcuts:'Keyboard Shortcuts',m_about:'About',
-t_move:'Move Tool',t_rectsel:'Rectangular Marquee',t_ellipsesel:'Elliptical Marquee',t_lasso:'Lasso Tool',t_crop:'Crop Tool',t_eyedropper:'Eyedropper Tool',t_brush:'Brush Tool',t_pencil:'Pencil Tool',t_eraser:'Eraser Tool',t_bucket:'Paint Bucket Tool',t_gradient:'Gradient Tool',t_text:'Text Tool',t_rectshape:'Rectangle Tool',t_ellipseshape:'Ellipse Tool',t_line:'Line Tool',t_zoom:'Zoom Tool',t_hand:'Hand Tool',
+t_move:'Move Tool',t_rectsel:'Rectangular Marquee',t_ellipsesel:'Elliptical Marquee',t_lasso:'Lasso Tool',t_crop:'Crop Tool',t_eyedropper:'Eyedropper Tool',t_brush:'Brush Tool',t_pencil:'Pencil Tool',t_eraser:'Eraser Tool',t_bucket:'Paint Bucket Tool',t_gradient:'Gradient Tool',t_text:'Text Tool',t_rectshape:'Rectangle Tool',t_ellipseshape:'Ellipse Tool',t_line:'Line Tool',t_zoom:'Zoom Tool',t_hand:'Hand Tool',m_menu:'Menu',
 opt_size:'Size',opt_hardness:'Hardness',opt_opacity:'Opacity',opt_flow:'Flow',opt_tolerance:'Tolerance',opt_gradient:'Gradient',opt_fill:'Fill',opt_stroke:'Stroke',opt_strokew:'Stroke w.',opt_fill_on:'Fill on',opt_stroke_on:'Stroke on',opt_feather:'Feather',opt_apply:'Apply',opt_cancel:'Cancel',
 bp_preset:'Brush Tip',bp_settings:'Brush Settings',bp_spacing:'Spacing',bp_angle:'Tip Angle',bp_roundness:'Roundness',bp_scatter:'Scatter',bp_custom:'Custom',
 bp_p_soft:'Round Soft',bp_p_hard:'Round Hard',bp_p_chalk:'Chalk',bp_p_air:'Airbrush',bp_p_flat:'Flat Chisel',bp_p_tex:'Textured',bp_p_dry:'Dry Brush',bp_p_spray:'Scatter Spray',bp_p_cali:'Calligraphy',bp_p_softair:'Soft Air',
@@ -21718,6 +21799,35 @@ tpl_facebook_cover:'Facebook cover',
 tpl_layer_bg:'Background',
 tpl_layer_shapes:'Shapes',
 tpl_layer_text:'Text',
+tpl_youtube_banner:'YouTube Channel Banner',
+tpl_ig_story:'Instagram Sale Story',
+tpl_sale_flash:'Flash Sale Poster',
+tpl_livestream:'Livestream Announcement',
+tpl_cafe_menu:'Coffee Menu',
+tpl_voucher:'Discount Voucher',
+tpl_certificate:'Certificate',
+tpl_quotation:'Quotation',
+tpl_loyalty_card:'Loyalty Card',
+tpl_wedding_invitation:'Elegant Wedding Invitation',
+tpl_grand_opening:'Grand Opening Poster',
+tpl_event_ticket:'Event Ticket',
+tpl_travel_poster:'Vintage Travel Poster',
+tpl_movie_poster:'Cinematic Movie Poster',
+tpl_tet_poster:'Tet Poster',
+tpl_tet_card:'Tet Greeting Card',
+tpl_tet_sale:'Tet Sale Poster',
+tpl_tet_banner:'Tet Banner',
+tpl_mockup_phone:'Phone Mockup',
+tpl_mockup_cards:'Business Card Mockup',
+tpl_mockup_posterwall:'Wall Poster Mockup',
+tpl_mockup_laptop:'Laptop Mockup',
+tpl_mockup_tshirt:'T-Shirt Mockup',
+tpl_mockup_tote:'Tote Bag Mockup',
+tpl_mockup_box:'Product Box Mockup',
+tpl_layer_decor:'Decor',
+tpl_layer_artwork:'Artwork',
+tpl_layer_headline:'Headline',
+tpl_layer_shadow:'Shadow',
 }
 };
 function t(k,vars){
@@ -22172,27 +22282,69 @@ const TOOL_CURSORS={move:'move',rectsel:'crosshair',ellipsesel:'crosshair',lasso
 function toolIcon(t){
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${t.icon}</svg>`;
 }
+/* ---------------- toolbar (flyout groups) ---------------- */
 function buildToolbar(){
-  const tb=$('#toolbar'); tb.innerHTML='';
+  const tb=$('#toolbar'); tb.innerHTML=''; closeFlyout();
   TOOL_GROUPS.forEach((g,gi)=>{
-    g.forEach(id=>{
-      const td=TOOLS.find(x=>x.id===id);
-      const b=el('button','tbtn'+(id===tool?' active':''),toolIcon(td));
-      b.title=t(td.name)+(td.key?` (${td.key})`:''); b.dataset.tool=id;
-      b.addEventListener('click',()=>setTool(id));
-      tb.appendChild(b);
+    if(!g.includes(groupSel[gi])) groupSel[gi]=g[0];
+    if(g.includes(tool)) groupSel[gi]=tool;
+    const cur=groupSel[gi];
+    const td=TOOLS.find(x=>x.id===cur);
+    const b=el('button','tbtn'+(g.includes(tool)?' active':'')+(g.length>1?' hasfly':''),
+      toolIcon(td)+(g.length>1?'<span class="flytri"></span>':''));
+    b.title=t(td.name)+(td.key?` (${td.key})`:'');
+    b.dataset.group=gi; b.dataset.tool=cur;
+    if(g.length>1){
+      b.addEventListener('pointerdown',()=>{ flyTimer=setTimeout(()=>{ flyTimer=null; openFlyout(b,gi,g); },350); });
+      const cancelFly=()=>{ if(flyTimer){ clearTimeout(flyTimer); flyTimer=null; } };
+      b.addEventListener('pointerup',cancelFly);
+      b.addEventListener('pointercancel',cancelFly);
+      b.addEventListener('pointerleave',cancelFly);
+      b.addEventListener('contextmenu',e=>{ e.preventDefault(); openFlyout(b,gi,g); });
+    }
+    b.addEventListener('click',()=>{
+      if(Date.now()<flySuppressUntil) return;
+      closeFlyout();
+      setTool(groupSel[gi]||g[0]);
     });
+    tb.appendChild(b);
     if(gi<TOOL_GROUPS.length-1) tb.appendChild(el('div','tsep'));
   });
 }
+const groupSel={};
+let flyPop=null, flyTimer=null, flySuppressUntil=0;
+function openFlyout(anchor,gi,g){
+  closeFlyout();
+  const pop=el('div','flypop');
+  g.forEach(id=>{
+    const td=TOOLS.find(x=>x.id===id);
+    const b=el('button','flyitem'+(id===tool?' active':''),toolIcon(td));
+    b.title=t(td.name);
+    b.addEventListener('click',ev=>{ ev.stopPropagation(); groupSel[gi]=id; setTool(id); });
+    pop.appendChild(b);
+  });
+  document.body.appendChild(pop);
+  const r=anchor.getBoundingClientRect();
+  pop.style.left=Math.max(8,Math.min(r.right+8,window.innerWidth-72))+'px';
+  pop.style.top=Math.max(8,Math.min(r.top-6,window.innerHeight-72))+'px';
+  flyPop=pop; flySuppressUntil=Date.now()+600;
+  document.addEventListener('pointerdown',flyDocDown,true);
+}
+function flyDocDown(e){
+  if(flyPop&&!flyPop.contains(e.target)&&!e.target.closest('#toolbar')) closeFlyout();
+}
+function closeFlyout(){
+  if(flyPop){ flyPop.remove(); flyPop=null; document.removeEventListener('pointerdown',flyDocDown,true); }
+}
 function setTool(id){
   tool=id;
-  $$('#toolbar .tbtn').forEach(b=>b.classList.toggle('active',b.dataset.tool===id));
+  closeFlyout();
+  buildToolbar();
   $('#canvaswrap').style.cursor=TOOL_CURSORS[id]||'default';
   cropState=null; shapePrev=null; lassoPts=null; // reset transient states
   renderOptions();
-  const t=TOOLS.find(x=>x.id===id);
-  updateStatus('tool',t?t.name:'');
+  const td=TOOLS.find(x=>x.id===id);
+  updateStatus('tool',td?t(td.name):'');
 }
 function cycleToolKey(key){
   const cands=TOOLS.filter(t=>t.key===key);
@@ -22488,8 +22640,23 @@ function applyCrop(){
   pushDocHist(t('hist_crop'),before,snapDoc()); afterHistNav(); dirty=true;
 }
 
+/* ---- multi-touch: pinch-zoom + two-finger pan (one finger still draws) ---- */
+const ptrs=new Map(); let pgesture=null;
+function cancelStrokeState(){ pdown=false; curStroke=null; moveInfo=null; lassoPts=null; shapePrev=null; }
 wrap.addEventListener('pointerdown',e=>{
   wrap.focus();
+  const isTouch=e.pointerType!=='mouse';
+  if(isTouch){
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size===2){
+    if(panning) endPan();
+    cancelStrokeState();
+    const p=[...ptrs.values()];
+    pgesture={d:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),mx:(p[0].x+p[1].x)/2,my:(p[0].y+p[1].y)/2};
+    e.preventDefault(); return;
+    }
+    if(ptrs.size>2) return;
+  }
   if(e.button===1){ startPan(e); e.preventDefault(); return; }
   if(e.button!==0) return;
   if(spaceDown){ startPan(e); return; }
@@ -22499,6 +22666,14 @@ wrap.addEventListener('pointerdown',e=>{
   const T=Tools[tool]; if(T&&T.down) T.down(e,pt);
 });
 wrap.addEventListener('pointermove',e=>{
+  if(e.pointerType!=='mouse'&&ptrs.has(e.pointerId)) ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pgesture&&ptrs.size===2){
+    const p=[...ptrs.values()];
+    const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y), mx=(p[0].x+p[1].x)/2, my=(p[0].y+p[1].y)/2;
+    if(pgesture.d>0&&d>0) zoomAt(mx,my,d/pgesture.d);
+    view.ox+=mx-pgesture.mx; view.oy+=my-pgesture.my;
+    pgesture={d:d,mx:mx,my:my}; dirty=true; return;
+  }
   const pt=screenToDoc(e.clientX,e.clientY);
   updateCursorPos(pt);
   if(panning){ view.ox=panning.ox+(e.clientX-panning.sx); view.oy=panning.oy+(e.clientY-panning.sy); dirty=true; return; }
@@ -22506,12 +22681,14 @@ wrap.addEventListener('pointermove',e=>{
   const T=Tools[tool]; if(T&&T.move) T.move(e,pt);
 });
 wrap.addEventListener('pointerup',e=>{
+  if(e.pointerType!=='mouse') ptrs.delete(e.pointerId);
+  if(pgesture){ if(ptrs.size<2) pgesture=null; return; }
   if(panning){ endPan(); return; }
   if(!pdown) return; pdown=false;
   const pt=screenToDoc(e.clientX,e.clientY);
   const T=Tools[tool]; if(T&&T.up) T.up(e,pt);
 });
-wrap.addEventListener('pointercancel',()=>{ pdown=false; curStroke=null; moveInfo=null; lassoPts=null; shapePrev=null; if(panning)endPan(); });
+wrap.addEventListener('pointercancel',()=>{ pdown=false; curStroke=null; moveInfo=null; lassoPts=null; shapePrev=null; ptrs.clear(); pgesture=null; if(panning)endPan(); });
 wrap.addEventListener('dblclick',e=>{
   if(tool==='crop'&&cropState&&cropState.r) applyCrop();
 });
@@ -23201,8 +23378,51 @@ function buildMenuBar(){
   bvi.addEventListener('click',()=>setLang('vi'));
   ben.addEventListener('click',()=>setLang('en'));
   lg.appendChild(bvi); lg.appendChild(ben); bar.appendChild(lg);
+  buildMobileMenu();
   if(!buildMenuBar._bound){ buildMenuBar._bound=true;
     document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#menubar')) closeAll(); }); }
+}
+
+/* ---------------- mobile hamburger menu + bottom-sheet dock ---------------- */
+function buildMobileMenu(){
+  let hamb=$('#hamb'); if(hamb) hamb.remove();
+  hamb=el('button'); hamb.id='hamb';
+  hamb.innerHTML='<span></span><span></span><span></span>';
+  hamb.title=t('m_menu'); hamb.setAttribute('aria-label',t('m_menu'));
+  hamb.addEventListener('click',()=>{ const mm=$('#mmenu'); if(mm) mm.classList.toggle('open'); });
+  const bar=$('#menubar'); bar.insertBefore(hamb,bar.firstChild);
+  let mm=$('#mmenu'); if(mm) mm.remove();
+  mm=el('div'); mm.id='mmenu';
+  MENU_DEF.forEach(m=>{
+    const h=el('div','mmhead'); h.textContent=t(m.label); mm.appendChild(h);
+    m.items.forEach(it=>{
+      if(it.sep){ mm.appendChild(el('div','msep')); return; }
+      const mi=el('div','mi'); const lb=el('span'); lb.textContent=t(it.t); mi.appendChild(lb);
+      if(it.sc){ const sc=el('span','sc'); sc.textContent=it.sc; mi.appendChild(sc); }
+      mi.addEventListener('click',()=>{ mm.classList.remove('open'); it.fn(); });
+      mm.appendChild(mi);
+    });
+  });
+  document.body.appendChild(mm);
+  if(!buildMobileMenu._bound){ buildMobileMenu._bound=true;
+    document.addEventListener('pointerdown',e=>{
+      const m2=$('#mmenu');
+      if(m2&&m2.classList.contains('open')&&!m2.contains(e.target)&&!e.target.closest('#hamb')) m2.classList.remove('open');
+    });
+  }
+}
+let sheetTabWasActive=false;
+function initMobileUI(){
+  $$('#docktabs .dtab').forEach(dt=>{
+    dt.addEventListener('pointerdown',()=>{
+      sheetTabWasActive=dt.classList.contains('active')&&$('#dock').classList.contains('sheet-open');
+    });
+    dt.addEventListener('click',()=>{
+      if(!window.matchMedia('(max-width:768px)').matches) return;
+      const dock=$('#dock');
+      if(sheetTabWasActive) dock.classList.remove('sheet-open'); else dock.classList.add('sheet-open');
+    });
+  });
 }
 
 /* ---------------- options bar ---------------- */
@@ -23713,6 +23933,7 @@ function init(){
   buildToolbar();
   buildMenuBar();
   buildDock();
+  initMobileUI();
   $$('#docktabs .dtab').forEach(b=>{ b.textContent=t('tab_'+b.dataset.tab); });
   createDocument(1600,900,'white','Untitled-1');
   loadTemplateFromHash();
