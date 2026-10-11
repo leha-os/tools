@@ -72,7 +72,7 @@ main{position:absolute;top:56px;left:0;right:0;bottom:0}
   transform:translateX(105%);transition:transform .22s ease;display:flex;flex-direction:column}
 #panel.open{transform:none}
 #scrim.open{display:block}
-.phead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+.psec{margin-bottom:14px}.psec-t{font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}.psec .viewsw{display:flex;flex-wrap:wrap;gap:6px}.pacts{display:flex;flex-wrap:wrap;gap:6px}.pacts .btn{font-size:12.5px}.phead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
 .phead b{font-size:15px}
 .px{border:0;background:#f1f5f9;width:30px;height:30px;border-radius:var(--radius);font-size:16px;cursor:pointer;color:#475569}
 .pbody{padding:14px;overflow-y:auto;flex:1}
@@ -163,6 +163,7 @@ table.wbs input[type=number]{width:64px;border:1px solid var(--line);border-radi
 .ohint{font-size:11px;color:#94a3b8}
 .otree{padding:12px 16px 60px;max-width:760px;margin:0 auto}
 .orow{margin:0}
+.orow.sel>.oline{background:#eef4ff}
 .orow.dim>.oline{opacity:.4}
 .oline{display:flex;align-items:flex-start;gap:2px;padding:2px 4px;position:relative;border-radius:4px}
 .oline:hover{background:#fafbfc}
@@ -453,22 +454,10 @@ table.task th,table.task td{padding:7px 9px}
 </head>
 <body>
 <header>
-  <div class="logo">LEHA MindPlan</div>
+  <div class="logo" id="logoBtn" title="Menu" style="cursor:pointer">LEHA MindPlan</div>
   <div class="mapname" id="mapName" title="Đổi tên bản đồ"></div>
-  <nav class="viewsw">
-    <button data-v="list" class="on">Outline</button>
-    <button data-v="map">Mindmap</button>
-    <button data-v="gantt">Gantt</button>
-    <button data-v="task">Task</button><button data-v="cal">Lịch</button>
-  </nav>
-  <div class="hact">
-    <div class="ddwrap"><button class="btn" id="btnMore" title="Thêm">⋯</button>
-    <div class="dd" id="ddMore" hidden>
-    <button class="btn pri" id="btnAddRoot">+ Node gốc</button>
-    <button class="btn" id="btnNew">+ Mới</button>
-    <button class="btn" id="btnExport">Xuất</button>
-    <button class="btn" id="btnImport">Nhập</button><select id="themeSel" title="Giao diện"><option value="light">Sáng</option><option value="dark">Tối</option><option value="night">Đêm</option><option value="mono">Đơn sắc</option><option value="sand">Cát</option><button class="btn" id="btnSearch" title="Tìm kiếm (Ctrl+K)">Tìm kiếm</button><button class="btn" id="btnPresent" title="Trình chiếu">Trình chiếu</button><button class="btn" id="btnDash" title="Tổng quan">Tổng quan</button><button class="btn" id="btnKeys" title="Phím tắt (?)">Phím tắt</button></select></div></div><span id="tagInd"><span id="tagIndT"></span><button id="tagIndX" title="Xóa lọc">×</button></span>
-  </div>
+  
+  
 </header>
 <main>
   <section class="view" id="view-map">
@@ -500,7 +489,19 @@ table.task th,table.task td{padding:7px 9px}
 <div id="scrim"></div>
 <aside id="panel">
   <div class="phead"><b>Chi tiết nhánh</b><button class="px" id="btnClosePanel">×</button></div>
-  <div class="pbody">
+  <div class="pbody"><div class="psec"><div class="psec-t">Xem</div><nav class="viewsw">
+    <button data-v="list" class="on">Outline</button>
+    <button data-v="map">Mindmap</button>
+    <button data-v="gantt">Gantt</button>
+    <button data-v="task">Task</button><button data-v="cal">Lịch</button>
+  </nav></div><div class="psec"><div class="psec-t">Thao tác</div><div class="pacts"><div class="hact">
+    
+    
+    <button class="btn pri" id="btnAddRoot">+ Node gốc</button>
+    <button class="btn" id="btnNew">+ Mới</button>
+    <button class="btn" id="btnExport">Xuất</button>
+    <button class="btn" id="btnImport">Nhập</button><select id="themeSel" title="Giao diện"><option value="light">Sáng</option><option value="dark">Tối</option><option value="night">Đêm</option><option value="mono">Đơn sắc</option><option value="sand">Cát</option><button class="btn" id="btnSearch" title="Tìm kiếm (Ctrl+K)">Tìm kiếm</button><button class="btn" id="btnPresent" title="Trình chiếu">Trình chiếu</button><button class="btn" id="btnDash" title="Tổng quan">Tổng quan</button><button class="btn" id="btnKeys" title="Phím tắt (?)">Phím tắt</button></select><span id="tagInd"><span id="tagIndT"></span><button id="tagIndX" title="Xóa lọc">×</button></span>
+  </div></div></div>
     <div class="fld"><label>Tiêu đề</label><input type="text" id="fTitle"></div>
     <div class="fld"><label class="chk"><input type="checkbox" id="fProj"> Là Task/Dự án</label></div>
     <div class="fld"><label>Màu sắc</label><div class="swatches" id="fColors"></div></div><div class="fld"><label>Biểu tượng</label><div><button class="btn" id="btnIcon" type="button" style="min-width:120px;text-align:left"><span id="iconPrev">Chưa có</span></button></div></div>
@@ -1541,9 +1542,8 @@ function openNodeFile(nid,idx){
   if(im||f.type==='application/pdf'){a.target='_blank';}else{a.download=f.name;}
   document.body.appendChild(a);a.click();setTimeout(function(){a.remove();},100);
 }
-$('#btnMore').onclick=e=>{e.stopPropagation();const d=$('#ddMore');d.hidden=!d.hidden;};
-document.addEventListener('click',e=>{const d=$('#ddMore');if(d&&!d.hidden&&!e.target.closest('.ddwrap'))d.hidden=true;});
-$('#btnFile').onclick=()=>{if(selectedId){attachTarget=selectedId;$('#fileAttach').click();}};
+
+$('#logoBtn').onclick=function(){var p=$('#panel');p.classList.toggle('open');$('#scrim').classList.toggle('open',p.classList.contains('open'));};$('#btnFile').onclick=()=>{if(selectedId){attachTarget=selectedId;$('#fileAttach').click();}};
 $('#fFiles').addEventListener('click',e=>{
   const o=e.target.closest('[data-pfopen]');
   if(o&&!e.target.closest('[data-pfdel]')&&selectedId){openNodeFile(selectedId,+o.dataset.pfopen);return;}
@@ -1863,16 +1863,16 @@ function outlineRow(n,rg){
   const showNote=(n.note&&n.note.trim())||n._noteOpen;
   let h='<div class="orow'+(dim?' dim':'')+'" data-id="'+n.id+'">';
   h+='<div class="oline">';
-  h+='<span class="dragh" draggable="true" data-drag="'+n.id+'" title="K\u00e9o \u0111\u1ec3 s\u1eafp x\u1ebfp">\u22ee\u22ee</span>';
-  h+='<span class="ocaret'+(ch.length?' has':'')+'" data-caret="'+n.id+'">'+(ch.length?(n.collapsed?'\u25B8':'\u25BE'):'\u2022')+'</span>';
-  h+='<input type="checkbox" class="odone" data-done="'+n.id+'"'+(pg>=100?' checked':'')+' tabindex="-1" title="\u0110\u00e1nh d\u1ea5u ho\u00e0n th\u00e0nh">';
-  h+=(n.icon&&ICONS[n.icon]?'<span class="nicon" style="align-self:center;color:'+esc(n.iconColor||'#475569')+'">'+ICONS[n.icon].svg+'</span>':'')+'<div class="otitle" contenteditable="true" spellcheck="false" data-title="'+n.id+'" data-md="1">'+(mdInline(n.title)||'<br>')+'</div>';
-  h+='<span class="ochips" data-chips="'+n.id+'">'+chipsHTML(n)+'</span>';
-  h+='<span class="oacts">'
-    +'<button class="oicon" data-a="note" data-id="'+n.id+'" title="Ghi ch\u00fa (Shift+Enter)">\uD83D\uDDD2</button>'
-    +'<button class="oicon" data-a="attach" data-id="'+n.id+'" title="\u0110\u00ednh k\u00e8m file">\uD83D\uDCCE</button>'
-    +'<button class="oicon" data-a="add" data-id="'+n.id+'" title="Th\u00eam nh\u00e1nh con">+</button>'
-    +'</span></div>';
+
+  h+='<span class="ocaret'+(ch.length?' has':'')+'" draggable="true" data-drag="'+n.id+'" data-caret="'+n.id+'">'+(ch.length?(n.collapsed?'\u25B8':'\u25BE'):'\u2022')+'</span>';
+  h+='<input type="hidden" class="odone" data-done="'+n.id+'"'+(pg>=100?' checked':'')+' tabindex="-1" title="\u0110\u00e1nh d\u1ea5u ho\u00e0n th\u00e0nh">';
+  h+='<div class="otitle" contenteditable="true" spellcheck="false" data-title="'+n.id+'" data-md="1">'+(mdInline(n.title)||'<br>')+'</div>';
+
+
+
+
+
+
   h+='<div class="onote" contenteditable="true" spellcheck="false" data-note="'+n.id+'" data-md="1"'+(showNote?'':' style="display:none"')+'>'+(n.note?mdBlock(n.note):'<br>')+'</div>';
   h+='<div class="ofiles" data-files="'+n.id+'">'+filesHTML(n)+'</div>';
   h+='<div class="ometa" data-meta="'+n.id+'" style="display:none">'
@@ -2052,7 +2052,7 @@ function bindOutline(){
     if(no){const n=byId(no.dataset.note);
       if(n){const raw=no.textContent;if(raw!==(n.note||'')){n.note=raw;saveSoon();}}}
   });
-  tree.addEventListener('keydown',e=>{
+  tree.addEventListener('click',e=>{if(e.target.closest('[data-title]')||e.target.closest('[data-caret]')||e.target.closest('[data-note]'))return;var row=e.target.closest('.orow');if(!row)return;var t=row.querySelector('[data-title]');if(!t)return;var nn=byId(t.dataset.title);if(!nn)return;selectedId=nn.id;openPanel(nn.id);document.querySelectorAll('.orow.sel').forEach(function(x){x.classList.remove('sel')});row.classList.add('sel');});tree.addEventListener('keydown',e=>{
     const t=e.target.closest('[data-title]');
     if(t){
       const id=t.dataset.title,n=byId(id);if(!n)return;
