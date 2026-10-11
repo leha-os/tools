@@ -40,15 +40,15 @@ main{position:absolute;top:56px;left:0;right:0;bottom:0}
 #view-map{background:#f8fafc}
 #cv{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
 #cv:active{cursor:grabbing}
-.edge{fill:none;stroke:var(--edge,#94a3b8);stroke-width:2}
+.edge{fill:none;stroke:var(--edge,#94a3b8);stroke-width:1.5}
 .zoomctl{position:absolute;right:12px;bottom:14px;display:flex;flex-direction:column;gap:6px;z-index:5}
 .zoomctl button{width:38px;height:38px;border-radius:var(--radius);border:1px solid var(--line);
   background:#fff;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
 .maphint{position:absolute;left:12px;bottom:14px;font-size:11px;color:#94a3b8;background:rgba(255,255,255,.85);
   padding:5px 10px;border-radius:var(--radius);border:1px solid var(--line);z-index:5}
 /* ===== Node ===== */
-.mnode{width:150px;background:#eef2ff;border:2px solid #c7d2fe;border-radius:var(--radius);
-  padding:6px 8px;box-shadow:var(--shadow);cursor:grab;position:relative;
+.mnode{width:150px;background:#f1f4f8;border:1px solid #c3ccd8;border-radius:6px;
+  padding:6px 8px;box-shadow:0 1px 2px rgba(15,23,42,.08);cursor:grab;position:relative;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .mnode.sel{outline:3px solid #93c5fd}
 .mnode .nt{font-weight:700;font-size:12.5px;line-height:1.3;color:#0f172a;
@@ -121,8 +121,25 @@ table.wbs input[type=number]{width:64px;border:1px solid var(--line);border-radi
 .minibar{width:90px;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:8px}
 .minibar i{display:block;height:100%;background:var(--ok)}
 @media(max-width:640px){
-  header{flex-wrap:wrap;height:auto;padding:8px}
-  main{top:104px}
+  header{flex-wrap:wrap;height:auto;padding:8px;gap:6px}
+  main{top:118px}
+  .hact{order:4;width:100%;margin:2px 0 0;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+  .hact::-webkit-scrollbar{display:none}
+  .hact .btn,.hact select{flex:none}
+  .viewsw button{padding:7px 8px;font-size:12px}
+  #view-gantt,#view-task{padding:8px}
+  #view-cal{padding:8px}
+  #view-list{padding:0}
+  .otree{padding:10px 10px 60px;max-width:none}
+  .obar{padding:8px 10px}
+  .onote,.ofiles,.ometa{margin-left:34px}
+  .okids{margin-left:11px}
+  .oacts{opacity:1}
+  .glabel{width:150px;min-width:150px}
+  .cal-grid{min-width:0}
+  .cal-day{min-height:64px}
+  .modal{padding:10px}
+  .mback{padding:4vh 8px 8px}
   #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;max-height:72vh;
     border-left:0;border-top:1px solid var(--line);border-radius:12px 12px 0 0;
     transform:translateY(105%)}
@@ -138,51 +155,59 @@ table.wbs input[type=number]{width:64px;border:1px solid var(--line);border-radi
 .maptools{position:absolute;left:12px;top:12px;display:flex;gap:6px;z-index:6}
 .maptools .btn{box-shadow:var(--shadow)}
 .maptools .btn.off{color:var(--mut)}
-/* ===== Outliner ===== */
-.obar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);
+/* ===== Outliner — phong cách plain-text note (Apple Notes/Workflowy) ===== */
+#view-list{background:#fff}
+.obar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);
   position:sticky;top:0;background:#fff;z-index:3;flex-wrap:wrap}
 .obar input[type=month]{border:1px solid var(--line);border-radius:var(--radius);padding:7px 10px;font-size:13px;font-family:inherit}
 .ohint{font-size:11px;color:#94a3b8}
-.otree{padding:8px 6px 30px;max-width:920px}
-.orow{margin:1px 0}
-.orow.dim>.oline{opacity:.45}
-.oline{display:flex;align-items:flex-start;gap:6px;padding:4px 6px;border-radius:var(--radius);position:relative}
-.oline:hover{background:#f8fafc}
-.dragh{cursor:grab;color:#cbd5e1;font-size:12px;padding-top:4px;user-select:none;flex:none}
-.ocaret{width:20px;min-width:20px;text-align:center;color:#cbd5e1;cursor:default;font-size:11px;padding-top:4px;user-select:none;flex:none}
-.ocaret.has{color:#475569;cursor:pointer}
-.odone{width:16px;height:16px;margin-top:4px;accent-color:var(--ok);cursor:pointer;flex:none}
-.otitle{flex:1;font-size:14px;line-height:1.45;outline:none;border-radius:4px;padding:1px 4px;margin-left:-4px;min-width:40px;word-break:break-word}
-.otitle:focus{background:#fffbeb;box-shadow:0 0 0 2px #fde68a}
-.otitle code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:0 4px;font-size:12.5px;font-family:ui-monospace,monospace}
-.ochips{display:flex;gap:4px;align-items:center;flex:none;padding-top:3px}
-.ochip{border:1px solid var(--line);background:#f8fafc;border-radius:8px;font-size:10.5px;color:#475569;
-  padding:1px 7px;cursor:pointer;white-space:nowrap;font-family:inherit}
-.ochip:hover{border-color:#93c5fd;color:var(--pri)}
-.ochip.add{border-style:dashed;color:#94a3b8;background:transparent}
-.oacts{display:flex;gap:2px;flex:none;opacity:0;transition:opacity .15s;padding-top:2px}
+.otree{padding:12px 16px 60px;max-width:760px;margin:0 auto}
+.orow{margin:0}
+.orow.dim>.oline{opacity:.4}
+.oline{display:flex;align-items:flex-start;gap:2px;padding:5px 4px;position:relative;border-radius:4px}
+.oline:hover{background:#fafbfc}
+.dragh{cursor:grab;color:#e2e8f0;font-size:11px;padding-top:6px;user-select:none;flex:none;width:14px;text-align:center}
+.oline:hover .dragh{color:#cbd5e1}
+.obull{width:18px;min-width:18px;text-align:center;color:#94a3b8;font-size:9px;padding-top:7px;user-select:none;flex:none;line-height:1}
+.ocaret{width:18px;min-width:18px;text-align:center;color:#e2e8f0;cursor:default;font-size:10px;padding-top:6px;user-select:none;flex:none}
+.ocaret.has{color:#64748b;cursor:pointer}
+.oline:hover .ocaret{color:#cbd5e1}
+.oline:hover .ocaret.has{color:#475569}
+.odone{width:15px;height:15px;margin-top:6px;accent-color:var(--ok);cursor:pointer;flex:none}
+.otitle{flex:1;font-size:15px;line-height:1.5;outline:none;padding:1px 2px;min-width:40px;word-break:break-word;color:var(--ink)}
+.otitle:focus{background:#fffbe6;box-shadow:0 2px 0 0 #f59e0b}
+.otitle:empty:before{content:attr(data-ph);color:#cbd5e1}
+.otitle code{background:#f1f5f9;border-radius:4px;padding:0 4px;font-size:13px;font-family:ui-monospace,SFMono-Regular,monospace;color:#0f172a}
+.otitle strong{font-weight:700}
+.ochips{display:flex;gap:6px;align-items:center;flex:none;padding-top:5px}
+.ochip{border:0;background:transparent;font-size:11px;color:#94a3b8;padding:1px 2px;cursor:pointer;white-space:nowrap;font-family:inherit}
+.ochip:hover{color:var(--pri);text-decoration:underline}
+.ochip.add{color:#cbd5e1}
+.oacts{display:flex;gap:0;flex:none;opacity:0;transition:opacity .15s;padding-top:3px}
 .oline:hover .oacts,.oline:focus-within .oacts{opacity:1}
-.oicon{border:0;background:transparent;color:#94a3b8;font-size:14px;cursor:pointer;padding:2px 5px;border-radius:4px}
-.oicon:hover{background:#eef2f7;color:var(--pri)}
-.onote{margin:2px 0 4px 64px;font-size:13px;color:#475569;background:#fffbeb;border:1px dashed #fde68a;
-  border-radius:var(--radius);padding:6px 10px;outline:none;line-height:1.5;max-width:760px;word-break:break-word}
-.onote:focus{background:#fff;box-shadow:0 0 0 2px #fde68a}
-.onote code{background:#f1f5f9;border-radius:3px;padding:0 3px;font-size:12px;font-family:ui-monospace,monospace}
-.ofiles{margin:2px 0 4px 64px;display:flex;gap:8px;flex-wrap:wrap}
+.oicon{border:0;background:transparent;color:#94a3b8;font-size:12px;font-weight:600;cursor:pointer;padding:6px 8px;border-radius:4px;min-width:40px;min-height:36px;white-space:nowrap}
+.oicon:hover{background:#f1f5f9;color:var(--pri)}
+.onote{margin:1px 0 3px 40px;font-size:13.5px;color:#475569;outline:none;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.onote:empty{display:none}
+.onote code{background:#f1f5f9;border-radius:3px;padding:0 3px;font-size:12.5px;font-family:ui-monospace,monospace}
+.ofiles{margin:2px 0 4px 40px;display:flex;gap:8px;flex-wrap:wrap}
 .ofile{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:var(--radius);
   padding:4px 6px;background:#fff;font-size:12px;max-width:260px}
 .ofile img{width:40px;height:40px;object-fit:cover;border-radius:4px}
 .ofdoc{font-size:20px}
 .ofnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
 .ofnm small{display:block;color:#94a3b8;font-size:10.5px}
-.ofdel{border:0;background:none;color:#b91c1c;cursor:pointer;font-size:14px;padding:0 2px}
-.ometa{display:flex;gap:8px;align-items:flex-end;margin:4px 0 4px 64px;padding:8px 10px;background:#f8fafc;
-  border:1px solid var(--line);border-radius:var(--radius);flex-wrap:wrap;max-width:760px}
-.ometa label{font-size:11px;color:#64748b;display:flex;flex-direction:column;gap:3px;font-weight:700}
-.ometa input{border:1px solid var(--line);border-radius:var(--radius);padding:6px 8px;font-size:13px;width:130px;font-family:inherit}
-.ometa input[data-m=progress]{width:70px}
-.ometa .btn{padding:6px 12px;font-size:12.5px}
-.okids{margin-left:26px;border-left:1px solid #eef2f7;padding-left:6px}
+.ofdel{border:0;background:none;color:#b91c1c;cursor:pointer;font-size:14px;padding:4px 8px;min-width:32px;min-height:32px}
+.ometa{display:flex;gap:10px;align-items:center;margin:2px 0 4px 40px;flex-wrap:wrap;font-size:12.5px;color:#64748b}
+.ometa label{font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:5px}
+.ometa input{border:0;border-bottom:1px solid var(--line);padding:4px 2px;font-size:13px;width:110px;font-family:inherit;background:transparent;outline:none}
+.ometa input:focus{border-bottom-color:var(--pri)}
+.ometa input[data-m=progress]{width:56px}
+.ometa .btn{padding:5px 10px;font-size:12px}
+.okids{margin-left:13px;border-left:1px solid #f1f5f9;padding-left:5px}
+.orow.drop-before>.oline{box-shadow:0 -2px 0 0 var(--pri)}
+.orow.drop-after>.oline{box-shadow:0 2px 0 0 var(--pri)}
+.orow.drop-inside>.oline{background:#eff6ff}
 .orow.drop-before>.oline{box-shadow:0 -2px 0 0 var(--pri)}
 .orow.drop-after>.oline{box-shadow:0 2px 0 0 var(--pri)}
 .orow.drop-inside>.oline{background:#dbeafe}
@@ -394,8 +419,8 @@ table.task th,table.task td{padding:7px 9px}
 .pfoot .btn{min-height:40px}
 #themeSel{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px;background:#fff;color:#334155;font-family:inherit;min-height:36px}
 /* --- themes --- */
-[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mut:#94a3b8;--line:#334155;--pri:#60a5fa;--pri-soft:#1e3a6e;--ok:#4ade80;--edge:#475569;--shadow:0 1px 3px rgba(0,0,0,.45)}
-[data-theme="night"]{--bg:#0a1a33;--card:#10294f;--ink:#dbeafe;--mut:#7ea4c9;--line:#1e3a5f;--pri:#38bdf8;--pri-soft:#0c4a6e;--ok:#4ade80;--edge:#2c4f7e;--shadow:0 1px 3px rgba(0,0,0,.45)}
+[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--ink:#d7dee8;--mut:#8a94a3;--line:#334155;--pri:#7aa3d8;--pri-soft:#1e3a6e;--ok:#6f9e7e;--edge:#475569;--shadow:0 1px 3px rgba(0,0,0,.45)}
+[data-theme="night"]{--bg:#0a1a33;--card:#10294f;--ink:#cfd8e3;--mut:#75889e;--line:#1e3a5f;--pri:#6ba3c8;--pri-soft:#0c4a6e;--ok:#6f9e7e;--edge:#2c4f7e;--shadow:0 1px 3px rgba(0,0,0,.45)}
 [data-theme="mono"]{--bg:#f2f2f2;--card:#ffffff;--ink:#141414;--mut:#6f6f6f;--line:#d6d6d6;--pri:#141414;--pri-soft:#e8e8e8;--ok:#141414;--edge:#a3a3a3}
 [data-theme="sand"]{--bg:#f4eee1;--card:#fffdf6;--ink:#4a3f2e;--mut:#8a7a5e;--line:#e4d8c0;--pri:#b45309;--pri-soft:#fdeecd;--ok:#15803d;--edge:#c6b48f}
 [data-theme="dark"] #cv,[data-theme="night"] #cv{background:#0a0f1e}
@@ -430,9 +455,9 @@ table.task th,table.task td{padding:7px 9px}
   <div class="logo">LEHA MindPlan</div>
   <div class="mapname" id="mapName" title="Đổi tên bản đồ"></div>
   <nav class="viewsw">
-    <button data-v="map" class="on">Mindmap</button>
+    <button data-v="list" class="on">Outline</button>
+    <button data-v="map">Mindmap</button>
     <button data-v="gantt">Gantt</button>
-    <button data-v="list">Outline</button>
     <button data-v="task">Task</button><button data-v="cal">Lịch</button>
   </nav>
   <div class="hact">
@@ -443,7 +468,7 @@ table.task th,table.task td{padding:7px 9px}
   </div>
 </header>
 <main>
-  <section class="view on" id="view-map">
+  <section class="view" id="view-map">
     <svg id="cv" oncontextmenu="return false">
       <defs><pattern id="gp" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#e2e8f0" stroke-width="1"/></pattern></defs>
       <g id="world"><g id="gridLayer" style="display:none"><rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#gp)"/></g><g id="edges"></g><g id="nodes"></g></g>
@@ -465,7 +490,7 @@ table.task th,table.task td{padding:7px 9px}
     <div id="minimap" title="Bấm để di chuyển tới"><svg id="mmSvg"></svg><div id="mmView"></div></div>
   </section>
   <section class="view" id="view-gantt"><div id="ganttBox"></div></section>
-  <section class="view" id="view-list"><div id="listBox"></div></section>
+  <section class="view on" id="view-list"><div id="listBox"></div></section>
   <section class="view" id="view-task"><div id="taskBox"></div></section>
   <section class="view" id="view-cal"><div id="calBox"></div></section>
 </main>
@@ -548,7 +573,7 @@ const debounce=(fn,ms)=>{let t;return function(){clearTimeout(t);const a=argumen
 function download(name,text){const b=new Blob([text],{type:'application/json'});const u=URL.createObjectURL(b);
   const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(u);a.remove();},300);}
-const COLORS=['#dbeafe','#dcfce7','#fef3c7','#ffedd5','#fce7f3','#ede9f6','#e0f2fe','#f1f5f9'];
+const COLORS=['#d7e0ec','#d9e2d5','#eae4d6','#ddd9e2','#dde0e4'];
 /* ===== LEHA MindPlan core: icons + markdown mở rộng ===== */
 const ICONS={
 project:{l:'Dự án',svg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>'},
@@ -770,16 +795,16 @@ function nodeDefaults(){return{id:uid(),parentId:null,title:'Nhánh mới',note:
 function demoData(){
   const nodes=[];
   const add=o=>{const n=Object.assign(nodeDefaults(),o);nodes.push(n);return n;};
-  const root=add({title:'Kế hoạch 2027',x:0,y:0,color:'#dbeafe',isProject:true,
+  const root=add({title:'Kế hoạch 2027',x:0,y:0,color:'#d7e0ec',isProject:true,
     note:'Bản đồ kế hoạch trọn đời. Vẽ nhánh, gán thông tin, xem Gantt và danh sách.',
     start:'2027-01-01',end:'2027-12-31',progress:15});
   const br=(t,x,y,o)=>add(Object.assign({title:t,parentId:root.id,x:x,y:y},o||{}));
-  const n1=br('Sự nghiệp',-430,-300,{color:'#e0f2fe',isProject:true,start:'2027-01-01',end:'2027-12-31',progress:10,note:'Hướng tới vị trí điều hành.'});
-  const n2=br('Tài chính',-430,-100,{color:'#dcfce7',start:'2027-01-01',end:'2027-12-31',progress:30});
-  const n3=br('Sức khỏe',-430,110,{color:'#fce7f3',progress:55});
-  const n4=br('Gia đình',430,-280,{color:'#ffedd5',progress:20});
-  const n5=br('Học tập',430,-70,{color:'#ede9f6',isProject:true,progress:25});
-  const n6=br('Mạng lưới',430,130,{color:'#fef3c7',progress:40});
+  const n1=br('Sự nghiệp',-430,-300,{color:'#d7e0ec',isProject:true,start:'2027-01-01',end:'2027-12-31',progress:10,note:'Hướng tới vị trí điều hành.'});
+  const n2=br('Tài chính',-430,-100,{color:'#d9e2d5',start:'2027-01-01',end:'2027-12-31',progress:30});
+  const n3=br('Sức khỏe',-430,110,{color:'#ddd9e2',progress:55});
+  const n4=br('Gia đình',430,-280,{color:'#eae4d6',progress:20});
+  const n5=br('Học tập',430,-70,{color:'#dde0e4',isProject:true,progress:25});
+  const n6=br('Mạng lưới',430,130,{color:'#eae4d6',progress:40});
   const ch=(p,t,dx,dy,o)=>add(Object.assign({title:t,parentId:p.id,x:p.x+dx,y:p.y+dy,color:p.color},o||{}));
   ch(n1,'Lên vị trí COO',-330,-70,{assignee:'Tôi',start:'2027-01-15',end:'2027-12-31',progress:10,budget:0});
   ch(n1,'Xây quy trình vận hành',-330,60,{start:'2027-02-01',end:'2027-06-30',progress:35,budget:50000000});
@@ -892,7 +917,7 @@ function inMonth(n,rg){
 function hasMatch(n,rg){if(inMonth(n,rg))return true;return children(n.id).some(c=>hasMatch(c,rg));}
 
 /* ============ CRUD (mọi view dùng chung) ============ */
-let selectedId=null, currentView='map';
+let selectedId=null, currentView='list';
 function updateNode(id,patch){const n=byId(id);if(!n)return;
   Object.assign(n,patch);saveSoon();refresh();}
 function addNode(parentId,x,y){
@@ -2295,10 +2320,10 @@ function bindTasks(box){
 function buildLifeTemplate(){
   const nodes=[];
   const add=o=>{const n=Object.assign(nodeDefaults(),o);nodes.push(n);return n;};
-  const root=add({title:'Cu\u1ed9c s\u1ed1ng c\u1ee7a t\u00f4i',color:'#dbeafe',isProject:true,
+  const root=add({title:'Cu\u1ed9c s\u1ed1ng c\u1ee7a t\u00f4i',color:'#d7e0ec',isProject:true,
     note:'B\u1ea3n \u0111\u1ed3 cu\u1ed9c s\u1ed1ng: 4 m\u1ea3ng \u2192 n\u0103m \u2192 12 th\u00e1ng.'});
-  const areas=[['Gia \u0111\u00ecnh','#ffedd5'],['C\u00e1 nh\u00e2n','#e0f2fe'],
-    ['C\u00f4ng vi\u1ec7c','#dcfce7'],['S\u1ee9c kh\u1ecfe','#fce7f3']];
+  const areas=[['Gia \u0111\u00ecnh','#eae4d6'],['C\u00e1 nh\u00e2n','#d7e0ec'],
+    ['C\u00f4ng vi\u1ec7c','#d9e2d5'],['S\u1ee9c kh\u1ecfe','#ddd9e2']];
   areas.forEach(a=>{
     const an=add({title:a[0],parentId:root.id,color:a[1],isProject:true});
     [2026,2027].forEach(y=>{
