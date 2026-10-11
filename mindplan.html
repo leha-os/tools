@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MindPlan — Bản đồ kế hoạch</title>
+<style>
+:root{
+  --bg:#f1f5f9; --card:#ffffff; --ink:#0f172a; --mut:#64748b;
+  --line:#e2e8f0; --pri:#1d4ed8; --pri-soft:#dbeafe; --ok:#15803d;
+  --radius:6px; --shadow:0 1px 3px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:14px;overflow:hidden}
+/* ===== Header ===== */
+header{height:56px;background:var(--card);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;padding:0 12px;position:relative;z-index:30}
+.logo{font-weight:800;font-size:17px;color:var(--pri);white-space:nowrap}
+.mapname{font-size:13px;color:var(--mut);border:1px dashed transparent;border-radius:var(--radius);
+  padding:4px 8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.mapname:hover{border-color:var(--line);background:#f8fafc}
+.viewsw{display:flex;background:#eef2f7;border-radius:8px;padding:3px;gap:2px;margin:0 auto}
+.viewsw button{border:0;background:transparent;padding:7px 14px;border-radius:var(--radius);
+  font-size:13px;font-weight:600;color:var(--mut);cursor:pointer;white-space:nowrap}
+.viewsw button.on{background:#fff;color:var(--pri);box-shadow:var(--shadow)}
+.hact{margin-left:auto;display:flex;gap:6px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:var(--radius);
+  padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{background:#f8fafc}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn.pri:hover{background:#1e40af}
+.btn.danger{color:#b91c1c;border-color:#fecaca}
+.btn.danger:hover{background:#fef2f2}
+/* ===== Views ===== */
+main{position:absolute;top:56px;left:0;right:0;bottom:0}
+.view{position:absolute;inset:0;display:none}
+.view.on{display:block}
+#view-map{background:#f8fafc}
+#cv{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+#cv:active{cursor:grabbing}
+.edge{fill:none;stroke:#94a3b8;stroke-width:2}
+.zoomctl{position:absolute;right:12px;bottom:14px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.zoomctl button{width:38px;height:38px;border-radius:var(--radius);border:1px solid var(--line);
+  background:#fff;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
+.maphint{position:absolute;left:12px;bottom:14px;font-size:11px;color:#94a3b8;background:rgba(255,255,255,.85);
+  padding:5px 10px;border-radius:var(--radius);border:1px solid var(--line);z-index:5}
+/* ===== Node ===== */
+.mnode{width:190px;min-height:86px;background:#eef2ff;border:2px solid #c7d2fe;border-radius:var(--radius);
+  padding:8px 10px 8px;box-shadow:var(--shadow);cursor:grab;position:relative;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.mnode.sel{outline:3px solid #93c5fd}
+.mnode .nt{font-weight:700;font-size:13px;line-height:1.3;color:#0f172a;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.mnode .nm{display:flex;align-items:center;gap:6px;margin-top:7px}
+.mnode .nm span{font-size:11px;color:#475569;min-width:32px;text-align:right}
+.pbar{flex:1;height:6px;background:rgba(15,23,42,.12);border-radius:3px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--ok);border-radius:3px}
+.mnode .nb2{margin-top:5px;font-size:11px;color:#475569;display:flex;align-items:center;gap:6px;min-height:14px}
+.pj{font-size:10px;font-weight:700;color:#1d4ed8;background:#dbeafe;border:1px solid #bfdbfe;
+  border-radius:8px;padding:1px 7px}
+.nbtn{position:absolute;width:24px;height:24px;border-radius:50%;border:1px solid #cbd5e1;background:#fff;
+  color:#334155;font-size:15px;font-weight:700;line-height:1;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;box-shadow:var(--shadow);padding:0}
+.nbtn.na{right:-11px;bottom:-11px;color:#1d4ed8;border-color:#93c5fd}
+.nbtn.nc{right:-11px;top:-11px;font-size:11px}
+/* ===== Panel ===== */
+#scrim{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:40;display:none}
+#panel{position:fixed;top:56px;right:0;bottom:0;width:340px;max-width:94vw;background:#fff;z-index:41;
+  border-left:1px solid var(--line);box-shadow:-4px 0 16px rgba(15,23,42,.08);
+  transform:translateX(105%);transition:transform .22s ease;display:flex;flex-direction:column}
+#panel.open{transform:none}
+#scrim.open{display:block}
+.phead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+.phead b{font-size:15px}
+.px{border:0;background:#f1f5f9;width:30px;height:30px;border-radius:var(--radius);font-size:16px;cursor:pointer;color:#475569}
+.pbody{padding:14px;overflow-y:auto;flex:1}
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:12px;font-weight:700;color:#475569;margin-bottom:5px}
+.fld input[type=text],.fld input[type=date],.fld input[type=number],.fld textarea{
+  width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;font-size:14px;font-family:inherit}
+.fld textarea{min-height:74px;resize:vertical}
+.frow{display:flex;gap:10px}
+.frow .fld{flex:1}
+input[type=range]{width:100%}
+.progval{font-weight:700;color:var(--pri)}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:var(--radius);border:2px solid transparent;cursor:pointer}
+.sw.on{border-color:var(--pri)}
+.imgprev{max-width:100%;border-radius:var(--radius);border:1px solid var(--line);margin-top:8px;display:block}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px}
+.chk input{width:18px;height:18px}
+.pfoot{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.pfoot .btn{flex:1}
+/* ===== Gantt ===== */
+#view-gantt{overflow:auto;background:#fff;padding:14px}
+.gantt{min-width:760px}
+.grow{display:flex;border-bottom:1px solid #f1f5f9;min-height:36px;align-items:stretch}
+.grow.ghead{background:#f8fafc;font-weight:700;font-size:12px;color:#475569;position:sticky;top:0;z-index:2}
+.glabel{width:250px;min-width:250px;padding:7px 10px;font-size:13px;border-right:1px solid var(--line);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glabel small{color:#94a3b8;display:block;font-size:11px}
+.gtime{flex:1;position:relative}
+.gmonths{display:flex;height:100%}
+.gm{border-left:1px solid #f1f5f9;font-size:10px;color:#94a3b8;padding:4px 6px;white-space:nowrap;overflow:hidden}
+.gbar{position:absolute;top:8px;height:20px;border-radius:4px;border:1px solid;cursor:pointer;overflow:hidden}
+.gbar i{display:block;height:100%;background:rgba(21,128,61,.55)}
+.gbar:hover{filter:brightness(.96)}
+.gempty{padding:40px;text-align:center;color:var(--mut)}
+/* ===== WBS list ===== */
+#view-list{overflow:auto;background:#fff;padding:14px}
+table.wbs{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}
+table.wbs th{background:#fef3c7;border:1px solid #fde68a;padding:8px 10px;text-align:left;
+  font-size:12px;white-space:nowrap;position:sticky;top:0}
+table.wbs td{border:1px solid var(--line);padding:7px 10px;vertical-align:middle}
+table.wbs tr:hover td{background:#f8fafc}
+.wbsno{color:var(--mut);font-size:12px;white-space:nowrap}
+.wbst{font-weight:600}
+table.wbs input[type=number]{width:64px;border:1px solid var(--line);border-radius:var(--radius);padding:5px 7px;font-size:13px}
+.minibar{width:90px;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:8px}
+.minibar i{display:block;height:100%;background:var(--ok)}
+@media(max-width:640px){
+  header{flex-wrap:wrap;height:auto;padding:8px}
+  main{top:104px}
+  #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;max-height:72vh;
+    border-left:0;border-top:1px solid var(--line);border-radius:12px 12px 0 0;
+    transform:translateY(105%)}
+  #panel.open{transform:none}
+  .mapname{display:none}
+  .maphint{display:none}
+  .viewsw{order:3;width:100%;margin:4px 0 0}
+  .viewsw button{flex:1}
+  .glabel{width:150px;min-width:150px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">MindPlan</div>
+  <div class="mapname" id="mapName" title="Đổi tên bản đồ"></div>
+  <nav class="viewsw">
+    <button data-v="map" class="on">Mindmap</button>
+    <button data-v="gantt">Gantt</button>
+    <button data-v="list">Danh sách</button>
+  </nav>
+  <div class="hact">
+    <button class="btn pri" id="btnAddRoot">+ Node gốc</button>
+    <button class="btn" id="btnExport">Xuất</button>
+    <button class="btn" id="btnImport">Nhập</button>
+  </div>
+</header>
+<main>
+  <section class="view on" id="view-map">
+    <svg id="cv" oncontextmenu="return false">
+      <g id="world"><g id="edges"></g><g id="nodes"></g></g>
+    </svg>
+    <div class="zoomctl">
+      <button id="zIn" title="Phóng to">+</button>
+      <button id="zOut" title="Thu nhỏ">−</button>
+      <button id="zFit" title="Vừa khung" style="font-size:13px">⤢</button>
+    </div>
+    <div class="maphint">Kéo nền để di chuyển • Cuộn chuột để zoom • Double-click nền để tạo node</div>
+  </section>
+  <section class="view" id="view-gantt"><div id="ganttBox"></div></section>
+  <section class="view" id="view-list"><div id="listBox"></div></section>
+</main>
+<div id="scrim"></div>
+<aside id="panel">
+  <div class="phead"><b>Chi tiết nhánh</b><button class="px" id="btnClosePanel">×</button></div>
+  <div class="pbody">
+    <div class="fld"><label>Tiêu đề</label><input type="text" id="fTitle"></div>
+    <div class="fld"><label class="chk"><input type="checkbox" id="fProj"> Đánh dấu là Dự án</label></div>
+    <div class="fld"><label>Màu sắc</label><div class="swatches" id="fColors"></div></div>
+    <div class="fld"><label>Ghi chú</label><textarea id="fNote" placeholder="Ghi chú cho nhánh này..."></textarea></div>
+    <div class="fld"><label>Hình ảnh</label>
+      <div><button class="btn" id="btnImg">Chọn ảnh</button>
+      <button class="btn danger" id="btnImgDel" style="display:none">Xóa ảnh</button></div>
+      <img class="imgprev" id="imgPrev" style="display:none" alt="">
+    </div>
+    <div class="frow">
+      <div class="fld"><label>Bắt đầu</label><input type="date" id="fStart"></div>
+      <div class="fld"><label>Kết thúc</label><input type="date" id="fEnd"></div>
+    </div>
+    <div class="fld"><label>Tiến độ: <span class="progval" id="fProgV">0%</span></label>
+      <input type="range" id="fProg" min="0" max="100" step="1"></div>
+    <div class="frow">
+      <div class="fld"><label>Ngân sách (₫)</label><input type="number" id="fBudget" min="0" step="1000"></div>
+      <div class="fld"><label>Chi phí thực (₫)</label><input type="number" id="fCost" min="0" step="1000"></div>
+    </div>
+    <div class="fld"><label>Người phụ trách</label><input type="text" id="fAssign" placeholder="Tên người phụ trách"></div>
+  </div>
+  <div class="pfoot">
+    <button class="btn pri" id="btnAddChild">+ Nhánh con</button>
+    <button class="btn" id="btnCollapse">Thu gọn</button>
+    <button class="btn danger" id="btnDelete">Xóa</button>
+  </div>
+</aside>
+<input type="file" id="fileImg" accept="image/*" hidden>
+<input type="file" id="fileJson" accept="application/json,.json" hidden>
+<script>
+'use strict';
+/* ============ Tiện ích ============ */
+const $=s=>document.querySelector(s);
+const uid=()=>'n'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtMoney=v=>{v=Number(v)||0;return v? v.toLocaleString('vi-VN')+' ₫':'—';};
+const fmtDate=s=>{if(!s)return '—';const d=new Date(s+'T00:00:00');return isNaN(d)?'—':d.toLocaleDateString('vi-VN');};
+const debounce=(fn,ms)=>{let t;return function(){clearTimeout(t);const a=arguments,s=this;t=setTimeout(()=>fn.apply(s,a),ms);};};
+function download(name,text){const b=new Blob([text],{type:'application/json'});const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(u);a.remove();},300);}
+const COLORS=['#dbeafe','#dcfce7','#fef3c7','#ffedd5','#fce7f3','#ede9f6','#e0f2fe','#f1f5f9'];
+
+/* ============ Kho dữ liệu ============ */
+const LSKEY='mindplan_data';
+let DB={name:'Kế hoạch 2027',nodes:[]};
+function save(){try{localStorage.setItem(LSKEY,JSON.stringify(DB));}catch(e){}}
+const saveSoon=debounce(save,400);
+function load(){
+  try{const s=localStorage.getItem(LSKEY);
+    if(s){const o=JSON.parse(s);if(o&&Array.isArray(o.nodes)){DB=o;return;}}}catch(e){}
+  DB=demoData();save();
+}
+function nodeDefaults(){return{id:uid(),parentId:null,title:'Nhánh mới',note:'',image:'',
+  start:'',end:'',assignee:'',progress:0,budget:0,cost:0,x:0,y:0,color:'#eef2ff',collapsed:false,isProject:false};}
+
+/* ============ Dữ liệu mẫu ============ */
+function demoData(){
+  const nodes=[];
+  const add=o=>{const n=Object.assign(nodeDefaults(),o);nodes.push(n);return n;};
+  const root=add({title:'Kế hoạch 2027',x:0,y:0,color:'#dbeafe',isProject:true,
+    note:'Bản đồ kế hoạch trọn đời. Vẽ nhánh, gán thông tin, xem Gantt và danh sách.',
+    start:'2027-01-01',end:'2027-12-31',progress:15});
+  const br=(t,x,y,o)=>add(Object.assign({title:t,parentId:root.id,x:x,y:y},o||{}));
+  const n1=br('Sự nghiệp',-430,-300,{color:'#e0f2fe',isProject:true,start:'2027-01-01',end:'2027-12-31',progress:10,note:'Hướng tới vị trí điều hành.'});
+  const n2=br('Tài chính',-430,-100,{color:'#dcfce7',start:'2027-01-01',end:'2027-12-31',progress:30});
+  const n3=br('Sức khỏe',-430,110,{color:'#fce7f3',progress:55});
+  const n4=br('Gia đình',430,-280,{color:'#ffedd5',progress:20});
+  const n5=br('Học tập',430,-70,{color:'#ede9f6',isProject:true,progress:25});
+  const n6=br('Mạng lưới',430,130,{color:'#fef3c7',progress:40});
+  const ch=(p,t,dx,dy,o)=>add(Object.assign({title:t,parentId:p.id,x:p.x+dx,y:p.y+dy,color:p.color},o||{}));
+  ch(n1,'Lên vị trí COO',-330,-70,{assignee:'Tôi',start:'2027-01-15',end:'2027-12-31',progress:10,budget:0});
+  ch(n1,'Xây quy trình vận hành',-330,60,{start:'2027-02-01',end:'2027-06-30',progress:35,budget:50000000});
+  ch(n2,'Quỹ khẩn cấp 6 tháng',-330,-60,{progress:35,budget:300000000,cost:105000000});
+  ch(n2,'Đầu tư dài hạn',-330,70,{progress:15,budget:500000000});
+  ch(n3,'Tập luyện 3 buổi/tuần',-330,-50,{progress:60});
+  ch(n3,'Khám sức khỏe định kỳ',-330,70,{start:'2027-06-01',end:'2027-06-02',progress:0,budget:5000000});
+  ch(n4,'Du lịch hè Đà Lạt',330,0,{assignee:'Cả nhà',start:'2027-07-01',end:'2027-07-05',progress:0,budget:80000000});
+  ch(n5,'Tiếng Anh B2',330,-60,{progress:25,budget:30000000,cost:8000000});
+  ch(n5,'Khóa Mini MBA',330,60,{start:'2027-09-01',end:'2027-12-15',progress:0,budget:120000000});
+  ch(n6,'Golf networking',330,0,{progress:40,budget:60000000,cost:24000000});
+  return {name:'Kế hoạch 2027',nodes:nodes};
+}
+
+/* ============ Hàm cây ============ */
+const byId=id=>DB.nodes.find(n=>n.id===id);
+const children=pid=>DB.nodes.filter(n=>n.parentId===pid);
+const roots=()=>DB.nodes.filter(n=>!n.parentId||!byId(n.parentId));
+function isVisible(n){let p=n.parentId?byId(n.parentId):null;
+  while(p){if(p.collapsed)return false;p=p.parentId?byId(p.parentId):null;}return true;}
+function effBudget(n){const ch=children(n.id);
+  if(ch.length)return ch.reduce((s,c)=>s+effBudget(c),0);return Number(n.budget)||0;}
+function effCost(n){const ch=children(n.id);
+  if(ch.length)return ch.reduce((s,c)=>s+effCost(c),0);return Number(n.cost)||0;}
+function descendants(id){const out=[];const walk=p=>{children(p).forEach(c=>{out.push(c.id);walk(c.id);});};walk(id);return out;}
+function wbsNumber(n){const parts=[];let c=n;
+  while(c){const sibs=c.parentId?children(c.parentId):roots();parts.unshift(sibs.indexOf(c)+1);
+    c=c.parentId?byId(c.parentId):null;}return parts.join('.');}
+
+/* ============ CRUD (mọi view dùng chung) ============ */
+let selectedId=null, currentView='map';
+function updateNode(id,patch){const n=byId(id);if(!n)return;
+  Object.assign(n,patch);saveSoon();refresh();}
+function addNode(parentId,x,y){
+  const p=parentId?byId(parentId):null;
+  const sibs=parentId?children(parentId):roots();
+  const n=nodeDefaults();
+  n.parentId=parentId||null;
+  n.title=parentId?'Nhánh con mới':'Node gốc mới';
+  n.color=p?p.color:COLORS[DB.nodes.length%COLORS.length];
+  if(x==null||y==null){
+    if(p){n.x=p.x+300;n.y=p.y+(sibs.length-0.5)*110;}
+    else{n.x=(sibs.length)*240;n.y=120;}
+  }else{n.x=x;n.y=y;}
+  DB.nodes.push(n);saveSoon();refresh();return n;
+}
+function deleteNode(id){
+  const n=byId(id);if(!n)return;
+  const hasCh=descendants(id).length>0;
+  if(!confirm('Xóa "'+(n.title||'nhánh')+'"'+(hasCh?' và toàn bộ '+hasCh+' nhánh con':'')+'?'))return;
+  const ids={};ids[id]=1;descendants(id).forEach(d=>ids[d]=1);
+  DB.nodes=DB.nodes.filter(m=>!ids[m.id]);
+  if(selectedId===id||ids[selectedId])closePanel();
+  saveSoon();refresh();
+}
+function toggleCollapse(id){const n=byId(id);if(!n)return;updateNode(id,{collapsed:!n.collapsed});}
+
+/* ============ VIEW MINDMAP ============ */
+const svg=$('#cv'), world=$('#world'), gE=$('#edges'), gN=$('#nodes');
+const view={x:0,y:0,k:1};
+const NW=190, NH=96;
+function applyView(){world.setAttribute('transform','translate('+view.x+','+view.y+') scale('+view.k+')');}
+function zoomAt(px,py,f){
+  const nk=Math.min(2.5,Math.max(0.25,view.k*f));if(nk===view.k)return;
+  const wx=(px-view.x)/view.k, wy=(py-view.y)/view.k;
+  view.k=nk;view.x=px-wx*nk;view.y=py-wy*nk;applyView();
+}
+function centerOn(n){const r=svg.getBoundingClientRect();
+  view.x=r.width/2-n.x*view.k;view.y=r.height/2-n.y*view.k;applyView();}
+function fitView(){
+  const vis=DB.nodes.filter(isVisible);if(!vis.length)return;
+  let x1=1e9,y1=1e9,x2=-1e9,y2=-1e9;
+  vis.forEach(n=>{x1=Math.min(x1,n.x-NW/2);y1=Math.min(y1,n.y-NH/2);x2=Math.max(x2,n.x+NW/2);y2=Math.max(y2,n.y+NH/2);});
+  const r=svg.getBoundingClientRect(),pad=90;
+  const k=Math.min(1.25,Math.max(0.25,Math.min(r.width/(x2-x1+pad*2),r.height/(y2-y1+pad*2))));
+  view.k=k;view.x=r.width/2-(x1+x2)/2*k;view.y=r.height/2-(y1+y2)/2*k;applyView();
+}
+function edgeD(p,c){const dx=Math.max(50,Math.abs(c.x-p.x)/2);
+  return 'M '+p.x+' '+p.y+' C '+(p.x+dx)+' '+p.y+', '+(c.x-dx)+' '+c.y+', '+c.x+' '+c.y;}
+function positionEdges(){
+  let h='';
+  DB.nodes.filter(isVisible).forEach(n=>{
+    if(!n.parentId)return;const p=byId(n.parentId);
+    if(p&&isVisible(p))h+='<path class="edge" d="'+edgeD(p,n)+'"/>';
+  });
+  gE.innerHTML=h;
+}
+function nodeHTML(n){
+  const ch=children(n.id), eb=effBudget(n);
+  return '<div xmlns="http://www.w3.org/1999/xhtml" class="mnode'+(n.id===selectedId?' sel':'')+'" data-id="'+n.id+'" style="background:'+esc(n.color||'#eef2ff')+'">'
+    +'<div class="nt">'+esc(n.title||'Không tên')+'</div>'
+    +'<div class="nm"><div class="pbar"><i style="width:'+(Number(n.progress)||0)+'%"></i></div><span>'+(Number(n.progress)||0)+'%</span></div>'
+    +'<div class="nb2">'+(eb?'<span>'+fmtMoney(eb)+'</span>':'<span></span>')+(n.isProject?'<span class="pj">Dự án</span>':'')+'</div>'
+    +'<button class="nbtn na" data-act="add" data-id="'+n.id+'" title="Thêm nhánh con">+</button>'
+    +(ch.length?'<button class="nbtn nc" data-act="col" data-id="'+n.id+'" title="Thu gọn / Mở rộng">'+(n.collapsed?'▸':'▾')+'</button>':'')
+    +'</div>';
+}
+function renderMap(){
+  gE.innerHTML='';gN.innerHTML='';
+  positionEdges();
+  const ns='http://www.w3.org/2000/svg', fns='http://www.w3.org/1999/xhtml';
+  DB.nodes.filter(isVisible).forEach(n=>{
+    const g=document.createElementNS(ns,'g');
+    g.setAttribute('transform','translate('+n.x+','+n.y+')');
+    g.setAttribute('data-gid',n.id);
+    const fo=document.createElementNS(ns,'foreignObject');
+    fo.setAttribute('x',-(NW/2+14));fo.setAttribute('y',-(NH/2+14));
+    fo.setAttribute('width',NW+28);fo.setAttribute('height',NH+28);
+    const d=document.createElement('div');d.setAttribute('xmlns',fns);
+    d.setAttribute('style','padding:14px;');
+    d.innerHTML=nodeHTML(n);
+    fo.appendChild(d);g.appendChild(fo);gN.appendChild(g);
+  });
+  applyView();
+}
+function positionNode(n){
+  const g=gN.querySelector('[data-gid="'+n.id+'"]');
+  if(g)g.setAttribute('transform','translate('+n.x+','+n.y+')');
+}
+/* Kéo node */
+let dragN=null;
+gN.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button'))return;
+  const nd=e.target.closest('.mnode');if(!nd)return;
+  const id=nd.dataset.id,n=byId(id);if(!n)return;
+  dragN={id:id,sx:e.clientX,sy:e.clientY,ox:n.x,oy:n.y,moved:false};
+  try{gN.setPointerCapture(e.pointerId);}catch(err){}
+  e.preventDefault();e.stopPropagation();
+});
+gN.addEventListener('pointermove',e=>{
+  if(!dragN)return;
+  const dx=(e.clientX-dragN.sx)/view.k, dy=(e.clientY-dragN.sy)/view.k;
+  if(Math.abs(e.clientX-dragN.sx)+Math.abs(e.clientY-dragN.sy)>5)dragN.moved=true;
+  const n=byId(dragN.id);if(!n)return;
+  n.x=dragN.ox+dx;n.y=dragN.oy+dy;
+  positionNode(n);positionEdges();
+});
+function endDragN(e){
+  if(!dragN)return;
+  const d=dragN;dragN=null;
+  if(d.moved){saveSoon();}
+  else{selectNode(d.id);}
+}
+gN.addEventListener('pointerup',endDragN);
+gN.addEventListener('pointercancel',()=>{dragN=null;});
+gN.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]');if(!b)return;
+  e.stopPropagation();
+  const id=b.dataset.id,act=b.dataset.act;
+  if(act==='add'){const c=addNode(id);selectNode(c.id);}
+  else if(act==='col'){toggleCollapse(id);}
+});
+/* Pan + pinch trên nền */
+const ptrs=new Map();let panSt=null,pinchSt=null;
+const pdist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+svg.addEventListener('pointerdown',e=>{
+  if(e.target.closest('.mnode'))return;
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  try{svg.setPointerCapture(e.pointerId);}catch(err){}
+  if(ptrs.size===1){panSt={sx:e.clientX,sy:e.clientY,ox:view.x,oy:view.y,moved:false};}
+  else if(ptrs.size===2){const p=Array.from(ptrs.values());
+    const r=svg.getBoundingClientRect();
+    pinchSt={d:pdist(p[0],p[1]),k:view.k,mx:(p[0].x+p[1].x)/2-r.left,my:(p[0].y+p[1].y)/2-r.top};
+    panSt=null;}
+});
+svg.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return;
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2&&pinchSt){
+    const p=Array.from(ptrs.values()),d=pdist(p[0],p[1]);
+    if(d<10)return;
+    const r=svg.getBoundingClientRect();
+    const mx=(p[0].x+p[1].x)/2-r.left,my=(p[0].y+p[1].y)/2-r.top;
+    const nk=Math.min(2.5,Math.max(0.25,pinchSt.k*d/pinchSt.d));
+    const wx=(mx-view.x)/view.k,wy=(my-view.y)/view.k;
+    view.k=nk;view.x=mx-wx*nk;view.y=my-wy*nk;applyView();
+  }else if(panSt){
+    view.x=panSt.ox+(e.clientX-panSt.sx);view.y=panSt.oy+(e.clientY-panSt.sy);
+    if(Math.abs(e.clientX-panSt.sx)+Math.abs(e.clientY-panSt.sy)>5)panSt.moved=true;
+    applyView();
+  }
+});
+function endPan(e){ptrs.delete(e.pointerId);
+  if(ptrs.size<2)pinchSt=null;
+  if(ptrs.size===0){if(panSt&&!panSt.moved&&selectedId){/* click nền: bỏ chọn */}panSt=null;}}
+svg.addEventListener('pointerup',endPan);
+svg.addEventListener('pointercancel',endPan);
+svg.addEventListener('dblclick',e=>{
+  if(e.target.closest('.mnode'))return;
+  const r=svg.getBoundingClientRect();
+  const wx=(e.clientX-r.left-view.x)/view.k, wy=(e.clientY-r.top-view.y)/view.k;
+  const n=addNode(null,wx,wy);selectNode(n.id);
+});
+svg.addEventListener('wheel',e=>{e.preventDefault();
+  const r=svg.getBoundingClientRect();
+  zoomAt(e.clientX-r.left,e.clientY-r.top,Math.pow(1.0016,-e.deltaY));
+},{passive:false});
+$('#zIn').onclick=()=>{const r=svg.getBoundingClientRect();zoomAt(r.width/2,r.height/2,1.25);};
+$('#zOut').onclick=()=>{const r=svg.getBoundingClientRect();zoomAt(r.width/2,r.height/2,0.8);};
+$('#zFit').onclick=fitView;
+
+/* ============ PANEL CHI TIẾT ============ */
+function selectNode(id){selectedId=id;
+  gN.querySelectorAll('.mnode.sel').forEach(m=>m.classList.remove('sel'));
+  const g=gN.querySelector('[data-gid="'+id+'"] .mnode');
+  if(g)g.classList.add('sel');
+  openPanel(id);
+}
+function openPanel(id){
+  const n=byId(id);if(!n){closePanel();return;}
+  $('#fTitle').value=n.title||'';
+  $('#fProj').checked=!!n.isProject;
+  $('#fNote').value=n.note||'';
+  $('#fStart').value=n.start||'';
+  $('#fEnd').value=n.end||'';
+  $('#fProg').value=Number(n.progress)||0;
+  $('#fProgV').textContent=(Number(n.progress)||0)+'%';
+  $('#fBudget').value=Number(n.budget)||'';
+  $('#fCost').value=Number(n.cost)||'';
+  $('#fAssign').value=n.assignee||'';
+  document.querySelectorAll('#fColors .sw').forEach(s=>s.classList.toggle('on',s.dataset.c===(n.color||'#eef2ff')));
+  const pv=$('#imgPrev');
+  if(n.image){pv.src=n.image;pv.style.display='block';$('#btnImgDel').style.display='inline-block';}
+  else{pv.src='';pv.style.display='none';$('#btnImgDel').style.display='none';}
+  $('#btnCollapse').textContent=n.collapsed?'Mở rộng':'Thu gọn';
+  $('#panel').classList.add('open');
+  if(window.innerWidth<=640)$('#scrim').classList.add('open');
+}
+function closePanel(){selectedId=null;
+  $('#panel').classList.remove('open');$('#scrim').classList.remove('open');
+  gN.querySelectorAll('.mnode.sel').forEach(m=>m.classList.remove('sel'));
+}
+$('#btnClosePanel').onclick=closePanel;
+$('#scrim').onclick=closePanel;
+(function initColors(){
+  const box=$('#fColors');
+  COLORS.forEach(c=>{const s=document.createElement('div');s.className='sw';s.dataset.c=c;s.style.background=c;
+    s.onclick=()=>{if(selectedId){updateNode(selectedId,{color:c});
+      document.querySelectorAll('#fColors .sw').forEach(x=>x.classList.toggle('on',x===s));}};
+    box.appendChild(s);});
+})();
+$('#fTitle').addEventListener('input',e=>{if(selectedId)updateNode(selectedId,{title:e.target.value});});
+$('#fNote').addEventListener('input',e=>{if(selectedId)updateNode(selectedId,{note:e.target.value});});
+$('#fStart').addEventListener('change',e=>{if(selectedId)updateNode(selectedId,{start:e.target.value});});
+$('#fEnd').addEventListener('change',e=>{if(selectedId)updateNode(selectedId,{end:e.target.value});});
+$('#fProg').addEventListener('input',e=>{if(!selectedId)return;
+  $('#fProgV').textContent=e.target.value+'%';updateNode(selectedId,{progress:Number(e.target.value)});});
+$('#fBudget').addEventListener('change',e=>{if(selectedId)updateNode(selectedId,{budget:Number(e.target.value)||0});});
+$('#fCost').addEventListener('change',e=>{if(selectedId)updateNode(selectedId,{cost:Number(e.target.value)||0});});
+$('#fAssign').addEventListener('input',e=>{if(selectedId)updateNode(selectedId,{assignee:e.target.value});});
+$('#fProj').addEventListener('change',e=>{if(selectedId)updateNode(selectedId,{isProject:e.target.checked});});
+$('#btnAddChild').onclick=()=>{if(selectedId){const c=addNode(selectedId);selectNode(c.id);}};
+$('#btnCollapse').onclick=()=>{if(selectedId){toggleCollapse(selectedId);openPanel(selectedId);}};
+$('#btnDelete').onclick=()=>{if(selectedId)deleteNode(selectedId);};
+$('#btnImg').onclick=()=>{if(selectedId)$('#fileImg').click();};
+$('#fileImg').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f||!selectedId)return;
+  const rd=new FileReader();
+  rd.onload=()=>{updateNode(selectedId,{image:rd.result});openPanel(selectedId);};
+  rd.readAsDataURL(f);e.target.value='';
+});
+$('#btnImgDel').onclick=()=>{if(selectedId){updateNode(selectedId,{image:''});openPanel(selectedId);}};
+
+/* ============ VIEW GANTT ============ */
+function ganttData(){
+  const rows=[];
+  const walk=(pid,depth)=>{children(pid).forEach(c=>{rows.push({n:c,depth:depth});walk(c.id,depth+1);});};
+  roots().forEach(r=>{rows.push({n:r,depth:0});walk(r.id,1);});
+  return rows.filter(x=>x.n.start&&x.n.end&&x.n.end>=x.n.start);
+}
+function renderGantt(){
+  const box=$('#ganttBox'),rows=ganttData();
+  if(!rows.length){box.innerHTML='<div class="gempty">Chưa có nhánh nào có ngày bắt đầu/kết thúc.<br>Mở Mindmap, chọn nhánh và nhập ngày trong panel chi tiết.</div>';return;}
+  let mn=null,mx=null;
+  rows.forEach(x=>{if(!mn||x.n.start<mn)mn=x.n.start;if(!mx||x.n.end>mx)mx=x.n.end;});
+  const d0=new Date(mn+'T00:00:00'),d1=new Date(mx+'T00:00:00');
+  d0.setDate(d0.getDate()-7);d1.setDate(d1.getDate()+7);
+  const total=Math.max(1,(d1-d0)/86400000);
+  const months=[];const dm=new Date(d0.getFullYear(),d0.getMonth(),1);
+  const em=new Date(d1.getFullYear(),d1.getMonth(),1);
+  while(dm<=em){months.push(new Date(dm));dm.setMonth(dm.getMonth()+1);}
+  let h='<div class="gantt">';
+  h+='<div class="grow ghead"><div class="glabel">Nhánh</div><div class="gtime"><div class="gmonths">';
+  months.forEach(m=>{
+    const nd=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
+    const w=Math.max(2,nd/total*100);
+    h+='<div class="gm" style="width:'+w+'%">T'+(m.getMonth()+1)+'/'+String(m.getFullYear()).slice(2)+'</div>';
+  });
+  h+='</div></div></div>';
+  rows.forEach(x=>{
+    const n=x.n;
+    const s=new Date(n.start+'T00:00:00'),e2=new Date(n.end+'T00:00:00');
+    const l=Math.max(0,(s-d0)/86400000/total*100);
+    const w=Math.max(0.8,(e2-s)/86400000/total*100+0.4);
+    h+='<div class="grow"><div class="glabel" style="padding-left:'+(10+x.depth*16)+'px">'+esc(n.title)
+      +'<small>'+fmtDate(n.start)+' → '+fmtDate(n.end)+' • '+(Number(n.progress)||0)+'%</small></div>'
+      +'<div class="gtime"><div class="gbar" data-id="'+n.id+'" title="'+esc(n.title)+' — bấm để xem trên Mindmap"'
+      +' style="left:'+l+'%;width:'+w+'%;background:'+esc(n.color||'#eef2ff')+';border-color:#94a3b8">'
+      +'<i style="width:'+(Number(n.progress)||0)+'%"></i></div></div></div>';
+  });
+  h+='</div>';
+  box.innerHTML=h;
+  box.querySelectorAll('.gbar').forEach(b=>{b.onclick=()=>{
+    showView('map');const n=byId(b.dataset.id);
+    if(n){if(view.k<0.9){view.k=1;}centerOn(n);selectNode(n.id);}};});
+}
+
+/* ============ VIEW DANH SÁCH / WBS ============ */
+function renderList(){
+  const box=$('#listBox');
+  if(!DB.nodes.length){box.innerHTML='<div class="gempty">Chưa có dữ liệu.</div>';return;}
+  let h='<table class="wbs"><thead><tr><th>WBS</th><th>Tiêu đề</th><th>Bắt đầu</th><th>Kết thúc</th>'
+    +'<th>Tiến độ</th><th>Ngân sách</th><th>Phụ trách</th></tr></thead><tbody>';
+  const walk=(pid,depth,prefix)=>{
+    children(pid).forEach((n,idx)=>{
+      const no=prefix?prefix+'.'+(idx+1):String(idx+1);
+      const p=Number(n.progress)||0;
+      h+='<tr><td class="wbsno">'+no+'</td>'
+        +'<td><span class="wbst" style="padding-left:'+(depth*18)+'px">'+esc(n.title||'Không tên')
+        +(n.isProject?' <span class="pj">Dự án</span>':'')+'</span></td>'
+        +'<td>'+fmtDate(n.start)+'</td><td>'+fmtDate(n.end)+'</td>'
+        +'<td><input type="number" min="0" max="100" value="'+p+'" data-pg="'+n.id+'">'
+        +'<span class="minibar"><i style="width:'+p+'%"></i></span></td>'
+        +'<td>'+fmtMoney(effBudget(n))+'</td>'
+        +'<td>'+esc(n.assignee||'—')+'</td></tr>';
+      walk(n.id,depth+1,no);
+    });
+  };
+  roots().forEach((r,idx)=>{
+    const no=String(idx+1),p=Number(r.progress)||0;
+    h+='<tr><td class="wbsno">'+no+'</td>'
+      +'<td><span class="wbst">'+esc(r.title||'Không tên')+(r.isProject?' <span class="pj">Dự án</span>':'')+'</span></td>'
+      +'<td>'+fmtDate(r.start)+'</td><td>'+fmtDate(r.end)+'</td>'
+      +'<td><input type="number" min="0" max="100" value="'+p+'" data-pg="'+r.id+'">'
+      +'<span class="minibar"><i style="width:'+p+'%"></i></span></td>'
+      +'<td>'+fmtMoney(effBudget(r))+'</td><td>'+esc(r.assignee||'—')+'</td></tr>';
+    walk(r.id,1,no);
+  });
+  h+='</tbody></table>';
+  box.innerHTML=h;
+  box.querySelectorAll('[data-pg]').forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      let v=Math.round(Number(inp.value)||0);v=Math.min(100,Math.max(0,v));
+      updateNode(inp.dataset.pg,{progress:v});
+    });
+  });
+}
+
+/* ============ Chuyển view / toolbar ============ */
+function showView(v){
+  currentView=v;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  $('#view-'+v).classList.add('on');
+  document.querySelectorAll('.viewsw button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  refresh();
+}
+function refresh(){
+  $('#mapName').textContent=DB.name||'Bản đồ';
+  if(currentView==='map')renderMap();
+  else if(currentView==='gantt')renderGantt();
+  else renderList();
+}
+document.querySelectorAll('.viewsw button').forEach(b=>{b.onclick=()=>showView(b.dataset.v);});
+$('#mapName').onclick=()=>{
+  const t=prompt('Tên bản đồ:',DB.name||'');
+  if(t!=null&&t.trim()){DB.name=t.trim();saveSoon();refresh();}
+};
+$('#btnAddRoot').onclick=()=>{
+  const r=svg.getBoundingClientRect();
+  const wx=(r.width/2-view.x)/view.k, wy=(r.height/2-view.y)/view.k;
+  if(currentView!=='map')showView('map');
+  const n=addNode(null,wx,wy);selectNode(n.id);
+};
+/* Xuất / Nhập JSON */
+$('#btnExport').onclick=()=>{
+  const d=new Date(),p=n=>String(n).padStart(2,'0');
+  download('mindplan-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'.json',JSON.stringify(DB,null,2));
+};
+$('#btnImport').onclick=()=>$('#fileJson').click();
+$('#fileJson').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+      const o=JSON.parse(rd.result);
+      if(!o||!Array.isArray(o.nodes))throw new Error('bad');
+      DB={name:o.name||'Bản đồ',nodes:o.nodes};
+      closePanel();save();refresh();fitView();
+      alert('Đã nhập '+o.nodes.length+' nhánh.');
+    }catch(err){alert('File không hợp lệ.');}};
+  rd.readAsText(f);e.target.value='';
+});
+/* Phím tắt */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closePanel();
+  if(e.key==='Delete'&&selectedId&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA')deleteNode(selectedId);
+});
+/* ============ Khởi động ============ */
+load();
+refresh();
+fitView();
+</script>
+</body>
+</html>
