@@ -25,7 +25,7 @@ header{height:56px;background:var(--card);border-bottom:1px solid var(--line);
 .viewsw button{border:0;background:transparent;padding:7px 14px;border-radius:var(--radius);
   font-size:13px;font-weight:600;color:var(--mut);cursor:pointer;white-space:nowrap}
 .viewsw button.on{background:#fff;color:var(--pri);box-shadow:var(--shadow)}
-.hact{margin-left:auto;display:flex;gap:6px}
+.hact{margin-left:auto;display:flex;gap:6px}.ddwrap{position:relative}.dd{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(15,23,42,.15);padding:6px;display:flex;flex-direction:column;gap:4px;z-index:80;min-width:150px}.dd .btn{justify-content:flex-start;width:100%}#btnMore{font-size:18px;padding:4px 12px;letter-spacing:2px;line-height:1}
 .btn{border:1px solid var(--line);background:#fff;border-radius:var(--radius);
   padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
 .btn:hover{background:#f8fafc}
@@ -164,47 +164,48 @@ table.wbs input[type=number]{width:64px;border:1px solid var(--line);border-radi
 .otree{padding:12px 16px 60px;max-width:760px;margin:0 auto}
 .orow{margin:0}
 .orow.dim>.oline{opacity:.4}
-.oline{display:flex;align-items:flex-start;gap:2px;padding:5px 4px;position:relative;border-radius:4px}
+.oline{display:flex;align-items:flex-start;gap:2px;padding:2px 4px;position:relative;border-radius:4px}
 .oline:hover{background:#fafbfc}
-.dragh{cursor:grab;color:#e2e8f0;font-size:11px;padding-top:6px;user-select:none;flex:none;width:14px;text-align:center}
-.oline:hover .dragh{color:#cbd5e1}
-.obull{width:18px;min-width:18px;text-align:center;color:#94a3b8;font-size:9px;padding-top:7px;user-select:none;flex:none;line-height:1}
-.ocaret{width:18px;min-width:18px;text-align:center;color:#e2e8f0;cursor:default;font-size:10px;padding-top:6px;user-select:none;flex:none}
+.dragh{display:none;cursor:grab;color:#e2e8f0;font-size:11px;padding-top:6px;user-select:none;flex:none;width:14px;text-align:center}
+@media(hover:hover){.dragh{display:block}.oline:hover .dragh{color:#cbd5e1}}
+.obull{width:16px;min-width:16px;text-align:center;color:#94a3b8;font-size:9px;padding-top:4px;user-select:none;flex:none;line-height:1}
+.ocaret{width:16px;min-width:16px;text-align:center;color:#e2e8f0;cursor:default;font-size:10px;padding-top:3px;user-select:none;flex:none}
 .ocaret.has{color:#64748b;cursor:pointer}
 .oline:hover .ocaret{color:#cbd5e1}
 .oline:hover .ocaret.has{color:#475569}
-.odone{width:15px;height:15px;margin-top:6px;accent-color:var(--ok);cursor:pointer;flex:none}
-.otitle{flex:1;font-size:15px;line-height:1.5;outline:none;padding:1px 2px;min-width:40px;word-break:break-word;color:var(--ink)}
+.odone{width:12px;height:12px;margin-top:4px;opacity:.55;accent-color:var(--ok);cursor:pointer;flex:none}
+.otitle{flex:1;font-size:14px;line-height:1.35;outline:none;padding:1px 2px;min-width:40px;word-break:break-word;color:var(--ink)}
 .otitle:focus{background:#fffbe6;box-shadow:0 2px 0 0 #f59e0b}
 .otitle:empty:before{content:attr(data-ph);color:#cbd5e1}
 .otitle code{background:#f1f5f9;border-radius:4px;padding:0 4px;font-size:13px;font-family:ui-monospace,SFMono-Regular,monospace;color:#0f172a}
 .otitle strong{font-weight:700}
-.ochips{display:flex;gap:6px;align-items:center;flex:none;padding-top:5px}
-.ochip{border:0;background:transparent;font-size:11px;color:#94a3b8;padding:1px 2px;cursor:pointer;white-space:nowrap;font-family:inherit}
-.ochip:hover{color:var(--pri);text-decoration:underline}
+.ochips{display:flex;gap:4px;align-items:center;flex:none;padding-top:2px}
+.ochip{border:0;background:transparent;font-size:10.5px;color:#cbd5e1;padding:1px 2px;cursor:pointer;white-space:nowrap;font-family:inherit}
+.ochip:hover,.oline:focus-within .ochip{color:#94a3b8}.ochip:hover{color:var(--pri);text-decoration:underline}
 .ochip.add{color:#cbd5e1}
-.oacts{display:flex;gap:0;flex:none;opacity:0;transition:opacity .15s;padding-top:3px}
-.oline:hover .oacts,.oline:focus-within .oacts{opacity:1}
+.oacts{display:flex;gap:0;flex:none;opacity:0;transition:opacity .15s;padding-top:1px}
+.oline:hover .oacts,.oline:focus-within .oacts,.orow.sel>.oline .oacts{opacity:1}
+@media(hover:none){.oacts{opacity:0}}
 .oicon{border:0;background:transparent;color:#94a3b8;font-size:12px;font-weight:600;cursor:pointer;padding:6px 8px;border-radius:4px;min-width:40px;min-height:36px;white-space:nowrap}
 .oicon:hover{background:#f1f5f9;color:var(--pri)}
-.onote{margin:1px 0 3px 40px;font-size:13.5px;color:#475569;outline:none;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.onote{margin:1px 0 2px 34px;font-size:13px;color:#475569;outline:none;line-height:1.45;word-break:break-word;white-space:pre-wrap}
 .onote:empty{display:none}
 .onote code{background:#f1f5f9;border-radius:3px;padding:0 3px;font-size:12.5px;font-family:ui-monospace,monospace}
 .ofiles{margin:2px 0 4px 40px;display:flex;gap:8px;flex-wrap:wrap}
-.ofile{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:var(--radius);
+.ofile{display:flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--line);border-radius:var(--radius);
   padding:4px 6px;background:#fff;font-size:12px;max-width:260px}
 .ofile img{width:40px;height:40px;object-fit:cover;border-radius:4px}
 .ofdoc{font-size:20px}
 .ofnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
 .ofnm small{display:block;color:#94a3b8;font-size:10.5px}
 .ofdel{border:0;background:none;color:#b91c1c;cursor:pointer;font-size:14px;padding:4px 8px;min-width:32px;min-height:32px}
-.ometa{display:flex;gap:10px;align-items:center;margin:2px 0 4px 40px;flex-wrap:wrap;font-size:12.5px;color:#64748b}
+.ometa{display:flex;gap:8px;align-items:center;margin:1px 0 2px 34px;flex-wrap:wrap;font-size:11.5px;color:#64748b}
 .ometa label{font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:5px}
-.ometa input{border:0;border-bottom:1px solid var(--line);padding:4px 2px;font-size:13px;width:110px;font-family:inherit;background:transparent;outline:none}
+.ometa input{border:0;border-bottom:1px solid var(--line);padding:2px 2px;font-size:12px;width:96px;font-family:inherit;background:transparent;outline:none}
 .ometa input:focus{border-bottom-color:var(--pri)}
 .ometa input[data-m=progress]{width:56px}
 .ometa .btn{padding:5px 10px;font-size:12px}
-.okids{margin-left:13px;border-left:1px solid #f1f5f9;padding-left:5px}
+.okids{margin-left:11px;border-left:1px solid #f1f5f9;padding-left:4px}
 .orow.drop-before>.oline{box-shadow:0 -2px 0 0 var(--pri)}
 .orow.drop-after>.oline{box-shadow:0 2px 0 0 var(--pri)}
 .orow.drop-inside>.oline{background:#eff6ff}
@@ -461,10 +462,12 @@ table.task th,table.task td{padding:7px 9px}
     <button data-v="task">Task</button><button data-v="cal">Lịch</button>
   </nav>
   <div class="hact">
+    <div class="ddwrap"><button class="btn" id="btnMore" title="Thêm">⋯</button>
+    <div class="dd" id="ddMore" hidden>
     <button class="btn pri" id="btnAddRoot">+ Node gốc</button>
     <button class="btn" id="btnNew">+ Mới</button>
     <button class="btn" id="btnExport">Xuất</button>
-    <button class="btn" id="btnImport">Nhập</button><select id="themeSel" title="Giao diện"><option value="light">Sáng</option><option value="dark">Tối</option><option value="night">Đêm</option><option value="mono">Đơn sắc</option><option value="sand">Cát</option></select><button class="btn" id="btnSearch" title="Tìm kiếm (Ctrl+K)">⌕</button><button class="btn" id="btnPresent" title="Trình chiếu">Chiếu</button><button class="btn" id="btnDash" title="Tổng quan">Tổng quan</button><button class="btn" id="btnKeys" title="Phím tắt (?)">?</button><span id="tagInd"><span id="tagIndT"></span><button id="tagIndX" title="Xóa lọc">×</button></span>
+    <button class="btn" id="btnImport">Nhập</button><select id="themeSel" title="Giao diện"><option value="light">Sáng</option><option value="dark">Tối</option><option value="night">Đêm</option><option value="mono">Đơn sắc</option><option value="sand">Cát</option><button class="btn" id="btnSearch" title="Tìm kiếm (Ctrl+K)">Tìm kiếm</button><button class="btn" id="btnPresent" title="Trình chiếu">Trình chiếu</button><button class="btn" id="btnDash" title="Tổng quan">Tổng quan</button><button class="btn" id="btnKeys" title="Phím tắt (?)">Phím tắt</button></select></div></div><span id="tagInd"><span id="tagIndT"></span><button id="tagIndX" title="Xóa lọc">×</button></span>
   </div>
 </header>
 <main>
@@ -1526,13 +1529,24 @@ function renderPanelFiles(n){
   const ff=$('#fFiles');if(!ff)return;
   ff.innerHTML=(n.files||[]).map((f,i)=>{
     const im=f.type&&f.type.indexOf('image/')===0;
-    return '<span class="ofile">'+(im?'<img src="'+f.data+'" alt="">':'<span class="ofdoc">\uD83D\uDCC4</span>')
+    return '<span class="ofile" data-pfopen="'+i+'">'+(im?'<img src="'+f.data+'" alt="">':'<span class="ofdoc">\uD83D\uDCC4</span>')
       +'<span class="ofnm">'+esc(f.name)+'<small>'+fmtSize(f.size)+'</small></span>'
       +'<button class="ofdel" data-pfdel="'+i+'" title="X\u00f3a">\u00d7</button></span>';
   }).join('');
 }
+function openNodeFile(nid,idx){
+  var n=byId(nid);if(!n||!n.files||!n.files[idx])return;
+  var f=n.files[idx];var a=document.createElement('a');a.href=f.data;
+  var im=f.type&&f.type.indexOf('image/')===0;
+  if(im||f.type==='application/pdf'){a.target='_blank';}else{a.download=f.name;}
+  document.body.appendChild(a);a.click();setTimeout(function(){a.remove();},100);
+}
+$('#btnMore').onclick=e=>{e.stopPropagation();const d=$('#ddMore');d.hidden=!d.hidden;};
+document.addEventListener('click',e=>{const d=$('#ddMore');if(d&&!d.hidden&&!e.target.closest('.ddwrap'))d.hidden=true;});
 $('#btnFile').onclick=()=>{if(selectedId){attachTarget=selectedId;$('#fileAttach').click();}};
 $('#fFiles').addEventListener('click',e=>{
+  const o=e.target.closest('[data-pfopen]');
+  if(o&&!e.target.closest('[data-pfdel]')&&selectedId){openNodeFile(selectedId,+o.dataset.pfopen);return;}
   const b=e.target.closest('[data-pfdel]');if(!b||!selectedId)return;
   const n=byId(selectedId);if(!n||!n.files)return;
   n.files.splice(+b.dataset.pfdel,1);saveSoon();renderPanelFiles(n);if(currentView==='map')renderMap();
@@ -1837,7 +1851,7 @@ function filesHTML(n){
   if(!n.files||!n.files.length)return '';
   return n.files.map((f,i)=>{
     const im=f.type&&f.type.indexOf('image/')===0;
-    return '<span class="ofile">'+(im?'<img src="'+f.data+'" alt="">':'<span class="ofdoc">\uD83D\uDCC4</span>')
+    return '<span class="ofile" data-fopen="'+i+'">'+(im?'<img src="'+f.data+'" alt="">':'<span class="ofdoc">\uD83D\uDCC4</span>')
       +'<span class="ofnm">'+esc(f.name)+'<small>'+fmtSize(f.size)+'</small></span>'
       +'<button class="ofdel" data-fdel="'+n.id+':'+i+'" title="X\u00f3a file">\u00d7</button></span>';
   }).join('');
@@ -1873,6 +1887,13 @@ function outlineRow(n,rg){
   h+='</div></div>';
   return h;
 }
+document.addEventListener('click',e=>{
+  var s2=e.target.closest('[data-fopen]');
+  if(s2&&!e.target.closest('[data-fdel]')){
+    var dw=s2.closest('[data-files]');
+    if(dw){openNodeFile(dw.dataset.files,+s2.dataset.fopen);}
+  }
+});
 function renderOutline(){
   const box=$('#listBox');const rg=mRange();
   let h='<div class="obar"><input type="month" id="oMonth" value="'+esc(monthFilter)+'">'
@@ -2202,7 +2223,7 @@ function renderCalendar(){
     h+='<div class="cal-day'+(other?' other':'')+(ds===today?' today':'')+'" data-day="'+ds+'">'
       +'<div class="cal-num">'+dt.getDate()+'</div>';
     chips.slice(0,4).forEach(n=>{
-      h+='<div class="cal-chip '+dueCls(n)+'" draggable="true" data-chipid="'+n.id+'" data-chipday="'+ds+'"'
+      h+='<div class="cal-chip '+dueCls(n)+'"'+(('ontouchstart' in window)?'':' draggable="true"')+' data-chipid="'+n.id+'" data-chipday="'+ds+'"'
         +' style="background:'+esc(n.color||'#eef2ff')+'" title="'+esc(n.title||'')+'">'
         +nodeIcon(n)+'<span class="ct">'+esc(n.title||'Không tên')+'</span></div>';
     });
