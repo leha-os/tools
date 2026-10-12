@@ -323,7 +323,7 @@ function bindToolEvents(){
             const { PDFDocument: PDFDoc2 } = PDFLib;
             const srcDoc = merged;
             const pages = srcDoc.getPages();
-            const OVERLAP=10; // TU CHINH O DAY: con thay ke ho thi tang so nay (3,4...), bi de noi dung thi giam
+            const OVERLAP=2; // TU CHINH O DAY: con thay ke ho thi tang so nay (3,4...), bi de noi dung thi giam
             let totalH=0; let maxW=0;
             pages.forEach(p=>{ totalH+=p.getHeight(); maxW=Math.max(maxW,p.getWidth()); });
             totalH-=OVERLAP*(pages.length-1);
