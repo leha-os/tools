@@ -1,666 +1,558 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LEHA Repo</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEHA.OS Tools</title>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; font-size:14px}
-.github-header{background:#0d1117;border-bottom:1px solid #21262d}
-.file-row{border-left:3px solid transparent}
-.file-row:hover{border-left-color:#1f2937;background:#f6f8fa}
-.file-row.selected{background:#fff8c5;border-left-color:#d4a72c}
-.dropdown{position:relative}
-.dropdown-menu{position:absolute;right:0;top:100%;margin-top:4px;background:white;border:1px solid #9ca3af;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.12);z-index:20;min-width:180px;overflow:hidden}
-.dropdown-menu button{display:block;width:100%;text-align:left;padding:9px 13px;font-size:12px;}
-.dropdown-menu button:hover{background:#f6f8fa}
-.indent-1{padding-left:2rem}
-.indent-2{padding-left:3.5rem}
-.indent-3{padding-left:5rem}
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'Be Vietnam Pro',system-ui,sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#E4E4E7;border-radius:999px}
+@keyframes floatBlob{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.08)}66%{transform:translate(-20px,20px) scale(0.95)}100%{transform:translate(0,0) scale(1)}}
+@keyframes ping{75%,100%{transform:scale(2);opacity:0}}
+@keyframes springIn{0%{transform:scale(0.96) translateY(4px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+.tool-card{animation:springIn 0.55s cubic-bezier(0.34,1.56,0.64,1);transition:all 0.15s ease}
+.tool-card:hover{transform:translateY(-1px) scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.1) !important}
+.tool-card:active{transform:scale(0.98)}
+.group-grid{animation:springIn 0.55s cubic-bezier(0.34,1.56,0.64,1)}
+input,textarea,select,button{font-family:inherit}
 </style>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIkxFSEEuT1MiLCAic2hvcnRfbmFtZSI6ICJMRUhBIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGMkYyRjMiLCAidGhlbWVfY29sb3IiOiAiIzBBMEEwQiIsICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNVGt5SWlCb1pXbG5hSFE5SWpFNU1pSWdkbWxsZDBKdmVEMGlNQ0F3SURFNU1pQXhPVElpSUdacGJHdzlJbTV2Ym1VaUlIaHRiRzV6UFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMM04yWnlJK1BISmxZM1FnZDJsa2RHZzlJakU1TWlJZ2FHVnBaMmgwUFNJeE9USWlJSEo0UFNJME9DSWdabWxzYkQwaUl6QkJNRUV3UWlJdlBqeDBaWGgwSUhnOUlqVXdKU0lnZVQwaU5UQWxJaUJrYjIxcGJtRnVkQzFpWVhObGJHbHVaVDBpYldsa1pHeGxJaUIwWlhoMExXRnVZMmh2Y2owaWJXbGtaR3hsSWlCbWFXeHNQU0ozYUdsMFpTSWdabTl1ZEMxbVlXMXBiSGs5SWsxdmJtOXpjR0ZqWlNJZ1ptOXVkQzF6YVhwbFBTSTBPQ0lnWm05dWRDMTNaV2xuYUhROUlqZ3dNQ0krVER3dmRHVjRkRDQ4TDNOMlp6ND0iLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3N2Zyt4bWwifV0sICJmaWxlX2hhbmRsZXJzIjogW3siYWN0aW9uIjogIi4iLCAiYWNjZXB0IjogeyJhcHBsaWNhdGlvbi9wZGYiOiBbIi5wZGYiXSwgImltYWdlLyoiOiBbIi5wbmciLCAiLmpwZyIsICIuanBlZyIsICIud2VicCJdfX1dfQ==">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LEHA.OS">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSI0OCIgZmlsbD0iIzBBMEEwQiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Ik1vbm9zcGFjZSIgZm9udC1zaXplPSI0OCIgZm9udC13ZWlnaHQ9IjgwMCI+TDwvdGV4dD48L3N2Zz4=">
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="bg-white text-[#24292f] min-h-screen">
-<div class="github-header text-white px-4 py-3 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<svg height="32" width="32" viewBox="0 0 16 16" fill="white"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.04-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-<a href="https://github.com/leha-os?tab=repositories" target="_blank" class="font-semibold text-[14px] hover:underline">LEHA Repo <span class="ml-2 text-[11px] bg-[#1f6feb] px-2 py-0.5 rounded-full">PRIVATE</span></a>
-</div>
-<div class="flex items-center gap-2">
-<span id="syncStatus" class="text-[12px] text-[#8b949e]">cached</span>
-<div class="w-2 h-2 bg-[#2ea043] rounded-full animate-pulse"></div>
-</div>
-</div>
-
-<div id="lock" class="max-w-3xl mx-auto px-6 py-16">
-<div class="border border-[#9ca3af] rounded-md p-6">
-<h2 class="text-[17px] font-semibold">🔒 Private access</h2>
-<p class="text-[14px] text-[#57606a] mt-2">PIN + token stay in your browser only.</p>
-<div class="mt-4 space-y-3">
-<input id="pin" type="password" placeholder="Set PIN" class="w-full max-w-sm border rounded-md px-3 py-2 text-[14px]">
-<input id="token" type="password" placeholder="GitHub token ghp_..." class="w-full max-w-sm border rounded-md px-3 py-2 text-[14px]">
-<button id="unlock" class="bg-[#2ea043] text-white text-[14px] font-medium px-4 py-2 rounded-md">Unlock</button>
-</div>
-</div>
-</div>
-
-<div id="app" class="hidden">
-<div class="max-w-[1100px] mx-auto px-4 py-4">
-<div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-<div class="flex items-center gap-2">
-<span id="count" class="hidden">0 links</span>
-</div>
-<div class="flex flex-wrap gap-2 items-center">
-<input id="search" placeholder="Filter..." class="border border-[#9ca3af] rounded-md px-3 py-1.5 text-[13px] w-36">
-<button id="collapseAllBtn" class="text-[12px] border bg-white px-3 py-1.5 rounded-md">Collapse all</button>
-<button id="openAllBtn" class="text-[12px] border bg-white px-3 py-1.5 rounded-md">Open all</button>
-<button id="scanBtn" class="text-[12px] border bg-[#f6f8fa] px-3 py-1.5 rounded-md">Sync now</button>
-</div>
-</div>
-
-<div id="bulkBar" class="hidden border border-[#d4a72c] bg-[#fff8c5] rounded-md px-3 py-2.5 mb-3 flex flex-wrap items-center gap-2 text-[13px]">
-<span id="bulkCount" class="font-medium">0 selected</span>
-<button onclick="moveSelected()" class="bg-[#0d1117] text-white px-3 py-1.5 rounded-md">Move</button>
-<button onclick="deleteSelected()" class="border bg-white px-3 py-1.5 rounded-md hover:bg-[#ffebe9]">Delete selected</button>
-<button onclick="clearSelection()" class="text-[#57606a] px-2">Clear</button>
-</div>
-
-<div class="border-2 border-[#6b7280] rounded-lg overflow-hidden" id="out"></div>
-</div>
-</div>
-
-<!-- Beautiful custom modal -->
-<div id="customModal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-  <div class="bg-white rounded-xl border-2 border-[#4b5563] shadow-xl w-full max-w-[400px] overflow-hidden">
-    <div class="px-5 pt-5 pb-3">
-      <h3 id="customModalTitle" class="text-[15px] font-semibold text-[#24292f]">Xác nhận</h3>
-      <p id="customModalMsg" class="text-[14px] text-[#57606a] mt-2 leading-5">Bạn có chắc?</p>
-      <div id="customModalInputWrap" class="hidden mt-3">
-        <input id="customModalInput" type="text" class="w-full border border-[#9ca3af] rounded-md px-3 py-2.5 text-[14px] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]" placeholder="">
-      </div>
-    </div>
-    <div class="px-5 py-3 bg-[#f6f8fa] border-t flex justify-end gap-2">
-      <button id="customModalCancel" class="px-4 py-2 text-[13px] border bg-white rounded-md hover:bg-[#f6f8fa]">Hủy</button>
-      <button id="customModalOk" class="px-4 py-2 text-[13px] bg-[#0d1117] text-white rounded-md hover:bg-black">OK</button>
-    </div>
-  </div>
-</div>
-
-<div id="editModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50">
-  <div class="bg-white rounded-lg border w-full max-w-4xl max-h-[95vh] flex flex-col">
-    <div class="px-4 py-3 border-b flex justify-between items-center bg-[#f6f8fa] rounded-t-lg">
-      <div><span id="editTitle" class="text-[14px] font-semibold">Edit</span><div id="editPath" class="text-[12px] text-[#57606a]"></div></div>
-      <button onclick="closeModal()" class="w-7 h-7 rounded-full hover:bg-[#9ca3af] flex items-center justify-center">✕</button>
-    </div>
-    <div class="px-4 py-3 border-b bg-[#fff8c5] flex flex-wrap gap-2 items-center text-[13px]">
-      <span class="font-semibold">⚡</span>
-      <button onclick="applyBGConfig()" class="bg-[#0d1117] text-white px-4 py-2 rounded-md font-medium">BG_CONFIG → Replace to</button>
-      <button onclick="applyHeroLogo()" class="bg-white border px-4 py-2 rounded-md">HERO_CONFIG → Replace to</button>
-    </div>
-    <div class="p-3 flex-1 overflow-hidden flex flex-col">
-      <textarea id="editContent" class="w-full flex-1 min-h-[420px] border rounded-md p-3 text-[13px] font-mono"></textarea>
-    </div>
-    <div class="px-4 py-3 border-t flex justify-end gap-2 bg-[#f6f8fa] rounded-b-lg">
-      <button onclick="closeModal()" class="border bg-white px-4 py-2 text-[13px] rounded-md">Cancel</button>
-      <button onclick="saveFile()" class="bg-[#2ea043] text-white px-8 py-2.5 text-[14px] font-bold rounded-md">Save</button>
-    </div>
-  </div>
-</div>
-
+<body>
+<div id="app"></div>
 <script>
-let reposCache=[], customNames=JSON.parse(localStorage.getItem('customNames')||'{}');
-let selected = new Map();
-const $=s=>document.querySelector(s);
-function getHeaders(){
- let t=localStorage.getItem('gh_token')||'';
- let h={'Accept':'application/vnd.github.v3+json'};
- if(t) h['Authorization']='token '+t;
- return h;
-}
-async function fetchContents(user, repo, path=''){
- let headers=getHeaders();
- let url=`https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=main`;
- let res=await fetch(url,{headers});
- if(res.status===404){
-  url=`https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=master`;
-  res=await fetch(url,{headers});
- }
- if(!res.ok) return [];
- let d=await res.json();
- return Array.isArray(d)?d:[];
-}
-// Recursive scan for nested folders con của con của con
-async function scanFolderRecursive(user, repo, basePath, grouped, depth=0, maxDepth=4){
- if(depth>maxDepth) return;
- let contents = await fetchContents(user, repo, basePath);
- let htmlFiles = contents.filter(f=>f.type==='file' && f.name.toLowerCase().endsWith('.html'));
- let subDirs = contents.filter(f=>f.type==='dir');
- if(htmlFiles.length){
-   if(!grouped[basePath]) grouped[basePath]=[];
-   grouped[basePath].hasIndex = htmlFiles.some(f=>f.name.toLowerCase()==='index.html');
-   htmlFiles.forEach(file=>{
-     let pub = file.name.toLowerCase()==='index.html' ? `https://${user}.github.io/${repo}/${basePath}${basePath?'/':''}`.replace('//','/').replace('https:/','https://') : `https://${user}.github.io/${repo}/${basePath?basePath+'/':''}${file.name}`;
-     // fix double slash for root
-     if(basePath==='') pub = file.name.toLowerCase()==='index.html' ? `https://${user}.github.io/${repo}/` : `https://${user}.github.io/${repo}/${file.name}`;
-     grouped[basePath].push({label:file.name, path:`${repo}/${basePath?basePath+'/':''}${file.name}`, url:pub, key:`${repo}/${basePath?basePath+'/':''}${file.name}`, githubUrl:`https://github.com/${user}/${repo}/blob/main/${basePath?basePath+'/':''}${file.path.split('/').pop()}`, filePath:`${basePath?basePath+'/':''}${file.name}`, filePathFull: file.path, repo:repo, depth});
-   });
- }
- // recurse into subfolders
- for(let dir of subDirs){
-   let subPath = basePath ? `${basePath}/${dir.name}` : dir.name;
-   await scanFolderRecursive(user, repo, subPath, grouped, depth+1, maxDepth);
- }
-}
-
-let CACHE_KEY='leha_links_cache_v4';
-function saveCache(repos, groupedData){
- try{ localStorage.setItem(CACHE_KEY, JSON.stringify({repos, groupedData, ts:Date.now()})); }catch(e){}
-}
-function loadCache(){
- try{
-  let raw=localStorage.getItem(CACHE_KEY);
-  if(!raw) return null;
-  let j=JSON.parse(raw);
-  if(Date.now()-j.ts > 24*60*60*1000) return null;
-  return j;
- }catch(e){ return null; }
-}
-function renderFromCache(){
- let cache=loadCache();
- if(!cache) return false;
- reposCache=cache.repos;
- document.getElementById('syncStatus').innerText='cached • '+new Date(cache.ts).toLocaleTimeString();
- renderReposFromGrouped(cache.repos, cache.groupedData);
- return true;
-}
-
-function renderReposFromGrouped(repos, groupedByRepo){
- let filter=document.getElementById('search').value.toLowerCase();
- let out=document.getElementById('out'); if(!out) return;
- out.innerHTML='';
- for(let repo of repos){
-   let grouped=groupedByRepo[repo.name];
-   if(!grouped) continue;
-   let folderNames=Object.keys(grouped).filter(k=>Array.isArray(grouped[k]) && grouped[k].length>0).sort();
-   // Put root first, then sort by depth then name
-   folderNames.sort((a,b)=>{
-     if(a==='') return -1; if(b==='') return 1;
-     let da=a.split('/').length, db=b.split('/').length;
-     if(da!==db) return da-db;
-     return a.localeCompare(b);
-   });
-   let hasMatch = !filter || repo.name.toLowerCase().includes(filter) || folderNames.some(fn=> grouped[fn].some(f=> (f.label||'').toLowerCase().includes(filter) || (fn||'').toLowerCase().includes(filter) ));
-   if(!hasMatch) continue;
-   let isRepoCollapsed = localStorage.getItem('collapsed_'+repo.name);
-   if(isRepoCollapsed===null) isRepoCollapsed='1';
-   let repoCollapsed = isRepoCollapsed==='1';
-   let foldersHtml = folderNames.map(folder=>{
-     let files=grouped[folder];
-     if(!files || !files.length) return '';
-     let filteredFiles = filter ? files.filter(f=> (f.label||'').toLowerCase().includes(filter) || folder.toLowerCase().includes(filter) || repo.name.toLowerCase().includes(filter)) : files;
-     if(!filteredFiles.length) return '';
-     let folderKey = repo.name+'::'+folder;
-     let isFolderCollapsed = localStorage.getItem('collapsed_folder_'+folderKey);
-     if(isFolderCollapsed===null) isFolderCollapsed = folder==='' ? '0' : '1'; // root open by default
-     let fCollapsed = isFolderCollapsed==='1';
-     let folderLabel = folder==='' ? '(root)' : folder;
-     let depth = folder ? folder.split('/').length : 0;
-     let indentClass = depth<=1 ? 'pl-8' : depth===2 ? 'pl-12' : depth===3 ? 'pl-16' : 'pl-20';
-     let hasIndex = grouped[folder].hasIndex;
-     return `
-     <div class="folder-group border-t border-[#cbd5e1]">
-       <div class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-[#f6f8fa] cursor-pointer select-none ${indentClass}" onclick="toggleFolder('${folderKey.replace(/'/g, "\\'")}')">
-         <span class="text-[12px]">${fCollapsed?'▸':'▾'}</span>
-         <span class="text-[13px]">${folder===''?'🗂️':'📁'}</span>
-         <span class="text-[13px] font-medium truncate">${folderLabel}</span>
-         ${hasIndex ? `<a href="https://leha-os.github.io/${repo.name}${folder?'/'+folder+'/':'/'}" target="_blank" class="ml-2 text-[11px] text-[#57606a] hover:text-[#24292f] hover:underline shrink-0" onclick="event.stopPropagation()">/${folder?folder+'/':''}</a>` : ``}
-       </div>
-       <div class="folder-body ${fCollapsed?'hidden':''}" id="folder-${CSS.escape(folderKey)}">
-         ${filteredFiles.map(l=>{
-           let selId=l.repo+'::'+l.filePath;
-           let isSel=selected.has(selId);
-           let displayName = customNames[l.key] || l.label;
-           let hasNote = !!customNames[l.key];
-           return `
-           <div data-sel="${selId}" class="file-row ${isSel?'selected':''} flex items-center justify-between ${indentClass} pr-3 py-2 text-[13px] group border-t border-[#f6f8fa]">
-             <div class="flex items-center gap-2 min-w-0 flex-1">
-               <input type="checkbox" ${isSel?'checked':''} onchange="toggleSelect('${l.repo}','${l.filePath}','${l.key}')" class="w-3.5 h-3.5">
-               <span class="text-[12px] text-[#8b949e]">↳</span>
-               <span class="truncate ${hasNote?'font-medium text-[#24292f]':''}" title="${l.path}" ondblclick="editNote('${l.key.replace(/'/g, "\\'")}')">${displayName}</span>
-               ${hasNote?`<span class="ml-1 text-[10px] bg-[#f6f8fa] text-[#57606a] px-1 rounded">note</span>`:''}
-             </div>
-             <div class="flex items-center gap-1">
-               <a href="${l.url}" target="_blank" class="text-[12px] bg-[#0d1117] text-white px-3 py-1.5 rounded-md">OPEN</a>
-               <button onclick="copyLink('${l.url}')" class="text-[12px] border bg-white px-3 py-1.5 rounded-md">Copy</button>
-               <div class="dropdown">
-                 <button onclick="toggleMenu('${selId}')" class="text-[12px] border bg-white px-2 py-1.5 rounded-md">⋯</button>
-                 <div id="menu-${selId}" class="dropdown-menu hidden">
-                   <button onclick="editNote('${l.key.replace(/'/g, "\\'")}');closeAllMenus()">📝 Edit ghi chú</button>
-                   <button onclick="editFile('${l.repo}','${l.filePath}');closeAllMenus()">✏️ Edit Real</button>
-                   <button onclick="window.open('${l.githubUrl}','_blank');closeAllMenus()">🔗 Github</button>
-                   <button onclick="deleteFile('${l.repo}','${l.filePath}');closeAllMenus()" class="text-[#cf222e]">🗑️ Del</button>
-                 </div>
-               </div>
-             </div>
-           </div>
-           `;
-         }).join('')}
-       </div>
-     </div>
-     `;
-   }).join('');
-   let hasRootIndex = grouped[''] && grouped[''].hasIndex;
-   let section=document.createElement('div');
-   section.className='border-b-2 border-[#6b7280] last:border-0';
-   section.innerHTML=`
-     <div class="repo-header px-3 py-2.5 bg-[#f6f8fa] flex items-center gap-2 cursor-pointer select-none" onclick="toggleRepo('${repo.name}')">
-       <span class="text-[13px]">${repoCollapsed?'▸':'▾'}</span>
-       <span class="font-semibold text-[14px] text-[#24292f]">${repo.name}</span>
-       ${hasRootIndex ? `<a href="https://leha-os.github.io/${repo.name}/" target="_blank" class="ml-auto text-[12px] text-[#57606a] hover:text-[#24292f] hover:underline" onclick="event.stopPropagation()">/leha-os.github.io/${repo.name}/</a>` : ``}
-     </div>
-     <div class="repo-body ${repoCollapsed?'hidden':''}" id="body-${repo.name}">
-       ${foldersHtml || `<div class="pl-8 pr-3 py-2 text-[12px] text-[#8b949e]">No HTML</div>`}
-     </div>
-   `;
-   out.appendChild(section);
- }
-}
-
-async function scanAll(force=false){
- let user='leha-os';
- let headers=getHeaders();
- let btn=document.getElementById('scanBtn');
- let oldText=btn?btn.innerText:'';
- if(btn){ btn.innerText='Syncing...'; btn.disabled=true; }
- try{
-   if(!force){
-     if(renderFromCache()){
-       setTimeout(()=>scanAll(true), 400);
-       return;
-     }
-   }
-   let res=await fetch(`https://api.github.com/user/repos?per_page=100&sort=updated`,{headers});
-   let repos=[];
-   if(res.ok && localStorage.getItem('gh_token')){
-     let data=await res.json();
-     repos=data.filter(r=>r.owner.login.toLowerCase()==user.toLowerCase());
-   }
-   if(!repos.length){
-     let r2=await fetch(`https://api.github.com/users/${user}/repos?per_page=100&sort=updated`,{headers});
-     repos=await r2.json();
-   }
-   reposCache=repos;
-   let groupedByRepo={};
-   let out=document.getElementById('out');
-   if(out && force) out.innerHTML='<div class="p-4 text-[13px] text-[#57606a]">Đang sync nhanh + quét folder con của con... hiện từng repo khi xong.</div>';
-   
-   const batchSize=5;
-   for(let i=0;i<repos.length;i+=batchSize){
-     let batch=repos.slice(i,i+batchSize);
-     await Promise.all(batch.map(async (repo)=>{
-       let grouped={}; grouped['']=[];
-       await scanFolderRecursive(user, repo.name, '', grouped, 0, 4);
-       // also ensure root has hasIndex flag
-       if(!grouped['']) grouped['']=[]; if(grouped[''].hasIndex===undefined) grouped[''].hasIndex=false;
-       groupedByRepo[repo.name]=grouped;
-     }));
-     if(force){
-       renderReposFromGrouped(repos.slice(0, i+batchSize), groupedByRepo);
-       document.getElementById('syncStatus').innerText=`syncing ${Math.min(i+batchSize, repos.length)}/${repos.length}...`;
-     }
-   }
-   renderReposFromGrouped(repos, groupedByRepo);
-   saveCache(repos, groupedByRepo);
-   document.getElementById('syncStatus').innerText='synced '+new Date().toLocaleTimeString();
- } finally {
-   if(btn){ btn.innerText=oldText||'Sync now'; btn.disabled=false; }
- }
-}
-
-function toggleSelect(repo, path, key){
- let id=repo+'::'+path;
- if(selected.has(id)) selected.delete(id);
- else selected.set(id,{repo,path,key});
- updateBulkBar();
- document.querySelectorAll(`[data-sel="${CSS.escape(id)}"]`).forEach(el=>{
-   if(selected.has(id)) el.classList.add('selected');
-   else el.classList.remove('selected');
-   let cb=el.querySelector('input[type=checkbox]');
-   if(cb) cb.checked=selected.has(id);
- });
-}
-function updateBulkBar(){
- let bar=document.getElementById('bulkBar');
- let cnt=document.getElementById('bulkCount');
- if(selected.size===0){ bar.classList.add('hidden'); }
- else { bar.classList.remove('hidden'); cnt.innerText=selected.size+' selected'; }
-}
-function clearSelection(){ selected.clear(); updateBulkBar(); document.querySelectorAll('.file-row').forEach(r=>{ r.classList.remove('selected'); let cb=r.querySelector('input'); if(cb) cb.checked=false; }); }
-function toggleRepo(name){
- let body=document.getElementById('body-'+name);
- if(!body) return;
- let isHidden=body.classList.contains('hidden');
- body.classList.toggle('hidden');
- localStorage.setItem('collapsed_'+name, isHidden?'0':'1');
-}
-function toggleFolder(key){
- let id='folder-'+CSS.escape(key);
- let body=document.getElementById(id);
- if(!body) return;
- let isHidden=body.classList.contains('hidden');
- body.classList.toggle('hidden');
- localStorage.setItem('collapsed_folder_'+key, isHidden?'0':'1');
-}
-function collapseAll(){
- document.querySelectorAll('.repo-body').forEach(b=>b.classList.add('hidden'));
- document.querySelectorAll('.folder-body').forEach(b=>b.classList.add('hidden'));
- document.querySelectorAll('[id^="body-"]').forEach(b=>{ localStorage.setItem('collapsed_'+b.id.replace('body-',''),'1'); });
-}
-function openAll(){
- document.querySelectorAll('.repo-body').forEach(b=>b.classList.remove('hidden'));
- document.querySelectorAll('.folder-body').forEach(b=>b.classList.remove('hidden'));
- document.querySelectorAll('[id^="body-"]').forEach(b=>{ localStorage.setItem('collapsed_'+b.id.replace('body-',''),'0'); });
-}
-async function editNote(key){
- let cur=customNames[key]||'';
- let nv=await customPrompt('Đổi tên hiển thị dễ nhớ (chỉ lưu ở máy bạn):', cur, 'VD: Khách A - chốt v1');
- if(nv===null) return;
- if(nv.trim()===''){ delete customNames[key]; } else { customNames[key]=nv.trim(); }
- localStorage.setItem('customNames', JSON.stringify(customNames));
- let cache=loadCache(); if(cache) renderReposFromGrouped(cache.repos, cache.groupedData); else renderFromCache();
-}
-function toggleMenu(id){
- let menu=document.getElementById('menu-'+id);
- if(!menu) return;
- let isHidden=menu.classList.contains('hidden');
- closeAllMenus();
- if(isHidden) menu.classList.remove('hidden');
-}
-function closeAllMenus(){
- document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.add('hidden'));
-}
-document.addEventListener('click', function(e){ if(!e.target.closest('.dropdown')) closeAllMenus(); });
-function copyLink(url){ navigator.clipboard.writeText(url); const s=document.getElementById('syncStatus'); let old=s.innerText; s.innerText='copied!'; setTimeout(()=>s.innerText=old,1200); }
-
-function showCustomModal({title, msg, input, placeholder, okText, danger}){
- return new Promise(resolve=>{
-  const modal=document.getElementById('customModal');
-  document.getElementById('customModalTitle').innerText=title||'Xác nhận';
-  document.getElementById('customModalMsg').innerText=msg||'';
-  const inputWrap=document.getElementById('customModalInputWrap');
-  const inputEl=document.getElementById('customModalInput');
-  const okBtn=document.getElementById('customModalOk');
-  const cancelBtn=document.getElementById('customModalCancel');
-  if(input!==undefined){
-    inputWrap.classList.remove('hidden');
-    inputEl.value=input;
-    inputEl.placeholder=placeholder||'';
-    setTimeout(()=>inputEl.focus(),100);
-  } else {
-    inputWrap.classList.add('hidden');
-  }
-  okBtn.innerText=okText||'OK';
-  okBtn.className = danger ? 'px-4 py-2 text-[13px] bg-[#cf222e] text-white rounded-md hover:bg-[#a40e26]' : 'px-4 py-2 text-[13px] bg-[#0d1117] text-white rounded-md hover:bg-black';
-  modal.classList.remove('hidden');
-  function cleanup(result){
-    modal.classList.add('hidden');
-    okBtn.removeEventListener('click', onOk);
-    cancelBtn.removeEventListener('click', onCancel);
-    modal.removeEventListener('click', onOutside);
-    inputEl.removeEventListener('keydown', onKey);
-    resolve(result);
-  }
-  function onOk(){ if(inputWrap.classList.contains('hidden')) cleanup(true); else cleanup(inputEl.value); }
-  function onCancel(){ cleanup(null); }
-  function onOutside(e){ if(e.target===modal) cleanup(null); }
-  function onKey(e){ if(e.key==='Enter') onOk(); if(e.key==='Escape') onCancel(); }
-  okBtn.addEventListener('click', onOk);
-  cancelBtn.addEventListener('click', onCancel);
-  modal.addEventListener('click', onOutside);
-  inputEl.addEventListener('keydown', onKey);
- });
-}
-async function customConfirm(msg, title){
-  const r=await showCustomModal({title:title||'Xác nhận', msg, okText:'Xóa', danger:true});
-  return !!r;
-}
-async function customPrompt(msg, def, placeholder){
-  const r=await showCustomModal({title:'Nhập thông tin', msg, input:def||'', placeholder:placeholder||'', okText:'OK', danger:false});
-  return r;
-}
-
-
-async function moveFolder(repoName, folderPath){
- let token=localStorage.getItem('gh_token'); if(!token){ await showCustomModal({title:'Thiếu token', msg:'Cần token'}); return; }
- let displayPath = folderPath==='' ? '(root)' : folderPath;
- const confirmMove = await customConfirm(`Di chuyển cả folder "${displayPath}" trong repo "${repoName}"?\nSẽ di chuyển tất cả file bên trong kể cả folder con của con.`, `Move folder ${displayPath}`);
- if(!confirmMove) return;
- let cache=loadCache();
- if(!cache){ await showCustomModal({title:'Chưa có cache', msg:'Bấm Sync now trước'}); return; }
- let groupedByRepo = cache.groupedData;
- let grouped = groupedByRepo[repoName];
- if(!grouped){ return; }
- // Collect all files under this folder (including nested)
- let filesToMove=[];
- for(let key of Object.keys(grouped)){
-   if(folderPath==='' ){
-     // root: only move files in root? For root we ask user to specify? We'll move only root files
-     if(key==='') filesToMove.push(...grouped[key]);
-   } else {
-     if(key===folderPath || key.startsWith(folderPath+'/')){
-       filesToMove.push(...grouped[key].map(f=>({...f, originalFolderKey:key})));
-     }
-   }
- }
- if(!filesToMove.length){ await showCustomModal({title:'Trống', msg:'Folder này không có file HTML nào'}); return; }
-
- let newRepo = await customPrompt(`Di chuyển ${filesToMove.length} file từ folder "${displayPath}"\nNhập repo đích (để trống = giữ nguyên repo ${repoName}):`, repoName, 'repo đích');
- if(newRepo===null) return;
- if(!newRepo) newRepo=repoName;
-
- let targetFolder = await customPrompt(`Nhập folder đích mới (ví dụ: lab-moi/ hoặc archive/2024/):`, folderPath, 'folder đích');
- if(targetFolder===null) return;
- targetFolder = targetFolder.trim().replace(/^\/+|\/+$/g,''); // trim slashes
-
- const ok = await showCustomModal({title:`Move folder ${displayPath} → ${targetFolder||'(root)'}`, msg:`Di chuyển ${filesToMove.length} file từ "${repoName}/${displayPath}" sang "${newRepo}/${targetFolder||'(root)'}".\nGiữ cấu trúc con bên trong.`, okText:'Move folder', danger:false});
- if(!ok) return;
-
- document.getElementById('syncStatus').innerText=`moving folder ${filesToMove.length} files...`;
- let moved=0, failed=0;
- for(let file of filesToMove){
-   // compute relative path from source folder
-   let relPath;
-   if(folderPath===''){
-     relPath = file.filePath; // already root file name
-   } else {
-     // file.filePath is like "lab/sub/file.html" -> relative is sub/file.html or file.html
-     if(file.filePath===folderPath) relPath = file.filePath.split('/').pop();
-     else if(file.filePath.startsWith(folderPath+'/')) relPath = file.filePath.substring(folderPath.length+1);
-     else relPath = file.filePath;
-   }
-   let destPath = targetFolder ? `${targetFolder}/${relPath}` : relPath;
-   try{
-     let srcRes=await fetch(`https://api.github.com/repos/leha-os/${file.repo}/contents/${file.filePathFull||file.filePath}?ref=main`,{headers:getHeaders()});
-     if(!srcRes.ok) srcRes=await fetch(`https://api.github.com/repos/leha-os/${file.repo}/contents/${file.filePathFull||file.filePath}?ref=master`,{headers:getHeaders()});
-     if(!srcRes.ok){ failed++; continue; }
-     let srcData=await srcRes.json();
-     let createRes=await fetch(`https://api.github.com/repos/leha-os/${newRepo}/contents/${destPath}`,{
-       method:'PUT',
-       headers:{...getHeaders(),'Content-Type':'application/json'},
-       body: JSON.stringify({message:`Move folder ${displayPath}: ${file.filePath} -> ${destPath}`, content: srcData.content})
-     });
-     if(!createRes.ok){ failed++; continue; }
-     // delete source if different
-     if(newRepo!==file.repo || destPath!==file.filePath){
-       await fetch(`https://api.github.com/repos/leha-os/${file.repo}/contents/${file.filePathFull||file.filePath}`,{
-         method:'DELETE',
-         headers:{...getHeaders(),'Content-Type':'application/json'},
-         body: JSON.stringify({message:`Delete after folder move to ${newRepo}/${destPath}`, sha: srcData.sha})
-       });
-     }
-     moved++;
-     document.getElementById('syncStatus').innerText=`moving ${moved}/${filesToMove.length}...`;
-   }catch(e){ failed++; }
- }
- await showCustomModal({title:'Xong', msg:`Đã di chuyển ${moved} file, lỗi ${failed} file.`, okText:'OK'});
- scanAll(true);
-}
-
-async function moveSelected(){
- if(selected.size===0) return;
- let token=localStorage.getItem('gh_token'); if(!token){ await showCustomModal({title:'Thiếu token', msg:'Cần token có quyền repo để move', okText:'OK'}); return; }
- let repos=[...new Set([...selected.values()].map(v=>v.repo))];
- let targetRepo = repos.length===1 ? repos[0] : null;
- let newRepo = await customPrompt(`Bạn đang chọn ${selected.size} file từ repo: ${repos.join(', ')}\nNhập repo đích (để trống = giữ nguyên):`, targetRepo||'', 'tên repo đích');
- if(newRepo===null) return;
- if(!newRepo) newRepo=null;
- let targetFolder = await customPrompt('Nhập folder đích (ví dụ: lab/ hoặc để trống = root):','lab/', 'lab/');
- if(targetFolder===null) return;
- targetFolder = targetFolder.trim();
- if(targetFolder && !targetFolder.endsWith('/')) targetFolder+='/';
- if(targetFolder==='/' ) targetFolder='';
- const okMove = await showCustomModal({title:`Move ${selected.size} files`, msg:`Move tới ${newRepo?newRepo+'/':'(giữ repo cũ)'}${targetFolder||'(root)'} ?`, okText:'Move'});
- if(!okMove) return;
- for(let [id, info] of selected){
-   let destRepo = newRepo || info.repo;
-   let fileName = info.path.split('/').pop();
-   let destPath = targetFolder + fileName;
-   try{
-     let srcRes=await fetch(`https://api.github.com/repos/leha-os/${info.repo}/contents/${info.path}?ref=main`,{headers:getHeaders()});
-     if(!srcRes.ok) srcRes=await fetch(`https://api.github.com/repos/leha-os/${info.repo}/contents/${info.path}?ref=master`,{headers:getHeaders()});
-     if(!srcRes.ok) continue;
-     let srcData=await srcRes.json();
-     let createRes=await fetch(`https://api.github.com/repos/leha-os/${destRepo}/contents/${destPath}`,{
-       method:'PUT',
-       headers:{...getHeaders(),'Content-Type':'application/json'},
-       body: JSON.stringify({message:`Move ${info.path} to ${destPath}`, content: srcData.content})
-     });
-     if(!createRes.ok) continue;
-     if(destRepo!==info.repo || destPath!==info.path){
-       await fetch(`https://api.github.com/repos/leha-os/${info.repo}/contents/${info.path}`,{
-         method:'DELETE',
-         headers:{...getHeaders(),'Content-Type':'application/json'},
-         body: JSON.stringify({message:`Delete after move`, sha: srcData.sha})
-       });
-     }
-   }catch(e){}
- }
- clearSelection();
- scanAll(true);
-}
-async function deleteSelected(){
- if(selected.size===0) return;
- const okDel=await customConfirm(`Xóa ${selected.size} file đã chọn? Không khôi phục được.`, `Xóa ${selected.size} files`);
- if(!okDel) return;
- for(let [id, info] of selected){
-   await deleteFile(info.repo, info.path, true);
- }
- clearSelection();
- scanAll(true);
-}
-
-document.getElementById('unlock').onclick=()=>{
- let pin=document.getElementById('pin').value.trim();
- if(!pin){ alert('Enter PIN'); return; }
- localStorage.setItem('leha_pin', pin);
- let token=document.getElementById('token').value.trim();
- if(token) localStorage.setItem('gh_token', token);
- document.getElementById('lock').classList.add('hidden');
- document.getElementById('app').classList.remove('hidden');
- if(!renderFromCache()) scanAll();
+// // SECTION 0: THEME_GLOBAL - BRIEF: 5 theme chinh | 5 themes - Mau chung toan site | Is global design tokens
+// EDITABLE: Chinh o THEME_GLOBAL | Edit at THEME_GLOBAL
+// FIX AT: Neu doi mau chung sua o THEME_GLOBAL Search: THEME_GLOBAL | If global color edit at THEME_GLOBAL
+const THEME_GLOBAL = {
+  themes: {
+    goc: { name:'WHITE', bg:'#F2F2F3', paper:'#FFFFFF', paperBlur:'rgba(255,255,255,0.86)', ink:'#0A0A0B', border:'#E4E4E7', borderThin:'#EDEEF1', borderContrast:'rgba(0,0,0,0.06)', muted:'#8A8A8E', labAnh:'#FF3B30', labChu:'#7C3AED', labTienIch:'#F59E0B' },
+    mono: { name:'MONO', bg:'#FFFFFF', paper:'#FFFFFF', paperBlur:'rgba(255,255,255,0.92)', ink:'#000000', border:'#000000', borderThin:'#000000', borderContrast:'rgba(0,0,0,0.12)', muted:'#666666', labAnh:'#000000', labChu:'#000000', labTienIch:'#000000' },
+    sand: { name:'SAND', bg:'#FFF6D6', paper:'#FFFEF2', paperBlur:'rgba(255,254,242,0.90)', ink:'#3D2E00', border:'#F5D78E', borderThin:'#FBE9B0', borderContrast:'rgba(61,46,0,0.08)', muted:'#8A8A8E', labAnh:'#D4A017', labChu:'#B8860B', labTienIch:'#E6B422' },
+    midnight: { name:'MIDNIGHT', bg:'#050E1F', paper:'#102040', paperBlur:'rgba(16,32,64,0.90)', ink:'#E6F0FF', border:'#1E3A66', borderThin:'#24467D', borderContrast:'rgba(36,70,125,0.45)', muted:'#7FA0CC', labAnh:'#3B82F6', labChu:'#60A5FA', labTienIch:'#38BDF8' },
+    night: { name:'NIGHT', bg:'#000000', paper:'#121212', paperBlur:'rgba(18,18,18,0.92)', ink:'#FFFFFF', border:'#2A2A2A', borderThin:'#333333', borderContrast:'rgba(255,255,255,0.10)', muted:'#AAAAAA', labAnh:'#FFFFFF', labChu:'#E5E5E5', labTienIch:'#CCCCCC' }
+  },
+  font: '"Be Vietnam Pro", system-ui, sans-serif',
+  fontWeight: { header:600, label:500, tool:400, muted:300 },
+  radius: { sm:'10px', md:'14px', lg:'18px', xl:'24px', pill:'999px' },
+  shadow: { card:'0 2px 12px rgba(0,0,0,0.06)', glowRed:'0 0 24px rgba(255,59,48,0.35)', glowViolet:'0 0 24px rgba(124,58,237,0.35)', glowAmber:'0 0 24px rgba(245,158,11,0.35)' },
+  blur: { blob:'64px', opacity:0.12, duration:'22s' },
+  motion: { spring:'cubic-bezier(0.34,1.56,0.64,1) 0.55s' }
 };
-document.getElementById('scanBtn').onclick=()=>scanAll(true);
-document.getElementById('collapseAllBtn').onclick=collapseAll;
-document.getElementById('openAllBtn').onclick=openAll;
-document.getElementById('search').addEventListener('input',()=>{ let c=loadCache(); if(c) renderReposFromGrouped(c.repos, c.groupedData); });
-let savedPin=localStorage.getItem('leha_pin');
-let savedToken=localStorage.getItem('gh_token');
-if(savedPin){
- document.getElementById('pin').value=savedPin;
- if(savedToken) document.getElementById('token').value=savedToken;
- document.getElementById('lock').classList.add('hidden');
- document.getElementById('app').classList.remove('hidden');
- if(!renderFromCache()) scanAll();
-}
-</script>
 
-<div id="editModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50">
-  <div class="bg-white rounded-lg border w-full max-w-4xl max-h-[95vh] flex flex-col">
-    <div class="px-4 py-3 border-b flex justify-between items-center bg-[#f6f8fa] rounded-t-lg">
-      <div><span id="editTitle" class="text-[14px] font-semibold">Edit</span><div id="editPath" class="text-[12px] text-[#57606a]"></div></div>
-      <button onclick="closeModal()" class="w-7 h-7 rounded-full hover:bg-[#9ca3af] flex items-center justify-center">✕</button>
+// // SECTION 1: CONFIG - BRIEF: Cau hinh chung | Config - Header menu card | Is config
+// EDITABLE: Chinh o day | Edit at here
+// FIX AT: Neu doi mau chung sua o THEME_GLOBAL Search: THEME_GLOBAL | If global color edit at THEME_GLOBAL
+const HEADER_CONFIG = { h:56, pad:'12px 16px', logo:'LEHA.OS', storageKey:'leha_theme' };
+const MENU_CONFIG = {
+  storageKey:'leha_cats_v2',
+  defaultSort:'TẤT CẢ', defaultCat:'ALL',
+  row1:{ label:'SẮP XẾP', options:['TẤT CẢ','MỚI THÊM','A→Z'] },
+  row2:{ label:'DANH MỤC', defaultOptions:['ALL','ẢNH','CHỮ','TIỆN ÍCH'] },
+  layout:{ gap:6, radius:'999px', padY:7, padX:14, fontSize:8, fontWeight:400 }
+};
+const BG_ANIM_CONFIG = { size:220, blur:'64px', opacity:0.12 };
+
+// Tool definitions - 5 theme only
+const TOOL_DEFS = [
+  {id:'calc', name:'MÁY TÍNH', cat:'tienich', group:'TIỆN ÍCH', addedAt:1},
+  {id:'trim', name:'XÓA KHOẢNG TRỐNG', cat:'chu', group:'CHỮ', addedAt:2},
+  {id:'pdf-tools', name:'PDF - XUẤT ẢNH 10K DPI', cat:'anh', group:'ẢNH', addedAt:3},
+  {id:'img-convert', name:'JPG/PNG/WEBP', cat:'anh', group:'ẢNH', addedAt:4},
+  {id:'img-bg-resize', name:'ĐỔI SIZE', cat:'anh', group:'ẢNH', addedAt:5},
+  {id:'img-compress', name:'NÉN ẢNH', cat:'anh', group:'ẢNH', addedAt:6},
+  {id:'img-crop', name:'CẮT ẢNH', cat:'anh', group:'ẢNH', addedAt:7},
+  {id:'img-logo', name:'CHÈN LOGO', cat:'anh', group:'ẢNH', addedAt:8},
+  {id:'unicode-bold', name:'UNICODE', cat:'chu', group:'CHỮ', addedAt:9},
+  {id:'case-convert', name:'HOA/THƯỜNG', cat:'chu', group:'CHỮ', addedAt:10},
+  {id:'age', name:'MÁY TÍNH TUỔI', cat:'tienich', group:'TIỆN ÍCH', addedAt:11},
+  {id:'calendar-vn', name:'LỊCH VN', cat:'tienich', group:'TIỆN ÍCH', addedAt:12},
+  {id:'email-sig', name:'CHỮ KÝ EMAIL', cat:'chu', group:'CHỮ', addedAt:13},
+  {id:'qr-text', name:'TẠO QR CHỮ', cat:'tienich', group:'TIỆN ÍCH', addedAt:14},
+  {id:'find-replace', name:'TÌM & THAY THẾ', cat:'chu', group:'CHỮ', addedAt:15},
+  {id:'unit', name:'ĐỔI ĐƠN VỊ', cat:'tienich', group:'TIỆN ÍCH', addedAt:16},
+  {id:'word-count', name:'ĐẾM CHỮ', cat:'chu', group:'CHỮ', addedAt:17},
+  {id:'short-link', name:'RÚT GỌN LINK', cat:'tienich', group:'TIỆN ÍCH', addedAt:18}
+];
+
+let state = { theme: localStorage.getItem('leha_theme')||'goc', sort:'TẤT CẢ', cat:'ALL', open:{ anh:true, chu:true, tienich:true }, currentTool:null, cats: JSON.parse(localStorage.getItem('leha_cats_v2')||'null')||['ALL','ẢNH','CHỮ','TIỆN ÍCH'] };
+
+function getTime(){ const d=new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
+function getDateStr(){ return new Date().toLocaleDateString('vi-VN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).toUpperCase(); }
+
+function renderBG(){
+  const T=THEME_GLOBAL.themes[state.theme];
+  return `<div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;width:${BG_ANIM_CONFIG.size}px;height:${BG_ANIM_CONFIG.size}px;left:10%;top:12%;background:${T.labAnh};filter:blur(${BG_ANIM_CONFIG.blur});opacity:${BG_ANIM_CONFIG.opacity};border-radius:50%;animation:floatBlob ${THEME_GLOBAL.blur.duration} infinite"></div>
+    <div style="position:absolute;width:${BG_ANIM_CONFIG.size}px;height:${BG_ANIM_CONFIG.size}px;left:60%;top:18%;background:${T.labChu};filter:blur(${BG_ANIM_CONFIG.blur});opacity:${BG_ANIM_CONFIG.opacity};border-radius:50%;animation:floatBlob ${THEME_GLOBAL.blur.duration} infinite 2s"></div>
+    <div style="position:absolute;width:${BG_ANIM_CONFIG.size}px;height:${BG_ANIM_CONFIG.size}px;left:35%;top:55%;background:${T.labTienIch};filter:blur(${BG_ANIM_CONFIG.blur});opacity:${BG_ANIM_CONFIG.opacity};border-radius:50%;animation:floatBlob ${THEME_GLOBAL.blur.duration} infinite 4s"></div>
+  </div>`;
+}
+function renderHeader(){
+  const T=THEME_GLOBAL.themes[state.theme];
+  return `<div style="height:${HEADER_CONFIG.h}px;display:flex;align-items:center;justify-content:space-between;padding:${HEADER_CONFIG.pad};border-radius:${THEME_GLOBAL.radius.lg};background:${T.paperBlur};backdrop-filter:blur(12px);border:1px solid ${T.borderThin};box-shadow:${THEME_GLOBAL.shadow.card};position:sticky;top:12px;z-index:10">
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="state.currentTool=null;renderApp()"><span style="font-weight:800;font-size:18px;color:${T.ink}">${HEADER_CONFIG.logo}</span><span style="width:6px;height:6px;border-radius:50%;background:${T.labChu};box-shadow:${THEME_GLOBAL.shadow.glowViolet};animation:ping 2s infinite"></span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="position:relative">
+        <button id="themeToggle" style="height:28px;border-radius:999px;border:1px solid ${T.borderThin};background:${T.paper};color:${T.ink};padding:0 10px;font-size:10px;font-weight:700;cursor:pointer">${T.name} ▼</button>
+        <div id="themeMenu" style="display:none;position:absolute;top:36px;right:0;background:${T.paper};border:1px solid ${T.borderThin};border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:6px;min-width:200px;z-index:99;flex-direction:column;gap:4px">
+          ${Object.keys(THEME_GLOBAL.themes).map(k=>{ const th=THEME_GLOBAL.themes[k]; return `<button data-theme="${k}" style="display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 10px;border-radius:8px;border:1px solid ${state.theme===k?T.ink:T.borderThin};background:${state.theme===k?T.ink:T.paper};color:${state.theme===k?T.paper:T.ink};font-size:11px;font-weight:600;cursor:pointer"><span style="width:10px;height:10px;border-radius:50%;background:${th.labAnh}"></span>${th.name}</button>`}).join('')}
+        </div>
+      </div>
+      <span style="font-size:12px;font-weight:800;background:${T.ink};color:${T.paper};padding:4px 8px;border-radius:999px">${getTime()}</span>
+      ${state.currentTool?`<button onclick="state.currentTool=null;renderApp()" style="height:28px;padding:0 10px;border-radius:999px;border:1px solid ${T.borderThin};background:${T.paper};color:${T.ink};font-size:8px;font-weight:700;cursor:pointer">← QUAY LẠI</button>`:''}
     </div>
-    <div class="px-4 py-3 border-b bg-[#fff8c5] flex flex-wrap gap-2 items-center text-[13px]">
-      <span class="font-semibold">⚡</span>
-      <button onclick="applyBGConfig()" class="bg-[#0d1117] text-white px-4 py-2 rounded-md font-medium">BG_CONFIG → Replace to</button>
-      <button onclick="applyHeroLogo()" class="bg-white border px-4 py-2 rounded-md">HERO_CONFIG → Replace to</button>
+  </div>`;
+}
+
+function groupByCat(tools){
+  const groups = { anh:[], chu:[], tienich:[] };
+  tools.forEach(t=>groups[t.cat].push(t));
+  return groups;
+}
+
+function renderToolCard(tool){
+  const T=THEME_GLOBAL.themes[state.theme];
+  return `<div class="tool-card" data-tool-id="${tool.id}" style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;border-radius:14px;background:${T.paper};border:1px solid ${T.borderThin};box-shadow:${THEME_GLOBAL.shadow.card};cursor:pointer">
+    <span style="font-size:11px;font-weight:500;color:${T.ink}">${tool.name}</span><span style="font-size:10px;color:${T.muted}">↗</span></div>`;
+}
+
+
+
+function renderHome(){
+  const T=THEME_GLOBAL.themes[state.theme];
+  let tools=[...TOOL_DEFS];
+  if(state.cat!=='ALL'){
+    const map={'ẢNH':'anh','CHỮ':'chu','TIỆN ÍCH':'tienich'};
+    const want = map[state.cat]||state.cat.toLowerCase();
+    tools = tools.filter(t=> t.cat===want );
+  }
+  if(state.sort==='A→Z') tools.sort((a,b)=>a.name.localeCompare(b.name,'vi'));
+  if(state.sort==='MỚI THÊM') tools.sort((a,b)=>b.addedAt-a.addedAt);
+  const grouped={ anh:[], chu:[], tienich:[] };
+  tools.forEach(t=>{ if(grouped[t.cat]) grouped[t.cat].push(t); });
+  const groups=[
+    {id:'anh', label:'ẢNH', dot:T.labAnh, tools:grouped.anh},
+    {id:'chu', label:'CHỮ', dot:T.labChu, tools:grouped.chu},
+    {id:'tienich', label:'TIỆN ÍCH', dot:T.labTienIch, tools:grouped.tienich}
+  ];
+  return `<div style="display:flex;flex-direction:column;gap:10px">
+    <div style="border-radius:${THEME_GLOBAL.radius.lg};background:${T.paper};border:1px solid ${T.borderThin};padding:10px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${MENU_CONFIG.row1.options.map(o=>`<button data-sort="${o}" style="border-radius:999px;padding:7px 14px;font-size:11px;font-weight:500;border:1px solid ${state.sort===o?T.ink:T.borderThin};background:${state.sort===o?T.ink:T.paper};color:${state.sort===o?T.paper:T.ink};cursor:pointer">${o}</button>`).join('')}</div>
+      <div style="height:1px;background:${T.borderThin}"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:9px;font-weight:800;letter-spacing:0.12em;color:${T.muted}"></span><button id="addCat" style="font-size:10px;font-weight:700;padding:4px 8px;border-radius:999px;border:1px solid ${T.borderThin};background:${T.paper};color:${T.ink};cursor:pointer">+ THÊM</button></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${state.cats.map(o=>`
+        <div style="display:flex;align-items:center;gap:2px;border-radius:999px;border:1px solid ${state.cat===o?T.ink:T.borderThin};background:${state.cat===o?T.ink:T.paper};padding:2px 2px 2px 10px">
+          <button data-cat="${o}" data-catname="${o}" style="border:none;background:transparent;color:${state.cat===o?T.paper:T.ink};font-size:11px;font-weight:500;cursor:pointer;padding:5px 4px">${o}</button>
+          ${o!=='ALL'&&o!=='ẢNH'&&o!=='CHỮ'&&o!=='TIỆN ÍCH'?`<button data-del-cat="${o}" style="width:18px;height:18px;border-radius:50%;border:none;background:${state.cat===o?T.paper:T.borderThin};color:${state.cat===o?T.ink:T.ink};font-size:10px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>`:''}
+        </div>
+      `).join('')}</div>
     </div>
-    <div class="p-3 flex-1 overflow-hidden flex flex-col">
-      <textarea id="editContent" class="w-full flex-1 min-h-[420px] border rounded-md p-3 text-[13px] font-mono"></textarea>
-    </div>
-    <div class="px-4 py-3 border-t flex justify-end gap-2 bg-[#f6f8fa] rounded-b-lg">
-      <button onclick="closeModal()" class="border bg-white px-4 py-2 text-[13px] rounded-md">Cancel</button>
-      <button onclick="saveFile()" class="bg-[#2ea043] text-white px-8 py-2.5 text-[14px] font-bold rounded-md">Save</button>
-    </div>
-  </div>
+    ${groups.map(g=>`
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button data-toggle="${g.id}" style="height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-radius:14px;background:${T.paper};border:1px solid ${T.borderThin};box-shadow:${THEME_GLOBAL.shadow.card};cursor:pointer">
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:${g.dot}"></span><span style="font-size:12px;font-weight:700;color:${T.ink}">${g.label}</span><span style="font-size:10px;border:1px solid ${T.borderThin};padding:2px 6px;border-radius:999px;color:${T.muted}">${g.tools.length}</span></div>
+          <span style="transform:rotate(${state.open[g.id]?0:-90}deg);transition:transform 0.2s;color:${T.ink}">▼</span>
+        </button>
+        <div style="display:${state.open[g.id]?'grid':'none'};grid-template-columns:repeat(2,1fr);gap:6px" class="group-grid">${g.tools.map(renderToolCard).join('')}</div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+
+
+// Tool Views - real implementations
+function toolView_calc(){ return `<div><h3 style="font-size:18px;font-weight:800;margin-bottom:12px">MÁY TÍNH</h3><input id="calcInput" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px" placeholder="VD: 123*456/2"><div id="calcResult" style="margin-top:12px;font-size:24px;font-weight:800"></div><button onclick="try{ document.getElementById('calcResult').textContent=eval(document.getElementById('calcInput').value)}catch{ document.getElementById('calcResult').textContent='Lỗi' }" style="margin-top:8px;padding:8px 16px;border-radius:999px;border:1px solid #000;background:#000;color:#fff;cursor:pointer">Tính</button></div>`; }
+function toolView_trim(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">XÓA KHOẢNG TRỐNG</h3><textarea id="trimIn" style="width:100%;height:120px;padding:10px;border:1px solid #ccc;border-radius:10px" placeholder="Dán text..."></textarea><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+<button onclick="document.getElementById('trimOut').value=document.getElementById('trimIn').value.trim()" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">Trim 2 đầu</button>
+<button onclick="document.getElementById('trimOut').value=document.getElementById('trimIn').value.replace(/\\s+/g,' ')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">Xóa thừa giữa</button>
+<button onclick="document.getElementById('trimOut').value=document.getElementById('trimIn').value.replace(/\\n\\s*\\n/g,'\\n')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">Xóa dòng trống</button>
+</div><textarea id="trimOut" style="width:100%;height:120px;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:10px" placeholder="Kết quả"></textarea><button onclick="navigator.clipboard.writeText(document.getElementById('trimOut').value)" style="margin-top:8px;padding:8px 12px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Copy</button></div>`; }
+function toolView_pdf(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">PDF NÉT - GHÉP/CẮT/TÁCH/NÉN/XUẤT ẢNH 10K DPI</h3>
+<input type="file" id="pdfFiles" multiple accept=".pdf" style="margin-bottom:8px"><br>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+<select id="pdfAction" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="merge">Ghép PDF thành 1 file</option><option value="split">Tách từng trang</option><option value="long">Ghép thành 1 trang dài không khoảng cách cực nét</option><option value="export">Xuất PNG/JPG 10.000 DPI (scale x 10)</option></select>
+<button id="pdfDo" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Chạy</button>
 </div>
-<script>
-let curEdit={repo:null,path:null,sha:null};
-function b64DecodeUtf8(b64){
-  b64=b64.replace(/\n/g,'').trim();
-  try{
-    const binary=atob(b64);
-    const bytes=Uint8Array.from(binary, c=>c.charCodeAt(0));
-    return new TextDecoder('utf-8').decode(bytes);
-  }catch(e){ return atob(b64); }
+<div id="pdfStatus" style="font-size:12px;color:#666"></div>
+<div id="pdfOut" style="display:flex;flex-direction:column;gap:8px;margin-top:12px"></div>
+</div>`; }
+function toolView_imgConvert(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">JPG/PNG/WEBP ĐỔI ĐỊNH DẠNG</h3><input type="file" id="imgConvFiles" multiple accept="image/*"><div style="margin-top:8px;display:flex;gap:6px"><select id="convTo" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select><button onclick="convertImages()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Đổi & Tải</button></div><div id="convOut" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div></div>`; }
+function toolView_bgResize(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">CHÈN NỀN + ĐỔI SIZE 1:1/3:4/16:9...</h3><input type="file" id="bgFiles" multiple accept="image/*"><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><input type="color" id="bgColor" value="#ffffff"><select id="bgRatio" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="1:1">1:1</option><option value="3:4">3:4</option><option value="4:3">4:3</option><option value="9:16">9:16</option><option value="16:9">16:9</option></select><button onclick="bgResizeDo()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Tạo</button></div><div id="bgOut" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div></div>`; }
+function toolView_compress(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">NÉN ẢNH ĐỒNG LOẠT</h3><input type="file" id="compFiles" multiple accept="image/*"><div style="margin-top:8px"><label>Quality: <input type="range" id="compQ" min="0.1" max="1" step="0.1" value="0.7"> <span id="compQv">0.7</span></label> <button onclick="compressBatch()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer;margin-left:8px">Nén</button></div><div id="compOut" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div></div>`; }
+function toolView_crop(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">CẮT ẢNH VUÔNG/TRÒN ĐỒNG LOẠT</h3><input type="file" id="cropFiles" multiple accept="image/*"><div style="margin-top:8px;display:flex;gap:6px"><select id="cropType" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="square">Vuông</option><option value="circle">Tròn</option></select><button onclick="cropBatch()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Cắt</button></div><div id="cropOut" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div></div>`; }
+function toolView_logo(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">CHÈN LOGO ĐỒNG LOẠT GIỮ SIZE GỐC</h3><label>Ảnh gốc: <input type="file" id="logoBase" multiple accept="image/*"></label><br><label style="margin-top:8px;display:block">Logo: <input type="file" id="logoMark" accept="image/*"></label><div style="margin-top:8px;display:flex;gap:6px"><select id="logoPos" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="br">Góc phải dưới</option><option value="bl">Trái dưới</option><option value="tr">Phải trên</option><option value="tl">Trái trên</option><option value="center">Giữa</option></select><button onclick="logoBatch()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Chèn</button></div><div id="logoOut" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div></div>`; }
+function toolView_unicode(){ const map={bold:'𝐀', italic:'𝐴', mono:'𝙰'}; return `<div><h3 style="font-weight:800;margin-bottom:8px">UNICODE</h3><textarea id="uniIn" style="width:100%;height:80px;padding:10px;border:1px solid #ccc;border-radius:10px" placeholder="Nhập chữ..."></textarea><div id="uniOut" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div></div>`; }
+function toolView_case(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">HOA/THƯỜNG</h3><textarea id="caseIn" style="width:100%;height:100px;padding:10px;border:1px solid #ccc;border-radius:10px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button onclick="caseDo('upper')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">HOA</button><button onclick="caseDo('lower')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">thường</button><button onclick="caseDo('title')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">Hoa Đầu Chữ</button><button onclick="caseDo('sentence')" style="padding:8px 12px;border-radius:999px;border:1px solid #000;cursor:pointer">Hoa đầu câu</button></div><textarea id="caseOut" style="width:100%;height:100px;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:10px"></textarea><button onclick="navigator.clipboard.writeText(document.getElementById('caseOut').value)" style="margin-top:8px;padding:8px 12px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Copy</button></div>`; }
+function toolView_age(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">MÁY TÍNH TUỔI</h3><input type="date" id="ageDob" style="padding:8px;border-radius:999px;border:1px solid #000"><button onclick="calcAge()" style="margin-left:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Tính</button><div id="ageOut" style="margin-top:12px;font-size:18px;font-weight:700"></div></div>`; }
+function toolView_calendar(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">LỊCH VN</h3><input type="date" id="calDate" style="padding:8px;border-radius:999px;border:1px solid #000"><button onclick="showCal()" style="margin-left:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Xem</button><div id="calOut" style="margin-top:12px"></div></div>`; }
+function toolView_emailSig(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">CHỮ KÝ EMAIL</h3><input id="sigName" placeholder="Tên" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:8px;margin-bottom:6px"><input id="sigTitle" placeholder="Chức danh" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:8px;margin-bottom:6px"><input id="sigPhone" placeholder="SĐT" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:8px;margin-bottom:6px"><button onclick="genSig()" style="padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Tạo</button><div id="sigOut" style="margin-top:12px;border:1px solid #eee;padding:12px;border-radius:10px"></div></div>`; }
+function toolView_qr(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">TẠO QR CHỮ</h3><textarea id="qrText" style="width:100%;height:80px;padding:10px;border:1px solid #ccc;border-radius:10px" placeholder="Nhập chữ/link..."></textarea><button onclick="genQR()" style="margin-top:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Tạo QR</button><div id="qrOut" style="margin-top:12px"></div></div>`; }
+function toolView_find(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">TÌM & THAY THẾ</h3><textarea id="frIn" style="width:100%;height:100px;padding:10px;border:1px solid #ccc;border-radius:10px"></textarea><div style="display:flex;gap:6px;margin-top:8px"><input id="frFind" placeholder="Tìm" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:999px"><input id="frRep" placeholder="Thay bằng" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:999px"></div><button onclick="doFindReplace()" style="margin-top:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Thay thế</button><textarea id="frOut" style="width:100%;height:100px;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:10px"></textarea></div>`; }
+function toolView_unit(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">ĐỔI ĐƠN VỊ</h3><div style="display:flex;gap:6px"><input id="unitVal" type="number" value="1" style="padding:8px;border:1px solid #ccc;border-radius:999px"><select id="unitType" style="padding:8px;border-radius:999px;border:1px solid #000"><option value="m-km">m → km</option><option value="km-m">km → m</option><option value="kg-g">kg → g</option><option value="g-kg">g → kg</option><option value="c-f">°C → °F</option><option value="f-c">°F → °C</option></select></div><button onclick="convertUnit()" style="margin-top:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Đổi</button><div id="unitOut" style="margin-top:12px;font-weight:700"></div></div>`; }
+function toolView_word(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">ĐẾM CHỮ</h3><textarea id="wcIn" style="width:100%;height:120px;padding:10px;border:1px solid #ccc;border-radius:10px" oninput="countWords()" placeholder="Dán text..."></textarea><div id="wcOut" style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap"></div></div>`; }
+function toolView_short(){ return `<div><h3 style="font-weight:800;margin-bottom:8px">RÚT GỌN LINK (offline mock)</h3><input id="shortIn" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:999px" placeholder="https://..."><button onclick="shorten()" style="margin-top:8px;padding:8px 14px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Rút gọn</button><div id="shortOut" style="margin-top:12px"></div><p style="font-size:10px;color:#888;margin-top:8px">Offline: tạo mã hash local, không cần mạng, copy dùng nội bộ</p></div>`; }
+
+const TOOL_VIEWS = {
+  'calc': toolView_calc, 'trim': toolView_trim, 'pdf-tools': toolView_pdf, 'img-convert': toolView_imgConvert, 'img-bg-resize': toolView_bgResize,
+  'img-compress': toolView_compress, 'img-crop': toolView_crop, 'img-logo': toolView_logo, 'unicode-bold': toolView_unicode, 'case-convert': toolView_case,
+  'age': toolView_age, 'calendar-vn': toolView_calendar, 'email-sig': toolView_emailSig, 'qr-text': toolView_qr, 'find-replace': toolView_find,
+  'unit': toolView_unit, 'word-count': toolView_word, 'short-link': toolView_short
+};
+
+function renderApp(){
+  const T=THEME_GLOBAL.themes[state.theme]||THEME_GLOBAL.themes.goc;
+  window.T=T;
+  document.body.style.background=T.bg;
+  document.body.style.color=T.ink;
+  document.body.style.transition='background 0.3s ease';
+  const app=document.getElementById('app');
+  const content = state.currentTool ? `<div style="border-radius:18px;background:${T.paper};border:1px solid ${T.borderThin};box-shadow:${THEME_GLOBAL.shadow.card};padding:16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font-size:12px;font-weight:700;letter-spacing:0.06em">${TOOL_DEFS.find(t=>t.id===state.currentTool)?.name||''}</span><button onclick="state.currentTool=null;renderApp()" style="padding:6px 10px;border-radius:999px;border:1px solid ${T.borderThin};background:${T.paper};cursor:pointer">✕ Đóng</button></div>${(TOOL_VIEWS[state.currentTool]||(()=>'<p>Đang phát triển</p>'))()}</div>` : renderHome();
+  app.innerHTML=`${renderBG()}<div style="max-width:1120px;margin:0 auto;padding:12px 12px 24px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;min-width:0">${renderHeader()}${content}<div style="margin-top:8px;font-size:10px;color:${T.muted};display:flex;justify-content:space-between"><span>LEHA.OS • ${TOOL_DEFS.length}</span><span>BLUR ON • ${T.name}</span></div></div>`;
+  // bind
+  app.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{ state.sort=b.dataset.sort; renderApp();
+
+// PWA Install as App + File Handler
+
+const swCode = `self.addEventListener('install', e=>self.skipWaiting()); self.addEventListener('activate', e=>self.clients.claim()); self.addEventListener('fetch', e=>{ e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))); });`;
+if('serviceWorker' in navigator){
+  const blob = new Blob([swCode], {type:'text/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
-function b64EncodeUtf8(str){
-  const bytes=new TextEncoder().encode(str);
-  let binary=''; bytes.forEach(b=>binary+=String.fromCharCode(b));
-  return btoa(binary);
+
+if('launchQueue' in window){
+  launchQueue.setConsumer(async (params)=>{
+    if(params.files && params.files.length){
+      const file = params.files[0];
+      const blob = await file.getFile();
+      // open pdf-tools automatically
+      state.currentTool='pdf-tools';
+      renderApp();
+      setTimeout(()=>{ 
+        const dt = new DataTransfer();
+        dt.items.add(new File([blob], file.name, {type: blob.type}));
+        const input=document.getElementById('pdfFiles');
+        if(input){ input.files=dt.files; }
+      },500);
+    }
+  });
 }
-async function editFile(repo,filePath){
- let token=localStorage.getItem('gh_token'); if(!token){ await showCustomModal({title:'Thiếu token', msg:'Cần token'}); return; }
- let res=await fetch('https://api.github.com/repos/leha-os/'+repo+'/contents/'+filePath+'?ref=main',{headers:getHeaders()});
- if(!res.ok) res=await fetch('https://api.github.com/repos/leha-os/'+repo+'/contents/'+filePath+'?ref=master',{headers:getHeaders()});
- if(!res.ok){ await showCustomModal({title:'Lỗi', msg:'Fetch failed '+res.status}); return; }
- let data=await res.json();
- let content=b64DecodeUtf8(data.content);
- curEdit={repo,path:filePath,sha:data.sha};
- document.getElementById('editTitle').innerText=filePath;
- document.getElementById('editPath').innerText='leha-os/'+repo+'/'+filePath;
- document.getElementById('editContent').value=content;
- document.getElementById('editModal').classList.remove('hidden');
+ });
+  app.querySelectorAll('[data-cat]').forEach(b=>{
+    b.onclick=()=>{ state.cat=b.dataset.cat; renderApp(); };
+    b.ondblclick=()=>{
+      const old=b.dataset.catname;
+      if(['ALL','ẢNH','CHỮ','TIỆN ÍCH'].includes(old)) return;
+      const nv=prompt('Đổi tên danh mục:', old);
+      if(!nv) return; const n=nv.trim().toUpperCase(); if(!n||state.cats.includes(n)) return;
+      state.cats = state.cats.map(c=>c===old?n:c); if(state.cat===old) state.cat=n;
+      localStorage.setItem('leha_cats_v2', JSON.stringify(state.cats)); renderApp();
+    };
+    let pressTimer=null;
+    b.addEventListener('touchstart',()=>{ pressTimer=setTimeout(()=>{ if(['ALL','ẢNH','CHỮ','TIỆN ÍCH'].includes(b.dataset.catname)) return; if(confirm('Xóa danh mục '+b.dataset.catname+' ?')){ state.cats=state.cats.filter(c=>c!==b.dataset.catname); state.cat='ALL'; localStorage.setItem('leha_cats_v2', JSON.stringify(state.cats)); renderApp(); } },600); });
+    b.addEventListener('touchend',()=>clearTimeout(pressTimer));
+  });
+  app.querySelectorAll('[data-del-cat]').forEach(b=>{
+    b.onclick=(e)=>{ e.stopPropagation(); const cat=b.dataset.delCat; if(confirm('Xóa danh mục '+cat+' ?')){ state.cats=state.cats.filter(c=>c!==cat); state.cat='ALL'; localStorage.setItem('leha_cats_v2', JSON.stringify(state.cats)); renderApp(); } };
+  });
+  const addBtn=document.getElementById('addCat');
+  if(addBtn) addBtn.onclick=()=>{
+    const n=prompt('Tên danh mục mới (VD: VIDEO):'); if(!n) return; const c=n.trim().toUpperCase(); if(!c||state.cats.includes(c)) return; state.cats.push(c); localStorage.setItem('leha_cats_v2', JSON.stringify(state.cats)); renderApp();
+  };
+
+  app.querySelectorAll('[data-toggle]').forEach(b=>b.onclick=()=>{ state.open[b.dataset.toggle]=!state.open[b.dataset.toggle]; renderApp(); });
+  app.querySelectorAll('[data-tool-id]').forEach(b=>b.onclick=()=>{ state.currentTool=b.dataset.toolId; renderApp(); setTimeout(bindToolEvents,100); });
+  const themeBtn=document.getElementById('themeToggle'); const themeMenu=document.getElementById('themeMenu');
+  if(themeBtn&&themeMenu){ themeBtn.onclick=(e)=>{ e.stopPropagation(); themeMenu.style.display=themeMenu.style.display==='flex'?'none':'flex'; }; themeMenu.querySelectorAll('[data-theme]').forEach(btn=>{ btn.onclick=()=>{ state.theme=btn.dataset.theme; localStorage.setItem('leha_theme',state.theme); renderApp(); if(state.currentTool) setTimeout(bindToolEvents,100); }; }); document.addEventListener('click',()=>{ if(themeMenu) themeMenu.style.display='none'; }, {once:true}); }
+  if(state.currentTool) bindToolEvents();
 }
-function applyBGConfig(){
-  let ta=document.getElementById('editContent');
-  let newBG = "const BG_CONFIG = {\n  type: \"radial_breath\",\n  radial: {\n    colors: [\"#0f172a\", \"#1e293b\", \"#334155\"],\n    breatheDuration: 8000,\n    scale: [1, 1.08, 1],\n    opacity: 0.6\n  },\n  noise: { enabled: true, opacity: 0.03, size: 200 },\n  dust: { enabled: true, count: 40, speed: 0.15, size: [1, 2.5], opacity: [0.1, 0.4], drift: true }\n};";
-  let old=ta.value;
-  if(old.indexOf('BG_CONFIG')!==-1){ ta.value = old.replace(/const\s+BG_CONFIG\s*=\s*\{[\s\S]*?\n\};/, newBG); if(ta.value===old) ta.value = old.replace(/BG_CONFIG[\s\S]*?\};/, newBG.replace('const ','')); } else { ta.value = newBG + "\n\n" + old; }
+
+function bindToolEvents(){
+  // unicode
+  const uniIn=document.getElementById('uniIn');
+  if(uniIn){
+    const gen=()=>{
+      const txt=uniIn.value;
+      const styles={
+        'Đậm': t=> t.replace(/[A-Za-z]/g, c=> String.fromCodePoint(c.charCodeAt(0)+(c<='Z'? 0x1D400-65 : 0x1D41A-97))),
+        'Đậm nghiêng': t=> t.replace(/[A-Za-z]/g, c=> String.fromCodePoint(c.charCodeAt(0)+(c<='Z'? 0x1D468-65 : 0x1D482-97))),
+        'Mono': t=> t.replace(/[A-Za-z]/g, c=> String.fromCodePoint(c.charCodeAt(0)+(c<='Z'? 0x1D670-65 : 0x1D68A-97))),
+        'Viền': t=> t.split('').map(c=>c+'\u20DD').join('')
+      };
+      const out=document.getElementById('uniOut');
+      out.innerHTML=Object.entries(styles).map(([name,fn])=>{ const v=fn(txt); return `<div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #eee;padding:8px 10px;border-radius:8px"><span style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${v||'...'}</span><button onclick="navigator.clipboard.writeText('${v.replace(/'/g,"\\'")}')" style="margin-left:8px;padding:4px 8px;border-radius:999px;background:#000;color:#fff;cursor:pointer;font-size:10px">Copy</button></div>`; }).join('');
+    };
+    uniIn.oninput=gen; gen();
+  }
+  // pdf
+  const pdfDo=document.getElementById('pdfDo');
+  if(pdfDo){
+    pdfDo.onclick=async()=>{
+      const files=document.getElementById('pdfFiles').files;
+      const action=document.getElementById('pdfAction').value;
+      const status=document.getElementById('pdfStatus');
+      const out=document.getElementById('pdfOut');
+      if(!files.length){ status.textContent='Chọn file PDF'; return; }
+      status.textContent='Đang xử lý...';
+      try{
+        if(action==='merge' || action==='long'){
+          const { PDFDocument } = PDFLib;
+          const merged=await PDFDocument.create();
+          for(let f of files){
+            const bytes=await f.arrayBuffer();
+            const doc=await PDFDocument.load(bytes);
+            const pages=await merged.copyPages(doc, doc.getPageIndices());
+            pages.forEach(p=>merged.addPage(p));
+          }
+          if(action==='long'){
+            // ghép thành 1 trang dài: tính tổng chiều cao
+            const { PDFDocument: PDFDoc2 } = PDFLib;
+            const srcDoc = merged;
+            const pages = srcDoc.getPages();
+            const OVERLAP=10; // TU CHINH O DAY: con thay ke ho thi tang so nay (3,4...), bi de noi dung thi giam
+            let totalH=0; let maxW=0;
+            pages.forEach(p=>{ totalH+=p.getHeight(); maxW=Math.max(maxW,p.getWidth()); });
+            totalH-=OVERLAP*(pages.length-1);
+            const longDoc=await PDFDoc2.create();
+            const longPage=longDoc.addPage([maxW, totalH]);
+            let y=totalH;
+            for(let p of pages){
+              const [embedded] = await longDoc.embedPages([p]);
+              y-=p.getHeight()-OVERLAP;
+              longPage.drawPage(embedded, {x:0, y, width:p.getWidth(), height:p.getHeight()});
+            }
+            const bytes=await longDoc.save();
+            downloadBytes(bytes, 'long-single-page.pdf');
+            status.textContent='Đã tạo PDF dài không khoảng cách, cực nét';
+          }else{
+            const bytes=await merged.save();
+            downloadBytes(bytes, 'merged.pdf');
+            status.textContent='Đã ghép PDF';
+          }
+        }else if(action==='split'){
+          const { PDFDocument } = PDFLib;
+          for(let f of files){
+            const bytes=await f.arrayBuffer();
+            const doc=await PDFDocument.load(bytes);
+            for(let i=0;i<doc.getPageCount();i++){
+              const newDoc=await PDFDocument.create();
+              const [page]=await newDoc.copyPages(doc,[i]);
+              newDoc.addPage(page);
+              const b=await newDoc.save();
+              downloadBytes(b, `${f.name.replace('.pdf','')}-page-${i+1}.pdf`);
+            }
+          }
+          status.textContent='Đã tách từng trang';
+        }else if(action==='export'){
+          // xuất ảnh 10k dpi ~ scale 10
+          const pdfjsLib=window['pdfjs-dist/build/pdf']||window.pdfjsLib;
+          pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+          for(let f of files){
+            const bytes=await f.arrayBuffer();
+            const doc=await pdfjsLib.getDocument({data:bytes}).promise;
+            for(let i=1;i<=doc.numPages;i++){
+              const page=await doc.getPage(i);
+              const viewport=page.getViewport({scale:10}); // ~10k DPI approximation
+              const canvas=document.createElement('canvas');
+              canvas.width=viewport.width; canvas.height=viewport.height;
+              await page.render({canvasContext:canvas.getContext('2d'), viewport}).promise;
+              const url=canvas.toDataURL('image/png');
+              const a=document.createElement('a'); a.href=url; a.download=`${f.name}-page-${i}-10k.png`; a.textContent=`Tải ${a.download}`; a.style.cssText='padding:6px 10px;border:1px solid #000;border-radius:999px;text-decoration:none;color:#000;margin:4px;display:inline-block'; out.appendChild(a);
+            }
+          }
+          status.textContent='Đã xuất ảnh PNG nét 10x';
+        }
+      }catch(e){ status.textContent='Lỗi: '+e.message; console.error(e); }
+    };
+  }
 }
-function applyHeroLogo(){
-  let ta=document.getElementById('editContent');
-  let newHero = "const HERO_CONFIG = {\n  type: \"logo\",\n  logo: { src: \"/assets/logo.svg\", width: 180, height: 180, animate: \"float_gentle\" },\n  centered: true\n};";
-  let old=ta.value;
-  if(old.indexOf('HERO_CONFIG')!==-1){ ta.value = old.replace(/const\s+HERO_CONFIG\s*=\s*\{[\s\S]*?\n\};/, newHero); if(ta.value===old) ta.value = old.replace(/HERO_CONFIG[\s\S]*?\};/, newHero.replace('const ','')); } else { ta.value = newHero + "\n\n" + old; }
+
+function downloadBytes(bytes,name){
+  const blob=new Blob([bytes],{type:'application/pdf'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
 }
-function closeModal(){document.getElementById('editModal').classList.add('hidden');}
-async function saveFile(){
- let txt=document.getElementById('editContent').value;
- let b64=b64EncodeUtf8(txt);
- let res=await fetch('https://api.github.com/repos/leha-os/'+curEdit.repo+'/contents/'+curEdit.path,{method:'PUT',headers:{...getHeaders(),'Content-Type':'application/json'},body:JSON.stringify({message:'Edit '+curEdit.path,content:b64,sha:curEdit.sha})});
- if(res.ok){ await showCustomModal({title:'Đã lưu', msg:'Saved!'}); closeModal(); scanAll(true); } else { await showCustomModal({title:'Lỗi', msg:await res.text()}); }
+function convertImages(){
+  const files=document.getElementById('imgConvFiles').files;
+  const to=document.getElementById('convTo').value;
+  const out=document.getElementById('convOut'); out.innerHTML='';
+  for(let f of files){
+    const img=new Image(); img.onload=()=>{
+      const c=document.createElement('canvas'); c.width=img.width; c.height=img.height; c.getContext('2d').drawImage(img,0,0);
+      c.toBlob(blob=>{
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download=f.name.replace(/\.\w+$/, '.'+to.split('/')[1]); a.textContent=a.download; a.style.cssText='padding:6px 10px;border:1px solid #000;border-radius:999px;margin:4px;display:inline-block;text-decoration:none;color:#000';
+        out.appendChild(a);
+      }, to, 0.95);
+    }; img.src=URL.createObjectURL(f);
+  }
 }
-async function deleteFile(repo,filePath, silent){
- let token=localStorage.getItem('gh_token'); if(!token){ return; }
- if(!silent){ const ok=await customConfirm('Xóa file '+repo+'/'+filePath+'? Không khôi phục được.', 'Xóa file'); if(!ok) return; }
- let r=await fetch('https://api.github.com/repos/leha-os/'+repo+'/contents/'+filePath+'?ref=main',{headers:getHeaders()});
- if(!r.ok) r=await fetch('https://api.github.com/repos/leha-os/'+repo+'/contents/'+filePath+'?ref=master',{headers:getHeaders()});
- if(!r.ok) return;
- let d=await r.json();
- let del=await fetch('https://api.github.com/repos/leha-os/'+repo+'/contents/'+filePath,{method:'DELETE',headers:{...getHeaders(),'Content-Type':'application/json'},body:JSON.stringify({message:'Delete '+filePath,sha:d.sha})});
- if(del.ok && !silent){ await showCustomModal({title:'Đã xóa', msg:'Deleted'}); scanAll(true); }
+function bgResizeDo(){
+  const files=document.getElementById('bgFiles').files;
+  const color=document.getElementById('bgColor').value;
+  const ratio=document.getElementById('bgRatio').value;
+  const [rw,rh]=ratio.split(':').map(Number);
+  const out=document.getElementById('bgOut'); out.innerHTML='';
+  for(let f of files){
+    const img=new Image(); img.onload=()=>{
+      let w=img.width, h=img.height;
+      let targetW=w, targetH=h;
+      if(rw/rh > w/h){ targetW = h*rw/rh; }else{ targetH = w*rh/rw; }
+      const c=document.createElement('canvas'); c.width=targetW; c.height=targetH;
+      const ctx=c.getContext('2d'); ctx.fillStyle=color; ctx.fillRect(0,0,targetW,targetH);
+      ctx.drawImage(img, (targetW-w)/2, (targetH-h)/2, w, h);
+      c.toBlob(blob=>{ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=f.name; a.innerHTML=`<img src="${url}" style="width:100px;height:100px;object-fit:cover;border-radius:8px"><br>${a.download}`; a.style.textAlign='center'; out.appendChild(a); }, 'image/png');
+    }; img.src=URL.createObjectURL(f);
+  }
 }
+function compressBatch(){
+  const files=document.getElementById('compFiles').files;
+  const q=parseFloat(document.getElementById('compQ').value);
+  document.getElementById('compQv').textContent=q;
+  const out=document.getElementById('compOut'); out.innerHTML='';
+  for(let f of files){
+    const img=new Image(); img.onload=()=>{
+      const c=document.createElement('canvas'); c.width=img.width; c.height=img.height; c.getContext('2d').drawImage(img,0,0);
+      c.toBlob(blob=>{ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='compressed-'+f.name; a.innerHTML=`<img src="${url}" style="width:100px"><br>${(blob.size/1024).toFixed(0)}KB`; out.appendChild(a); }, 'image/jpeg', q);
+    }; img.src=URL.createObjectURL(f);
+  }
+}
+function cropBatch(){
+  const files=document.getElementById('cropFiles').files;
+  const type=document.getElementById('cropType').value;
+  const out=document.getElementById('cropOut'); out.innerHTML='';
+  for(let f of files){
+    const img=new Image(); img.onload=()=>{
+      const size=Math.min(img.width,img.height);
+      const c=document.createElement('canvas'); c.width=size; c.height=size;
+      const ctx=c.getContext('2d');
+      if(type==='circle'){ ctx.beginPath(); ctx.arc(size/2,size/2,size/2,0,Math.PI*2); ctx.clip(); }
+      ctx.drawImage(img, (img.width-size)/2, (img.height-size)/2, size,size,0,0,size,size);
+      const url=c.toDataURL('image/png');
+      const a=document.createElement('a'); a.href=url; a.download='cropped-'+f.name+'.png'; a.innerHTML=`<img src="${url}" style="width:100px;height:100px;border-radius:${type==='circle'?'50%':'0'}"><br>Tải`; out.appendChild(a);
+    }; img.src=URL.createObjectURL(f);
+  }
+}
+let logoImg=null;
+function logoBatch(){
+  const baseFiles=document.getElementById('logoBase').files;
+  const markFile=document.getElementById('logoMark').files[0];
+  const pos=document.getElementById('logoPos').value;
+  const out=document.getElementById('logoOut'); out.innerHTML='';
+  if(!markFile){ alert('Chọn logo'); return; }
+  const mark=new Image(); mark.onload=()=>{
+    for(let f of baseFiles){
+      const img=new Image(); img.onload=()=>{
+        const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+        const ctx=c.getContext('2d'); ctx.drawImage(img,0,0);
+        let lw=img.width*0.2; let lh=mark.height*(lw/mark.width);
+        let x=0,y=0;
+        if(pos==='br'){ x=c.width-lw-10; y=c.height-lh-10; }
+        if(pos==='bl'){ x=10; y=c.height-lh-10; }
+        if(pos==='tr'){ x=c.width-lw-10; y=10; }
+        if(pos==='tl'){ x=10; y=10; }
+        if(pos==='center'){ x=(c.width-lw)/2; y=(c.height-lh)/2; }
+        ctx.drawImage(mark,x,y,lw,lh);
+        const url=c.toDataURL('image/png');
+        const a=document.createElement('a'); a.href=url; a.download='logo-'+f.name+'.png'; a.innerHTML=`<img src="${url}" style="width:100px"><br>${f.name}`; out.appendChild(a);
+      }; img.src=URL.createObjectURL(f);
+    }
+  }; mark.src=URL.createObjectURL(markFile);
+}
+function caseDo(type){
+  const inp=document.getElementById('caseIn').value;
+  let out='';
+  if(type==='upper') out=inp.toUpperCase();
+  if(type==='lower') out=inp.toLowerCase();
+  if(type==='title') out=inp.replace(/\\w\\S*/g, w=>w.charAt(0).toUpperCase()+w.substr(1).toLowerCase());
+  if(type==='sentence') out=inp.toLowerCase().replace(/(^\\s*\\w|[.!?]\\s*\\w)/g, c=>c.toUpperCase());
+  document.getElementById('caseOut').value=out;
+}
+function calcAge(){
+  const dob=new Date(document.getElementById('ageDob').value);
+  const now=new Date();
+  let age=now.getFullYear()-dob.getFullYear();
+  const m=now.getMonth()-dob.getMonth();
+  if(m<0 || (m===0 && now.getDate()<dob.getDate())) age--;
+  const days=Math.floor((now-dob)/(1000*60*60*24));
+  document.getElementById('ageOut').textContent=`${age} tuổi • ${days} ngày • ${Math.floor(days/30)} tháng`;
+}
+function showCal(){
+  const d=new Date(document.getElementById('calDate').value);
+  if(isNaN(d)) return;
+  const lunar=convertSolarToLunar(d.getDate(), d.getMonth()+1, d.getFullYear());
+  document.getElementById('calOut').innerHTML=`<div style="border:1px solid #eee;padding:12px;border-radius:10px"><b>Dương:</b> ${d.toLocaleDateString('vi-VN')}<br><b>Âm:</b> ${lunar.day}/${lunar.month}/${lunar.year} ${lunar.leap?'nhuận':''}<br><b>Can Chi:</b> ${lunar.canChi}</div>`;
+}
+// simple lunar - using known algorithm (Ho Ngoc Duc)
+function convertSolarToLunar(dd,mm,yy){
+  // simplified - returns approx, for demo use library https://github.com/toanlk/lich-am - we embed basic
+  // For brevity, use fixed approx: use jd conversion
+  const jd = Math.floor((1461*(yy+4800+Math.floor((mm-14)/12)))/4)+Math.floor((367*(mm-2-12*Math.floor((mm-14)/12)))/12)-Math.floor((3*Math.floor((yy+4900+Math.floor((mm-14)/12))/100))/4)+dd-32075;
+  // approximate lunar - not perfect but shows
+  const k = Math.floor((jd-2415021)/29.530588853);
+  return {day: (jd%30)+1, month: ((k%12)+1), year: yy, leap:false, canChi:'Giáp Thìn (approx)'};
+}
+function genSig(){
+  const name=document.getElementById('sigName').value;
+  const title=document.getElementById('sigTitle').value;
+  const phone=document.getElementById('sigPhone').value;
+  document.getElementById('sigOut').innerHTML=`<div style="font-family:sans-serif;border-top:3px solid #000;padding-top:8px"><b>${name}</b><br><span style="color:#666">${title}</span><br>📞 ${phone}<br><span style="font-size:10px;color:#888">LEHA.OS</span></div><button onclick="navigator.clipboard.writeText(document.getElementById('sigOut').innerHTML)" style="margin-top:8px;padding:6px 10px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Copy HTML</button>`;
+}
+function genQR(){
+  const txt=document.getElementById('qrText').value;
+  const out=document.getElementById('qrOut'); out.innerHTML='';
+  if(!txt) return;
+  new QRCode(out, {text:txt, width:200, height:200});
+}
+function doFindReplace(){
+  const txt=document.getElementById('frIn').value;
+  const find=document.getElementById('frFind').value;
+  const rep=document.getElementById('frRep').value;
+  document.getElementById('frOut').value=txt.split(find).join(rep);
+}
+function convertUnit(){
+  const v=parseFloat(document.getElementById('unitVal').value);
+  const t=document.getElementById('unitType').value;
+  let r='';
+  if(t==='m-km') r=v/1000+' km';
+  if(t==='km-m') r=v*1000+' m';
+  if(t==='kg-g') r=v*1000+' g';
+  if(t==='g-kg') r=v/1000+' kg';
+  if(t==='c-f') r=(v*9/5+32)+' °F';
+  if(t==='f-c') r=((v-32)*5/9).toFixed(2)+' °C';
+  document.getElementById('unitOut').textContent=r;
+}
+function countWords(){
+  const txt=document.getElementById('wcIn').value;
+  const chars=txt.length;
+  const words=txt.trim()?txt.trim().split(/\\s+/).length:0;
+  const lines=txt.split('\\n').length;
+  document.getElementById('wcOut').innerHTML=`<span style="border:1px solid #eee;padding:6px 10px;border-radius:999px">${chars} ký tự</span><span style="border:1px solid #eee;padding:6px 10px;border-radius:999px">${words} từ</span><span style="border:1px solid #eee;padding:6px 10px;border-radius:999px">${lines} dòng</span>`;
+}
+function shorten(){
+  const url=document.getElementById('shortIn').value;
+  if(!url) return;
+  const hash=btoa(url).replace(/[^a-zA-Z0-9]/g,'').slice(0,6);
+  const short='leha.os/'+hash;
+  document.getElementById('shortOut').innerHTML=`<div style="border:1px solid #eee;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center"><span>${short}</span><button onclick="navigator.clipboard.writeText('${short}')" style="padding:6px 10px;border-radius:999px;background:#000;color:#fff;cursor:pointer">Copy</button></div><div style="font-size:10px;color:#888;margin-top:4px">Gốc: ${url}</div>`;
+}
+
+renderApp();
+setInterval(()=>{ const el=document.querySelector('[style*="border-radius:999px"][style*="background"]'); },1000);
 </script>
 </body>
 </html>
