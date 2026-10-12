@@ -324,13 +324,16 @@ function bindToolEvents(){
             const srcDoc = merged;
             const pages = srcDoc.getPages();
             let totalH=0; let maxW=0;
-            pages.forEach(p=>{ totalH+=p.getHeight(); maxW=Math.max(maxW,p.getWidth()); });
+            const OVERLAP=2; // chỉ sửa số này: còn hở thì tăng, bị đè nội dung thì giảm
+let totalH=0; let maxW=0;
+pages.forEach(p=>{ totalH+=p.getHeight(); maxW=Math.max(maxW,p.getWidth()); });
+totalH-=OVERLAP*(pages.length-1);
             const longDoc=await PDFDoc2.create();
             const longPage=longDoc.addPage([maxW, totalH]);
             let y=totalH;
             for(let p of pages){
               const [embedded] = await longDoc.embedPages([p]);
-              y-=p.getHeight();
+              y-=p.getHeight()-OVERLAP;
               longPage.drawPage(embedded, {x:0, y, width:p.getWidth(), height:p.getHeight()});
             }
             const bytes=await longDoc.save();
