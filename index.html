@@ -323,14 +323,16 @@ function bindToolEvents(){
             const { PDFDocument: PDFDoc2 } = PDFLib;
             const srcDoc = merged;
             const pages = srcDoc.getPages();
+            const OVERLAP=2; // TU CHINH O DAY: con thay ke ho thi tang so nay (3,4...), bi de noi dung thi giam
             let totalH=0; let maxW=0;
             pages.forEach(p=>{ totalH+=p.getHeight(); maxW=Math.max(maxW,p.getWidth()); });
+            totalH-=OVERLAP*(pages.length-1);
             const longDoc=await PDFDoc2.create();
             const longPage=longDoc.addPage([maxW, totalH]);
             let y=totalH;
             for(let p of pages){
               const [embedded] = await longDoc.embedPages([p]);
-              y-=p.getHeight();
+              y-=p.getHeight()-OVERLAP;
               longPage.drawPage(embedded, {x:0, y, width:p.getWidth(), height:p.getHeight()});
             }
             const bytes=await longDoc.save();
