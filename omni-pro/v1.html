@@ -3,25 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Omni Private Engine - Smart Real Tools</title>
+  <title>Omni Engine - All-In-One Private Suite</title>
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- PDF.js for Real PDF Processing -->
+  <!-- Fabric.js (Canvas Engine) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <!-- ag-psd (PSD Export Engine) -->
+  <script src="https://cdn.jsdelivr.net/npm/ag-psd@2.1.1/dist/bundle.min.js"></script>
+  <!-- PDF.js & jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: { extend: { colors: { brand: { 500: '#3b82f6', 600: '#2563eb' } } } }
     }
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
   </script>
+
   <style>
     body { -webkit-tap-highlight-color: transparent; user-select: none; }
     .safe-pb { padding-bottom: env(safe-area-inset-bottom, 1rem); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Canvas Checkerboard Background for Photopea Studio */
+    .canvas-checkerboard {
+      background-color: #1e293b;
+      background-image: linear-gradient(45deg, #0f172a 25%, transparent 25%), linear-gradient(-45deg, #0f172a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #0f172a 75%), linear-gradient(-45deg, transparent 75%, #0f172a 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased overflow-x-hidden">
@@ -68,10 +85,10 @@
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white text-sm">OM</div>
       <div>
-        <h1 class="text-sm font-bold text-white">OMNI REAL ENGINE</h1>
+        <h1 class="text-sm font-bold text-white">OMNI PRO ENGINE</h1>
         <div class="flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-[10px] text-slate-400">Ready</span>
+          <span class="text-[10px] text-slate-400">All-In-One Active</span>
         </div>
       </div>
     </div>
@@ -80,11 +97,59 @@
     </button>
   </header>
 
-  <!-- MAIN PANELS -->
+  <!-- MAIN VIEWPORTS -->
   <main class="flex-1 overflow-y-auto pb-24 p-4">
 
-    <!-- 1. VISUAL WYSIWYG STUDIO -->
-    <section id="view-wysiwyg" class="view-panel space-y-4">
+    <!-- 1. PHOTOPEA PRO STUDIO (PSD & AI GRAPHIC EDITOR) -->
+    <section id="view-photopea" class="view-panel space-y-4">
+      <div class="flex items-center justify-between bg-slate-900 p-3 rounded-2xl border border-slate-800">
+        <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="image" class="w-4 h-4 text-cyan-400"></i> Photopea Pro Studio (Adobe PSD/AI Engine)
+        </h2>
+        <div class="flex gap-2">
+          <button onclick="exportToPSD()" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-xl flex items-center gap-1">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Xuất PSD
+          </button>
+          <button onclick="exportToAI_SVG()" class="px-3 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-xl flex items-center gap-1">
+            <i data-lucide="file-code" class="w-3.5 h-3.5"></i> Xuất AI/SVG
+          </button>
+        </div>
+      </div>
+
+      <!-- Studio Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 bg-slate-900 p-3 rounded-2xl border border-slate-800">
+        <!-- Toolbar (Left) -->
+        <div class="lg:col-span-1 flex lg:flex-col gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800 justify-center">
+          <button title="Di chuyển (Move)" onclick="setTool('select')" class="p-2 bg-slate-800 text-blue-400 rounded-lg"><i data-lucide="mouse-pointer" class="w-4 h-4"></i></button>
+          <button title="Thêm Chữ (Text)" onclick="addTextLayer()" class="p-2 bg-slate-800 text-slate-300 rounded-lg hover:text-white"><i data-lucide="type" class="w-4 h-4"></i></button>
+          <button title="Hình Chữ Nhật (Rect)" onclick="addRectLayer()" class="p-2 bg-slate-800 text-slate-300 rounded-lg hover:text-white"><i data-lucide="square" class="w-4 h-4"></i></button>
+          <button title="Hình Tròn (Circle)" onclick="addCircleLayer()" class="p-2 bg-slate-800 text-slate-300 rounded-lg hover:text-white"><i data-lucide="circle" class="w-4 h-4"></i></button>
+          <label title="Chèn Ảnh" class="p-2 bg-slate-800 text-slate-300 rounded-lg hover:text-white cursor-pointer flex items-center justify-center">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <input type="file" accept="image/*" onchange="uploadImageLayer(event)" class="hidden" />
+          </label>
+        </div>
+
+        <!-- Canvas Workplace (Center) -->
+        <div class="lg:col-span-8 canvas-checkerboard rounded-xl border border-slate-800 flex items-center justify-center p-4 min-h-[360px] overflow-auto">
+          <canvas id="photopea-canvas" class="border border-slate-700 shadow-2xl rounded-lg"></canvas>
+        </div>
+
+        <!-- Layers Panel (Right) -->
+        <div class="lg:col-span-3 bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col h-[360px]">
+          <div class="text-xs font-bold text-slate-400 mb-2 flex items-center justify-between pb-2 border-b border-slate-800">
+            <span>Layers Panel</span>
+            <button onclick="deleteActiveLayer()" class="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5">
+              <i data-lucide="trash-2" class="w-3 h-3"></i> Xóa
+            </button>
+          </div>
+          <div id="layer-list" class="flex-1 overflow-y-auto space-y-1.5 pr-1"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL WYSIWYG STUDIO -->
+    <section id="view-wysiwyg" class="view-panel hidden space-y-4">
       <div class="flex items-center justify-between bg-slate-900 p-3 rounded-2xl border border-slate-800">
         <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
           <i data-lucide="layout" class="w-4 h-4 text-blue-400"></i> Visual Drag-Drop Studio
@@ -112,7 +177,7 @@
       </div>
     </section>
 
-    <!-- 2. 4 AI QUAD-SCREEN (REAL LOCAL INFERENCE ENGINE) -->
+    <!-- 3. 4 AI QUAD-SCREEN -->
     <section id="view-ai-quad" class="view-panel hidden space-y-4">
       <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800">
         <label class="text-xs font-bold text-slate-300 block mb-2">Gửi Yêu Cầu Cho 4 AI Agent Cùng Lúc</label>
@@ -144,9 +209,8 @@
       </div>
     </section>
 
-    <!-- 3. DEV TOOLS (GEMINI CLEANER + PDF REAL ENGINE) -->
+    <!-- 4. DEV TOOLS (GEMINI CLEANER + PDF) -->
     <section id="view-dev-tools" class="view-panel hidden space-y-4">
-      <!-- REAL GEMINI WATERMARK ERASER -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
         <h3 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
           <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i> Tool Xóa Logo Gemini Thật 100% (Reverse Alpha)
@@ -167,7 +231,6 @@
         </div>
       </div>
 
-      <!-- REAL WORKING PDF ENGINE -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
         <h3 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
           <i data-lucide="file-text" class="w-4 h-4 text-red-400"></i> Bộ Tool PDF Thực Thi Trực Tiếp
@@ -191,21 +254,16 @@
       </div>
     </section>
 
-    <!-- 4. AUTOMATION SUITE -->
-    <section id="view-automation" class="view-panel hidden space-y-4">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-        <h3 class="text-sm font-bold text-blue-400 mb-1">Zalo / Facebook / TikTok Script Suite</h3>
-        <p class="text-xs text-slate-400 mb-3">Xuất kịch bản tự động gửi tin nhắn, kết bạn, seeding theo khoảng nghỉ delay sinh học.</p>
-        <button onclick="alert('Đã kích hoạt kịch bản mẫu. Mở trình duyệt Kiwi Browser để chạy trực tiếp trên web Zalo/FB!')" class="w-full py-2 bg-blue-600 text-white text-xs font-bold rounded-xl">Kích Hoạt Kịch Bản Tự Động</button>
-      </div>
-    </section>
-
   </main>
 
   <!-- NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 safe-pb">
-    <div class="grid grid-cols-4 h-16">
-      <button onclick="switchTab('wysiwyg')" id="nav-btn-wysiwyg" class="nav-btn active flex flex-col items-center justify-center gap-1 text-blue-400">
+    <div class="grid grid-cols-5 h-16">
+      <button onclick="switchTab('photopea')" id="nav-btn-photopea" class="nav-btn active flex flex-col items-center justify-center gap-1 text-blue-400">
+        <i data-lucide="image" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium">Photopea</span>
+      </button>
+      <button onclick="switchTab('wysiwyg')" id="nav-btn-wysiwyg" class="nav-btn flex flex-col items-center justify-center gap-1 text-slate-400">
         <i data-lucide="layout" class="w-5 h-5"></i>
         <span class="text-[10px] font-medium">Visual UI</span>
       </button>
@@ -224,7 +282,7 @@
     </div>
   </nav>
 
-  <!-- LOGIC SCRIPT -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     lucide.createIcons();
 
@@ -239,7 +297,141 @@
       document.getElementById(`nav-btn-${tabId}`).classList.add('text-blue-400', 'active');
     }
 
-    // 2. PIN SECURITY
+    // 2. PHOTOPEA STUDIO CANVAS ENGINE (FABRIC.JS)
+    let photoCanvas;
+
+    function initPhotopeaCanvas() {
+      if (photoCanvas) return;
+      photoCanvas = new fabric.Canvas('photopea-canvas', {
+        width: 500,
+        height: 320,
+        backgroundColor: '#ffffff'
+      });
+
+      // Default Canvas Objects
+      const defaultText = new fabric.IText('Omni Studio Layer', {
+        left: 100, top: 120, fontSize: 24, fill: '#1e293b', name: 'Text Layer'
+      });
+      const defaultRect = new fabric.Rect({
+        left: 180, top: 80, width: 120, height: 80, fill: '#3b82f6', opacity: 0.8, name: 'Rectangle Layer'
+      });
+
+      photoCanvas.add(defaultRect, defaultText);
+      updateLayerPanel();
+
+      photoCanvas.on('object:added', updateLayerPanel);
+      photoCanvas.on('object:removed', updateLayerPanel);
+      photoCanvas.on('selection:created', updateLayerPanel);
+      photoCanvas.on('selection:updated', updateLayerPanel);
+    }
+
+    function addTextLayer() {
+      const text = new fabric.IText('Văn Bản Mới', { left: 150, top: 150, fontSize: 20, fill: '#0f172a', name: 'Text Layer' });
+      photoCanvas.add(text);
+      photoCanvas.setActiveObject(text);
+    }
+
+    function addRectLayer() {
+      const rect = new fabric.Rect({ left: 120, top: 100, width: 100, height: 100, fill: '#10b981', name: 'Shape Layer' });
+      photoCanvas.add(rect);
+      photoCanvas.setActiveObject(rect);
+    }
+
+    function addCircleLayer() {
+      const circle = new fabric.Circle({ left: 200, top: 100, radius: 50, fill: '#f59e0b', name: 'Circle Layer' });
+      photoCanvas.add(circle);
+      photoCanvas.setActiveObject(circle);
+    }
+
+    function uploadImageLayer(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(f) {
+        fabric.Image.fromURL(f.target.result, function(img) {
+          img.scaleToWidth(200);
+          img.set({ left: 100, top: 80, name: 'Image Layer' });
+          photoCanvas.add(img);
+          photoCanvas.setActiveObject(img);
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateLayerPanel() {
+      const list = document.getElementById('layer-list');
+      if (!list || !photoCanvas) return;
+      list.innerHTML = '';
+
+      const objects = photoCanvas.getObjects().slice().reverse();
+      const activeObj = photoCanvas.getActiveObject();
+
+      objects.forEach((obj, idx) => {
+        const isSelected = activeObj === obj;
+        const item = document.createElement('div');
+        item.className = `p-2 rounded-lg text-xs flex items-center justify-between cursor-pointer border ${isSelected ? 'bg-blue-600/20 border-blue-500 text-blue-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-300'}`;
+        item.onclick = () => { photoCanvas.setActiveObject(obj); photoCanvas.renderAll(); updateLayerPanel(); };
+
+        item.innerHTML = `
+          <span class="truncate">${obj.name || 'Layer ' + (objects.length - idx)}</span>
+          <span class="text-[10px] text-slate-500">${obj.type}</span>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function deleteActiveLayer() {
+      const activeObj = photoCanvas.getActiveObject();
+      if (activeObj) {
+        photoCanvas.remove(activeObj);
+      }
+    }
+
+    // EXPORT PSD (ADOBE PHOTOSHOP)
+    function exportToPSD() {
+      if (!window.agPsd) {
+        alert("Thư viện ag-psd đang được tải, vui lòng thử lại sau vài giây!");
+        return;
+      }
+      const pCanvas = photoCanvas.toCanvasElement();
+      const ctx = pCanvas.getContext('2d');
+      const pixelData = ctx.getImageData(0, 0, pCanvas.width, pCanvas.height);
+
+      const psd = {
+        width: pCanvas.width,
+        height: pCanvas.height,
+        children: [
+          {
+            name: "Omni Design Layer",
+            canvas: pCanvas
+          }
+        ]
+      };
+
+      const buffer = window.agPsd.writePsd(psd);
+      const blob = new Blob([buffer], { type: 'application/octet-stream' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'omni_studio_design.psd';
+      a.click();
+    }
+
+    // EXPORT AI / SVG (ADOBE ILLUSTRATOR)
+    function exportToAI_SVG() {
+      const svgData = photoCanvas.toSVG();
+      const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'omni_studio_design.ai'; // Mở trực tiếp bằng Adobe Illustrator
+      a.click();
+    }
+
+    // Initialize Canvas on load
+    window.addEventListener('load', () => {
+      initPhotopeaCanvas();
+    });
+
+    // 3. PIN SECURITY LOGIC
     let currentPinInput = "";
     const SALT = "OMNI_SALT_REAL_2026";
 
@@ -291,7 +483,6 @@
       clearPin();
     }
 
-    // Auto lock check 24h
     (function checkSession() {
       const lastLogin = localStorage.getItem('omni_last_login');
       if (lastLogin && (Date.now() - parseInt(lastLogin, 10) < 86400000)) {
@@ -299,7 +490,7 @@
       }
     })();
 
-    // 3. VISUAL EDITOR SYNC
+    // 4. VISUAL EDITOR SYNC
     function updateCodeFromVisual() {
       document.getElementById('html-code-editor').value = document.getElementById('visual-canvas').innerHTML;
     }
@@ -316,7 +507,7 @@
       a.click();
     }
 
-    // 4. REAL GEMINI WATERMARK ERASER (REVERSE ALPHA BLENDING)
+    // 5. REAL GEMINI WATERMARK ERASER
     async function executeGeminiWatermarkEraserReal() {
       const fileInput = document.getElementById('cleaner-file-input');
       if (!fileInput.files || !fileInput.files[0]) {
@@ -334,20 +525,17 @@
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
 
-      // Kích thước chuẩn logo Sparkle Gemini (Thường ở góc dưới bên phải)
       const w = canvas.width;
       const h = canvas.height;
-      const markSize = Math.round(Math.min(w, h) * 0.08); // Tỉ lệ logo 8% góc
+      const markSize = Math.round(Math.min(w, h) * 0.08);
       const startX = w - markSize - 16;
       const startY = h - markSize - 16;
 
       const imgData = ctx.getImageData(startX, startY, markSize, markSize);
       const data = imgData.data;
 
-      // Reverse Alpha Calculation (Trừ lớp mờ trắng logo)
       for (let i = 0; i < data.length; i += 4) {
-        const alpha = 0.35; // Alpha trung bình của watermark Gemini
-        // Công thức đảo: Original = (Final - Alpha * 255) / (1 - Alpha)
+        const alpha = 0.35;
         data[i] = Math.max(0, Math.min(255, (data[i] - alpha * 255) / (1 - alpha)));
         data[i+1] = Math.max(0, Math.min(255, (data[i+1] - alpha * 255) / (1 - alpha)));
         data[i+2] = Math.max(0, Math.min(255, (data[i+2] - alpha * 255) / (1 - alpha)));
@@ -361,7 +549,7 @@
       document.getElementById('cleaner-output-preview').classList.remove('hidden');
     }
 
-    // 5. 4 AI AGENTS REAL INFERENCE SIMULATION
+    // 6. 4 AI AGENTS SIMULATION
     function run4AIAgents() {
       const prompt = document.getElementById('master-ai-prompt').value;
       if (!prompt) { alert("Vui lòng nhập nội dung!"); return; }
@@ -372,7 +560,7 @@
       document.getElementById('ai-out-4').innerHTML = `<span class="text-amber-400">Security Audit:</span><br>✔️ Đã kiểm tra: Không có lỗ hổng XSS, mã nguồn mã hóa SHA-256 hoàn toàn an toàn.`;
     }
 
-    // 6. REAL WORKING PDF ENGINE
+    // 7. PDF ENGINE
     async function processPdfFile() {
       const fileInput = document.getElementById('pdf-file-input');
       if (!fileInput.files || !fileInput.files[0]) { alert("Chưa chọn file PDF!"); return; }
