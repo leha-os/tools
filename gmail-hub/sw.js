@@ -1,5 +1,5 @@
-// sw.js — Gmail Hub V7.2
-const CACHE = 'gmail-hub-v7.2';
+// sw.js — Gmail Hub V7.3
+const CACHE = 'gmail-hub-v7.3';
 const STATIC_ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', e => {

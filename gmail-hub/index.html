@@ -83,13 +83,18 @@
     .empty-title{font-size:13px;font-weight:600}.empty-text{font-size:12px;color:var(--text-2);margin-top:4px;max-width:360px;line-height:1.5}
     .toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:100;padding:8px 16px;border-radius:999px;background:#11110F;color:#fff;font-size:12px;font-weight:500;box-shadow:0 10px 15px -3px rgba(0,0,0,.2);max-width:calc(100vw - 32px);text-align:center;display:flex;align-items:center;gap:8px}
     .toast button{color:#FDE047;font-weight:600;padding:0 4px}
-    .modal-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:16px}
-    .modal{width:100%;max-width:480px;max-height:calc(100vh - 32px);border-radius:16px;background:var(--surface);border:1px solid var(--border);box-shadow:0 20px 25px -5px rgba(0,0,0,.15);display:flex;flex-direction:column;overflow:hidden}
-    .modal.wide{max-width:760px}
-    .modal-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+    .modal-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:12px}
+    .modal{width:100%;max-width:420px;max-height:85vh;border-radius:16px;background:var(--surface);border:1px solid var(--border);box-shadow:0 20px 25px -5px rgba(0,0,0,.15);display:flex;flex-direction:column;overflow:hidden}
+    .modal.wide{max-width:640px}
+    @media(max-width:480px){
+      .modal-backdrop{align-items:flex-end;padding:0}
+      .modal{max-width:100%;max-height:90vh;border-radius:16px 16px 0 0;margin:0}
+      .modal.wide{max-width:100%}
+    }
+    .modal-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
     .modal-title{font-size:14px;font-weight:700;letter-spacing:-.025em}
-    .modal-body{padding:16px;overflow-y:auto;flex:1}.modal-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
-    .modal-close{padding:4px;border-radius:999px;color:var(--text-3)}.modal-close:hover{background:var(--surface-2)}
+    .modal-body{padding:14px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}.modal-footer{padding:10px 14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+    .modal-close{padding:6px;border-radius:999px;color:var(--text-3);min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}.modal-close:hover{background:var(--surface-2)}
     .field{margin-bottom:12px}.field-label{display:block;font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
     .field-input{width:100%;height:36px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px}
     .field-input:focus{box-shadow:0 0 0 1px rgba(0,0,0,.1)}
@@ -161,14 +166,25 @@
     .code-block-head button{height:22px;padding:0 6px;border-radius:4px;font-size:10.5px;font-weight:600;color:var(--text-2);background:var(--surface);border:1px solid var(--border);cursor:pointer}
     .code-block-head button:hover{background:var(--surface-2)}
     .code-block-body{position:relative;overflow:auto;max-height:400px}
-    .code-block-body pre{margin:0!important;border-radius:0!important;font-size:12px!important;padding:10px 12px!important;background:var(--surface)!important;line-height:1.5}
+    .code-block-body pre{margin:0!important;border-radius:0!important;font-size:12px!important;padding:10px 12px!important;background:var(--surface)!important;line-height:1.5;min-height:48px;outline:none;white-space:pre}
+    .code-block-body pre:empty:before,.code-block-body pre[data-placeholder]:empty:before{content:attr(data-placeholder);color:var(--text-3);pointer-events:none}
     .code-block-body.collapsed pre{max-height:40px;overflow:hidden}
     .code-block-resize{height:4px;background:var(--border);cursor:ns-resize;position:relative;display:flex;align-items:center;justify-content:center}
     .code-block-resize::before{content:'';width:24px;height:2px;background:var(--border-strong);border-radius:2px}
-    .img-block{display:inline-block;position:relative;resize:both;overflow:hidden;max-width:100%;min-width:80px;min-height:60px;border:1px dashed transparent;border-radius:6px;vertical-align:top;margin:6px 4px}
+    .img-block{display:inline-block;position:relative;resize:both;overflow:hidden;max-width:300px;max-height:300px;min-width:80px;min-height:60px;border:1px dashed transparent;border-radius:6px;vertical-align:top;margin:6px 4px}
     .img-block:hover{border-color:var(--border-strong)}
     .img-block img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
     .img-block caption{display:block;font-size:11px;color:var(--text-2);text-align:center;padding:2px 0;pointer-events:auto}
+    .img-block .img-controls{position:absolute;top:4px;right:4px;display:none;gap:2px}
+    .img-block:hover .img-controls{display:flex}
+    .img-block .img-controls button{height:22px;padding:0 6px;font-size:10px;border-radius:4px;background:var(--surface);border:1px solid var(--border);cursor:pointer}
+    .nb-editor-page{box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04)}
+    .nb-content-area{font-size:14px;line-height:1.65}
+    .nb-toolbar{flex-wrap:wrap;gap:2px;overflow:hidden}
+    @media(max-width:767px){
+      .nb-sidebar{max-width:80vw;width:min(260px,80vw)}
+      .nb-tool{width:26px;height:26px}
+    }
     .md-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%}
     @media(max-width:767px){.md-split{grid-template-columns:1fr}}
     .md-pane{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;min-height:400px;overflow:auto}
@@ -206,6 +222,38 @@
 
     (function(){
       'use strict';
+      /*
+       * === BRIEF: Cloudflare Email Workers (OTP không cần Gmail) ===
+       * Mục tiêu: Mail gửi tới *@yourdomain.com → Worker đọc OTP/magic link → bắn Telegram/Discord ngay.
+       * Cách làm nhanh:
+       * 1. Cloudflare Dashboard → Email → Email Routing → Enable + tạo catch-all / address.
+       * 2. Workers → Create → Email Worker (hoặc bind route).
+       * 3. Code mẫu (Worker):
+       *    export default {
+       *      async email(message, env, ctx) {
+       *        const raw = await new Response(message.raw).text();
+       *        const otp = (raw.match(/(?<!\d)(\d{6})(?!\d)/)||[])[1];
+       *        const link = (raw.match(/https?:\/\/[^\s<>"']+(?:magic|verify|confirm|login|auth|token)/i)||[])[0];
+       *        const text = `OTP: ${otp||'—'} | From: ${message.from} | Subj: ${message.headers.get('subject')||''}${link?'\n'+link:''}`;
+       *        // Telegram
+       *        if (env.TG_BOT_TOKEN && env.TG_CHAT_ID) {
+       *          await fetch(`https://api.telegram.org/bot${env.TG_BOT_TOKEN}/sendMessage`, {
+       *            method:'POST', headers:{'content-type':'application/json'},
+       *            body: JSON.stringify({chat_id:env.TG_CHAT_ID, text, disable_web_page_preview:true})
+       *          });
+       *        }
+       *        // Discord webhook (optional)
+       *        if (env.DISCORD_WEBHOOK) {
+       *          await fetch(env.DISCORD_WEBHOOK, {method:'POST', headers:{'content-type':'application/json'},
+       *            body: JSON.stringify({content: text})});
+       *        }
+       *        // message.setReject("ignored") nếu không muốn forward; hoặc message.forward("backup@...") 
+       *      }
+       *    }
+       * 4. Secrets: TG_BOT_TOKEN, TG_CHAT_ID, DISCORD_WEBHOOK.
+       * 5. Test gửi mail chứa 6 số → nhận ngay trên Telegram.
+       * Ưu điểm: zero Gmail API quota, cực nhanh, bí mật (không log qua Google).
+       */
       if(!window.preact || !window.preactHooks || !window.htm){
         document.getElementById('boot-error').style.display='block';
         return;
@@ -264,14 +312,19 @@
       /* ============ AUTH HELPERS ============ */
       var gsiPromptLock = false, gsiPromptLockTs = 0;
       function isTokenValid(acc){
-        return !!(acc && acc.accessToken && acc.expiresAt &&
-                 (acc.expiresAt - Date.now() > 60000));
+        if (!acc || !acc.accessToken) return false;
+        // Prefer expiresAt; give 45s buffer. If no expiresAt but token exists, treat as usable for one try.
+        if (acc.expiresAt) return (acc.expiresAt - Date.now() > 45000);
+        return true;
       }
       function acquireGsiLock(){
         var now = Date.now();
-        if (gsiPromptLock && now - gsiPromptLockTs < 2000) return false;
+        if (gsiPromptLock && now - gsiPromptLockTs < 2500) {
+          console.log('[GSI] lock active, skip prompt');
+          return false;
+        }
         gsiPromptLock = true; gsiPromptLockTs = now;
-        setTimeout(function(){ gsiPromptLock = false; }, 3000);
+        setTimeout(function(){ gsiPromptLock = false; }, 4000);
         return true;
       }
       function releaseGsiLock(){ gsiPromptLock = false; }
@@ -399,7 +452,11 @@
         var vuState = useState(false); var vaultUnlocked=vuState[0], setVaultUnlocked=vuState[1];
 
         var searchState = useState(''); var search=searchState[0], setSearch=searchState[1];
-        var aaidState = useState(null); var activeAccountId=aaidState[0], setActiveAccountId=aaidState[1];
+        var aaidState = useState(null); // null = all, or single id for backward compat
+        var activeAccountId=aaidState[0], setActiveAccountId=aaidState[1];
+        var filterOpenState = useState(false); var filterOpen=filterOpenState[0], setFilterOpen=filterOpenState[1];
+        var selectedAccsState = useState(new Set()); // multi-select filter
+        var selectedAccs=selectedAccsState[0], setSelectedAccs=selectedAccsState[1];
         var eidState = useState(null); var expandedId=eidState[0], setExpandedId=eidState[1];
         var selState = useState(new Set()); var selectedIds=selState[0], setSelectedIds=selState[1];
         var toastState = useState(null); var toast=toastState[0], setToast=toastState[1];
@@ -450,6 +507,7 @@
           var token = account.accessToken;
 
           if (!isTokenValid(account)) {
+            console.log('[REFRESH] token invalid for', account.email, 'expiresAt=', account.expiresAt);
             if (account.status === 'needs-reauth') return;
             if (!clientId) return;
             if (!acquireGsiLock()) return;
@@ -466,6 +524,7 @@
                 });
               });
             } catch(e) {
+              console.warn('[REFRESH] reauth failed', account.email, e.message);
               if (opts.silent) {
                 setAccounts(function(p){
                   return p.map(function(a){
@@ -598,21 +657,66 @@
                 var p=JSON.parse(r.result); if(!p.data) throw new Error('File không hợp lệ');
                 var pw=prompt('Mật khẩu giải mã:'); if(!pw) return;
                 var data=await decData(p,pw);
-                console.log('[IMPORT] decrypted ok, accounts:', (data.accounts||[]).length);
+                console.log('[IMPORT] decrypted ok, accounts:', (data.accounts||[]).length, 'clientId:', !!data.clientId);
 
-                if (data.accounts)   setAccounts(function(prev){ return mergeById(prev, data.accounts); });
-                if (data.emails)     setEmails(function(prev){ return mergeById(prev, data.emails); });
-                if (data.notes)      setNotes(function(prev){ return Object.assign({}, prev, data.notes); });
-                if (data.signatures) setSignatures(function(prev){ return Object.assign({}, prev, data.signatures); });
-                if (data.settings)   setSettings(function(prev){ return Object.assign({}, prev, data.settings); });
-                if (data.clientId)   { setClientId(data.clientId); localStorage.setItem(LS.CLIENT_ID, data.clientId); }
-                if (data.notebook)   setNotebook(data.notebook);
-                if (data.vault && Array.isArray(data.vault)) { setVault(data.vault); await saveVault(data.vault); }
+                // Force-write everything to localStorage first so state survives any reload
+                if (data.clientId) {
+                  localStorage.setItem(LS.CLIENT_ID, data.clientId);
+                  setClientId(data.clientId);
+                }
+                if (data.accounts) {
+                  // Ensure tokens + expiresAt are kept; mark status live if token looks valid
+                  var restored = (data.accounts||[]).map(function(a){
+                    var acc = Object.assign({}, a);
+                    if (acc.accessToken && acc.expiresAt && (acc.expiresAt - Date.now() > 30000)) {
+                      acc.status = 'live';
+                    } else if (acc.accessToken) {
+                      // keep token but let refresh try silently
+                      acc.status = acc.status || 'live';
+                    }
+                    return acc;
+                  });
+                  saveJSON(LS.ACCOUNTS, restored);
+                  setAccounts(restored);
+                  console.log('[IMPORT] restored accounts with tokens:', restored.filter(function(a){return !!a.accessToken;}).length);
+                }
+                if (data.emails) {
+                  saveJSON(LS.EMAILS, data.emails);
+                  setEmails(data.emails);
+                }
+                if (data.notes) {
+                  saveJSON(LS.NOTES, data.notes);
+                  setNotes(data.notes);
+                }
+                if (data.signatures) {
+                  saveJSON(LS.SIGNATURES, data.signatures);
+                  setSignatures(data.signatures);
+                }
+                if (data.settings) {
+                  saveJSON(LS.SETTINGS, data.settings);
+                  setSettings(function(prev){ return Object.assign({}, prev, data.settings); });
+                }
+                if (data.notebook) {
+                  saveJSON(LS.NOTEBOOK, data.notebook);
+                  setNotebook(data.notebook);
+                }
+                if (data.vault && Array.isArray(data.vault)) {
+                  setVault(data.vault);
+                  // vault is encrypted separately; we store plaintext only in memory for now
+                  try { await saveVault(data.vault); } catch(ve){ console.warn('[IMPORT] vault save skip', ve); }
+                }
 
-                console.log('[IMPORT] state applied, clearing SW cache…');
+                console.log('[IMPORT] state + localStorage written, clearing SW cache…');
                 await swClearCacheAfterImport();
-                console.log('[IMPORT] SW cache cleared — letting useEffect refresh');
-                showToast('Đã nhập backup — đang tải mail…');
+
+                // Debounce any GSI prompt for 3s after import
+                gsiPromptLock = true;
+                gsiPromptLockTs = Date.now();
+                setTimeout(function(){ gsiPromptLock = false; }, 3000);
+
+                showToast('Đã nhập backup — mail sẽ hiện ngay nếu token còn hạn');
+                // Soft refresh only; isTokenValid will skip prompt if tokens good
+                setTimeout(function(){ refreshAll(false); }, 800);
               }catch(e){
                 console.error('[IMPORT] failed:', e);
                 showToast('Giải mã thất bại: '+e.message);
@@ -622,7 +726,7 @@
           };
           input.click();
         };
-        function mergeById(a,b){ var m=new Map(); a.forEach(function(x){m.set(x.id,x);}); b.forEach(function(x){m.set(x.id,Object.assign({},m.get(x.id),x));}); return Array.from(m.values()); }
+        function mergeById(a,b){ var m=new Map(); a.forEach(function(x){m.set(x.id,x);}); b.forEach(function(x){m.set(x.id,Object.assign({},m.get(x.id)||{},x));}); return Array.from(m.values()); }
 
         var onReauth = async function(a){
           if(!clientId){ setModal('clientId'); return; }
@@ -645,27 +749,34 @@
 
         var filtered = useMemo(function(){
           var list=emails;
-          if(activeAccountId) list=list.filter(function(e){return e.accountId===activeAccountId;});
+          if (selectedAccs.size > 0) {
+            list = list.filter(function(e){ return selectedAccs.has(e.accountId); });
+          } else if (activeAccountId) {
+            list = list.filter(function(e){ return e.accountId === activeAccountId; });
+          }
           var q=search.trim().toLowerCase();
           if(q) list=list.filter(function(e){ var acc=accounts.find(function(a){return a.id===e.accountId;}); return (e.from||'').toLowerCase().indexOf(q)>=0||(e.subject||'').toLowerCase().indexOf(q)>=0||(e.snippet||'').toLowerCase().indexOf(q)>=0||(e.otp||'').indexOf(q)>=0||((acc&&acc.displayName)||'').toLowerCase().indexOf(q)>=0||((acc&&acc.email)||'').toLowerCase().indexOf(q)>=0; });
           return list.slice().sort(function(a,b){return b.internalDate-a.internalDate;});
-        },[emails,accounts,activeAccountId,search]);
+        },[emails,accounts,activeAccountId,selectedAccs,search]);
 
         var unreadByAccount = useMemo(function(){ var m={}; emails.forEach(function(e){ if(e.isUnread) m[e.accountId]=(m[e.accountId]||0)+1; }); return m; },[emails]);
         var expandedEmail = expandedId ? emails.find(function(e){return e.id===expandedId;}) : null;
         var editingAccount = editingAccountId ? accounts.find(function(a){return a.id===editingAccountId;}) : null;
         var unreadTotal = Object.values(unreadByAccount).reduce(function(s,v){return s+v;},0);
 
-        return h('div',{class:'app'},
+        return h('div',{class:'app',onClick:function(){ if(filterOpen) setFilterOpen(false); }},
           h(Header,{accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){setModal('export');},onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
           activeTab==='gmail' && h(GmailTab,{
             accounts:accounts, filtered:filtered, search:search, setSearch:setSearch,
             activeAccountId:activeAccountId, setActiveAccountId:setActiveAccountId,
+            selectedAccs:selectedAccs, setSelectedAccs:setSelectedAccs,
+            filterOpen:filterOpen, setFilterOpen:setFilterOpen,
             unreadByAccount:unreadByAccount, selectedIds:selectedIds, setSelectedIds:setSelectedIds,
             copyText:copyText,
             onExpand:function(e){ setExpandedId(e.id); if(e.isUnread){ var acc=accounts.find(function(a){return a.id===e.accountId;}); if(acc) gmailModify(acc.accessToken,e.id,[],['UNREAD']).then(function(){setEmails(function(p){return p.map(function(x){return x.id===e.id?Object.assign({},x,{isUnread:false}):x;});});}).catch(function(){}); } },
             renameId:renameId, renameValue:renameValue, setRenameId:setRenameId, setRenameValue:setRenameValue,
             onRenameSave:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{displayName:v}):x;});}); setRenameId(null); },
+            onUpdateTag:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{tag:v}):x;});}); },
             onDeleteAccount:deleteAccount, onEditAccount:function(a){setEditingAccountId(a.id);},
             onReauth:onReauth,
             onDeleteEmail:deleteEmail, onBulkRead:bulkMarkRead, onBulkDelete:bulkDelete,
@@ -733,31 +844,69 @@
                 props.search && h('button',{class:'search-clear',onClick:function(){props.setSearch('');}},h(Ico,{d:'x',size:12}))
               )
             ),
-            props.accounts.length>0 && h('div',{class:'pills'}, props.accounts.map(function(a){
-              var editing=props.renameId===a.id; var unread=props.unreadByAccount[a.id]||0;
-              return h('div',{key:a.id,class:'pill-group'},
-                h('div',{class:'dot',style:{background:a.color}}),
-                editing
-                  ? h('input',{class:'pill-edit',value:props.renameValue,style:{background:rgba(a.color,.12),borderColor:darken(a.color,.3),color:'var(--text)'},onInput:function(e){props.setRenameValue(e.target.value);},onBlur:function(){var v=props.renameValue.trim(); if(v) props.onRenameSave(a.id,v); else props.setRenameId(null);},onKeyDown:function(e){if(e.key==='Enter')e.target.blur(); if(e.key==='Escape')props.setRenameId(null);},autoFocus:true})
-                  : h('button',{class:'pill '+(props.activeAccountId===a.id?'active':''),style:{background:rgba(a.color,.12),borderColor:darken(a.color,.3),color:a.color},onClick:function(){props.setActiveAccountId(props.activeAccountId===a.id?null:a.id);},onDblClick:function(){props.setRenameId(a.id);props.setRenameValue(a.displayName);},title:a.email+(a.tag?' • '+a.tag:'')},
-                      a.displayName,
-                      unread>0 && h('span',{class:'unread-badge'},unread),
-                      a.status==='needs-reauth'
-                        ? h('button',{
-                            onClick:function(ev){ ev.stopPropagation(); props.onReauth(a); },
-                            title:'Cần đăng nhập lại — nhấp để xác thực',
-                            style:{marginLeft:'4px',color:'var(--warning)',fontSize:'11px',fontWeight:'700',background:'none',border:'none',cursor:'pointer',padding:'0 2px'}
-                          },'⚠')
-                        : a.status==='dead'
-                          ? h('span',{style:{marginLeft:'4px',color:'var(--danger)',fontSize:'10px'}},'✕')
-                          : null
+            props.accounts.length>0 && h('div',{style:{paddingBottom:'10px',position:'relative'}},
+              h('button',{
+                class:'btn btn-sm',
+                style:{height:'28px',gap:'6px'},
+                onClick:function(){props.setFilterOpen(!props.filterOpen);}
+              },
+                'Lọc theo Gmail',
+                h('span',{style:{fontSize:'10px',opacity:.7}},'▼'),
+                (props.selectedAccs.size>0 || props.activeAccountId) && h('span',{class:'unread-badge',style:{marginLeft:'2px'}}, props.selectedAccs.size || 1)
+              ),
+              props.filterOpen && h('div',{
+                style:{
+                  position:'absolute', top:'32px', left:0, zIndex:40,
+                  width:'min(320px,92vw)', maxHeight:'300px', overflowY:'auto',
+                  background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'12px',
+                  boxShadow:'0 12px 28px -8px rgba(0,0,0,.18)', padding:'8px'
+                },
+                onClick:function(e){e.stopPropagation();}
+              },
+                h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
+                  h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set()); props.setActiveAccountId(null);}},'Tất cả'),
+                  h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set()); props.setActiveAccountId(null); props.setFilterOpen(false);}},'Xóa lọc')
+                ),
+                props.accounts.map(function(a){
+                  var unread=props.unreadByAccount[a.id]||0;
+                  var checked = props.selectedAccs.has(a.id) || props.activeAccountId===a.id;
+                  return h('div',{key:a.id,style:{display:'flex',alignItems:'flex-start',gap:'8px',padding:'8px 6px',borderRadius:'8px',background:checked?'var(--surface-2)':'transparent'}},
+                    h('input',{type:'checkbox',checked:checked,style:{marginTop:'3px',accentColor:a.color},
+                      onChange:function(){
+                        props.setActiveAccountId(null);
+                        props.setSelectedAccs(function(prev){
+                          var n=new Set(prev);
+                          if(n.has(a.id)) n.delete(a.id); else n.add(a.id);
+                          return n;
+                        });
+                      }
+                    }),
+                    h('div',{class:'dot',style:{background:a.color,marginTop:'6px'}}),
+                    h('div',{style:{flex:1,minWidth:0}},
+                      h('div',{style:{display:'flex',alignItems:'center',gap:'6px',flexWrap:'wrap'}},
+                        h('span',{style:{fontWeight:600,fontSize:'12.5px'}},a.displayName),
+                        unread>0 && h('span',{class:'unread-badge'},unread),
+                        a.status==='needs-reauth' && h('button',{onClick:function(ev){ev.stopPropagation();props.onReauth(a);},style:{color:'var(--warning)',fontSize:'11px',fontWeight:700,background:'none',border:'none',cursor:'pointer'}},'⚠ Reauth'),
+                        a.status==='dead' && h('span',{style:{color:'var(--danger)',fontSize:'10px'}},'✕')
+                      ),
+                      h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',marginTop:'1px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email),
+                      h('input',{
+                        class:'field-input',
+                        style:{height:'24px',fontSize:'11px',marginTop:'4px',padding:'0 8px'},
+                        value:a.tag||'',
+                        placeholder:'Tag / chủ đề (Shop US, Ads...)',
+                        onInput:function(e){ if(props.onUpdateTag) props.onUpdateTag(a.id, e.target.value); },
+                        onClick:function(e){e.stopPropagation();}
+                      })
                     ),
-                h('div',{class:'pill-actions'},
-                  h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
-                  h('button',{class:'pill-x',onClick:function(){props.onDeleteAccount(a.id);},title:'Xóa'},h(Ico,{d:'x',size:11}))
-                )
-              );
-            }))
+                    h('div',{style:{display:'flex',gap:'2px',flexShrink:0}},
+                      h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
+                      h('button',{class:'pill-x',onClick:function(){props.onDeleteAccount(a.id);},title:'Xóa'},h(Ico,{d:'x',size:11}))
+                    )
+                  );
+                })
+              )
+            )
           ),
           h('div',{class:'swipe-hint'},'← Vuốt hàng sang phải để xóa • Hover hàng có nút 🗑'),
           h('div',{class:'table-header'},h('div',{class:'table-header-inner'},
@@ -834,13 +983,35 @@
         var saveContent=function(){ if(editorRef.current && note) updateNote({content:editorRef.current.innerHTML}); };
         var insertCodeBlock=function(){
           var lang=prompt('Ngôn ngữ:','javascript')||'javascript';
-          var label=prompt('Tên khối code:','【entity-shopify¦canonical_name=Shopify】 API key')||'Code';
+          var label=prompt('Tên khối code:','Code')||'Code';
           var el=document.createElement('div');
           el.className='code-block-wrapper'; el.contentEditable='false';
-          el.innerHTML='<div class="code-block-head"><span class="code-block-label" contenteditable="true">'+esc(label)+'</span><select class="code-lang">'+['javascript','typescript','html','css','json','python','java','csharp','go','rust','php','ruby','bash','sql','yaml','markdown','plaintext'].map(function(l){return '<option value="'+l+'"'+(l===lang?' selected':'')+'>'+l+'</option>';}).join('')+'</select><button class="copy-code-btn">Copy</button><button class="toggle-code-btn">▾</button></div><div class="code-block-body"><pre><code class="language-'+lang+'">// Paste code here</code></pre></div><div class="code-block-resize"></div>';
-          el.querySelector('.copy-code-btn').onclick=function(){ var pre=el.querySelector('pre code'); navigator.clipboard.writeText(pre.innerText); this.textContent='✓'; var btn=this; setTimeout(function(){btn.textContent='Copy';},1000); };
+          el.innerHTML=
+            '<div class="code-block-head">'+
+              '<span class="code-block-label" contenteditable="true">'+esc(label)+'</span>'+
+              '<select class="code-lang">'+['javascript','typescript','html','css','json','python','java','csharp','go','rust','php','ruby','bash','sql','yaml','markdown','plaintext'].map(function(l){return '<option value="'+l+'"'+(l===lang?' selected':'')+'>'+l+'</option>';}).join('')+'</select>'+
+              '<button type="button" class="wrap-code-btn" title="Toggle wrap">Wrap</button>'+
+              '<button type="button" class="copy-code-btn">Copy</button>'+
+              '<button type="button" class="toggle-code-btn">▾</button>'+
+            '</div>'+
+            '<div class="code-block-body">'+
+              '<pre contenteditable="true" spellcheck="false" data-placeholder="Paste code here..."><code class="language-'+lang+'"></code></pre>'+
+            '</div>'+
+            '<div class="code-block-resize"></div>';
+          var pre = el.querySelector('pre');
+          var code = el.querySelector('code');
+          // Make the pre the editable surface; keep code for Prism class
+          pre.addEventListener('input', function(){ saveContent(); });
+          pre.addEventListener('focus', function(){ if(!code.textContent.trim()) code.textContent=''; });
+          el.querySelector('.copy-code-btn').onclick=function(){ navigator.clipboard.writeText(pre.innerText||''); this.textContent='✓'; var btn=this; setTimeout(function(){btn.textContent='Copy';},1000); };
           el.querySelector('.toggle-code-btn').onclick=function(){ var b=el.querySelector('.code-block-body'); b.classList.toggle('collapsed'); this.textContent=b.classList.contains('collapsed')?'▸':'▾'; };
-          el.querySelector('.code-lang').onchange=function(){ var pre=el.querySelector('pre code'); pre.className='language-'+this.value; if(window.Prism) Prism.highlightElement(pre); };
+          el.querySelector('.wrap-code-btn').onclick=function(){
+            var wrapped = pre.style.whiteSpace === 'pre-wrap';
+            pre.style.whiteSpace = wrapped ? 'pre' : 'pre-wrap';
+            pre.style.wordBreak = wrapped ? 'normal' : 'break-all';
+            this.textContent = wrapped ? 'Wrap' : 'No wrap';
+          };
+          el.querySelector('.code-lang').onchange=function(){ code.className='language-'+this.value; if(window.Prism) Prism.highlightElement(code); };
           var sel=window.getSelection(); if(sel.rangeCount){ var r=sel.getRangeAt(0); r.deleteContents(); r.insertNode(el); r.setStartAfter(el); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
           if(window.Prism) Prism.highlightAll();
           saveContent();
@@ -853,9 +1024,26 @@
             var f=files[i]; if(!f.type.startsWith('image/')) continue;
             var b64=await fileToB64(f);
             var el=document.createElement('div');
-            el.className='img-block'; el.contentEditable='false'; el.style.width='320px'; el.style.height='auto';
-            el.innerHTML='<img src="data:'+f.type+';base64,'+b64+'" alt=""><caption contenteditable="true">Nhập chú thích...</caption>';
+            el.className='img-block'; el.contentEditable='false';
+            el.style.width='280px'; el.style.maxWidth='300px'; el.style.maxHeight='300px'; el.style.height='auto';
+            el.innerHTML=
+              '<div class="img-controls">'+
+                '<button type="button" class="img-full">Full</button>'+
+                '<button type="button" class="img-small">Nhỏ</button>'+
+              '</div>'+
+              '<img src="data:'+f.type+';base64,'+b64+'" alt="" style="max-width:100%;max-height:280px;object-fit:contain">'+
+              '<caption contenteditable="true">Nhập chú thích...</caption>';
             (function(imgEl){
+              imgEl.querySelector('.img-full').onclick = function(ev){
+                ev.stopPropagation();
+                imgEl.style.maxWidth='100%'; imgEl.style.width='100%'; imgEl.style.maxHeight='none';
+                imgEl.querySelector('img').style.maxHeight='none';
+              };
+              imgEl.querySelector('.img-small').onclick = function(ev){
+                ev.stopPropagation();
+                imgEl.style.maxWidth='300px'; imgEl.style.width='280px'; imgEl.style.maxHeight='300px';
+                imgEl.querySelector('img').style.maxHeight='280px';
+              };
               imgEl.querySelector('img').onclick = function(){
                 var url = imgEl.querySelector('img').src;
                 window.open().document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+url+'" style="max-width:100%;max-height:100vh"></body></html>');
@@ -1148,6 +1336,14 @@
             h('label',{class:'field-label'},'Client ID'),
             h('div',{class:'field-help'},props.clientId?'✓ Đã cấu hình':'⚠ Chưa cấu hình'),
             h('button',{class:'btn btn-sm',style:{marginTop:'6px'},onClick:props.onOpenClientId},'Cấu hình')
+          ),
+          h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
+            h('div',{style:{fontSize:'12px',fontWeight:700,marginBottom:'6px'}},'☁ Cloudflare Email Workers (nâng cao)'),
+            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55}},
+              'Không cần Gmail. Viết ~10 dòng JS trên Cloudflare Email Workers: mọi mail gửi tới *@domain-của-bạn sẽ được Worker đọc OTP/magic link rồi bắn thẳng Telegram/Discord. Nhanh hơn Gmail API, không cần mở app này nữa.',
+              h('br'),
+              h('span',{style:{color:'var(--text-3)'}},'Brief đầy đủ nằm trong comment đầu file hoặc hỏi AI để generate Worker code.')
+            )
           )
         );
       }
