@@ -201,7 +201,6 @@
   <script src="https://unpkg.com/preact@10.19.6/hooks/dist/hooks.umd.js"></script>
   <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
   <script>
-    // Error guard
     window.addEventListener('error', function(e){ if(!document.getElementById('app').innerHTML.trim()){ document.getElementById('boot-error').style.display='block'; } });
     setTimeout(function(){ if(!document.getElementById('app').innerHTML.trim()){ document.getElementById('boot-error').style.display='block'; } }, 5000);
 
@@ -216,6 +215,34 @@
           useRef = window.preactHooks.useRef, useMemo = window.preactHooks.useMemo,
           useCallback = window.preactHooks.useCallback;
       var html = window.htm.bind(h);
+
+      /* ============ SERVICE WORKER ============ */
+      if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        navigator.serviceWorker.register('./sw.js').then(function(reg){
+          console.log('[SW] registered:', reg.scope);
+        }).catch(function(e){ console.warn('[SW] register failed:', e); });
+
+        navigator.serviceWorker.addEventListener('controllerchange', function(){
+          var key = 'gh_sw_ctrl_reload';
+          if (sessionStorage.getItem(key)) return;
+          sessionStorage.setItem(key, '1');
+          window.location.reload();
+        });
+      }
+      function swClearCacheAfterImport(){
+        return new Promise(function(resolve){
+          if (!navigator.serviceWorker || !navigator.serviceWorker.controller){ resolve(); return; }
+          try{
+            var ch = new MessageChannel();
+            var done = false;
+            ch.port1.onmessage = function(){ if(!done){ done = true; resolve(); } };
+            navigator.serviceWorker.controller.postMessage(
+              {type:'CLEAR_CACHE_AFTER_IMPORT'}, [ch.port2]
+            );
+            setTimeout(function(){ if(!done){ done=true; resolve(); } }, 1500);
+          }catch(e){ resolve(); }
+        });
+      }
 
       /* ============ UTILS ============ */
       var COLORS = ['#2563EB','#DB2777','#059669','#EA580C','#7C3AED','#0891B2','#16A34A','#DC2626','#D97706','#4F46E5'];
@@ -233,6 +260,22 @@
       function utf8ToB64Url(s){ return utf8ToB64(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
       function wrap76(s){ return s.match(/.{1,76}/g)?.join('\r\n')||s; }
       function fileToB64(f){ return new Promise(function(res,rej){var r=new FileReader(); r.onload=function(){res(String(r.result).split(',')[1]||'');}; r.onerror=rej; r.readAsDataURL(f);}); }
+
+      /* ============ AUTH HELPERS ============ */
+      var gsiPromptLock = false, gsiPromptLockTs = 0;
+      function isTokenValid(acc){
+        return !!(acc && acc.accessToken && acc.expiresAt &&
+                 (acc.expiresAt - Date.now() > 60000));
+      }
+      function acquireGsiLock(){
+        var now = Date.now();
+        if (gsiPromptLock && now - gsiPromptLockTs < 2000) return false;
+        gsiPromptLock = true; gsiPromptLockTs = now;
+        setTimeout(function(){ gsiPromptLock = false; }, 3000);
+        return true;
+      }
+      function releaseGsiLock(){ gsiPromptLock = false; }
+
       function genPassword(len){ len=len||20; var s='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+'; var p=''; var arr=new Uint32Array(len); crypto.getRandomValues(arr); for(var i=0;i<len;i++) p+=s[arr[i]%s.length]; return p; }
 
       /* ============ STORAGE ============ */
@@ -282,7 +325,7 @@
         L.push('--'+b+'--'); return L.join('\r\n');
       }
 
-      /* ============ MARKDOWN (minimal) ============ */
+      /* ============ MARKDOWN ============ */
       function mdToHtml(md){
         if(!md) return '';
         var s = md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -402,16 +445,49 @@
           return parsed;
         },[playBeep,notifyBrowser]);
 
-        var refreshAccount = useCallback(async function(account,opts){
-          opts=opts||{silent:true};
-          var token=account.accessToken;
-          if(!token||!account.expiresAt||account.expiresAt-Date.now()<60000){
-            if(!clientId) return;
-            try{ var resp=await gsiSignIn(clientId,account.email); token=resp.access_token; var exp=Date.now()+(resp.expires_in||3600)*1000; setAccounts(function(p){return p.map(function(a){return a.id===account.id?Object.assign({},a,{accessToken:token,expiresAt:exp}):a;});}); }
-            catch(e){ if(!opts.silent) showToast('Cần đăng nhập lại: '+account.email); return; }
+        var refreshAccount = useCallback(async function(account, opts){
+          opts = opts || {silent: true};
+          var token = account.accessToken;
+
+          if (!isTokenValid(account)) {
+            if (account.status === 'needs-reauth') return;
+            if (!clientId) return;
+            if (!acquireGsiLock()) return;
+
+            try {
+              var resp = await gsiSignIn(clientId, account.email);
+              token = resp.access_token;
+              var exp = Date.now() + (resp.expires_in || 3600) * 1000;
+              setAccounts(function(p){
+                return p.map(function(a){
+                  return a.id === account.id
+                    ? Object.assign({}, a, {accessToken: token, expiresAt: exp, status: 'live'})
+                    : a;
+                });
+              });
+            } catch(e) {
+              if (opts.silent) {
+                setAccounts(function(p){
+                  return p.map(function(a){
+                    return a.id === account.id ? Object.assign({}, a, {status: 'needs-reauth'}) : a;
+                  });
+                });
+              } else {
+                showToast('Cần đăng nhập lại: ' + account.email);
+              }
+              releaseGsiLock();
+              return;
+            } finally {
+              releaseGsiLock();
+            }
           }
-          await fetchAccountEmails(account,token);
-        },[clientId,fetchAccountEmails,showToast]);
+
+          try {
+            await fetchAccountEmails(account, token);
+          } catch(e) {
+            if (!opts.silent) showToast('Lỗi tải mail: ' + (e.message || ''));
+          }
+        }, [clientId, fetchAccountEmails, showToast]);
 
         var refreshAll = useCallback(async function(manual){
           if(refreshLock.current||!clientId) return;
@@ -501,7 +577,7 @@
         var doExport = async function(pw,silent){
           if(!pw||pw.length<4){ showToast('Mật khẩu phải ≥ 4 ký tự'); return; }
           var data={version:3,exportedAt:new Date().toISOString(),
-            accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status};}),
+            accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,expiresAt:a.expiresAt};}),
             emails:emails, notes:notes, signatures:signatures, settings:settings, clientId:clientId, notebook:notebook, vault:vault};
           try{
             var enc=await encData(data,pw);
@@ -522,22 +598,50 @@
                 var p=JSON.parse(r.result); if(!p.data) throw new Error('File không hợp lệ');
                 var pw=prompt('Mật khẩu giải mã:'); if(!pw) return;
                 var data=await decData(p,pw);
-                if(data.accounts) setAccounts(function(prev){return mergeById(prev,data.accounts);});
-                if(data.emails) setEmails(function(prev){return mergeById(prev,data.emails);});
-                if(data.notes) setNotes(function(prev){return Object.assign({},prev,data.notes);});
-                if(data.signatures) setSignatures(function(prev){return Object.assign({},prev,data.signatures);});
-                if(data.settings) setSettings(function(prev){return Object.assign({},prev,data.settings);});
-                if(data.clientId){ setClientId(data.clientId); localStorage.setItem(LS.CLIENT_ID,data.clientId); }
-                if(data.notebook) setNotebook(data.notebook);
-                if(data.vault && Array.isArray(data.vault)){ setVault(data.vault); await saveVault(data.vault); }
-                showToast('Đã nhập backup');
-              }catch(e){ showToast('Giải mã thất bại: '+e.message); }
+                console.log('[IMPORT] decrypted ok, accounts:', (data.accounts||[]).length);
+
+                if (data.accounts)   setAccounts(function(prev){ return mergeById(prev, data.accounts); });
+                if (data.emails)     setEmails(function(prev){ return mergeById(prev, data.emails); });
+                if (data.notes)      setNotes(function(prev){ return Object.assign({}, prev, data.notes); });
+                if (data.signatures) setSignatures(function(prev){ return Object.assign({}, prev, data.signatures); });
+                if (data.settings)   setSettings(function(prev){ return Object.assign({}, prev, data.settings); });
+                if (data.clientId)   { setClientId(data.clientId); localStorage.setItem(LS.CLIENT_ID, data.clientId); }
+                if (data.notebook)   setNotebook(data.notebook);
+                if (data.vault && Array.isArray(data.vault)) { setVault(data.vault); await saveVault(data.vault); }
+
+                console.log('[IMPORT] state applied, clearing SW cache…');
+                await swClearCacheAfterImport();
+                console.log('[IMPORT] SW cache cleared — letting useEffect refresh');
+                showToast('Đã nhập backup — đang tải mail…');
+              }catch(e){
+                console.error('[IMPORT] failed:', e);
+                showToast('Giải mã thất bại: '+e.message);
+              }
             };
             r.readAsText(f);
           };
           input.click();
         };
         function mergeById(a,b){ var m=new Map(); a.forEach(function(x){m.set(x.id,x);}); b.forEach(function(x){m.set(x.id,Object.assign({},m.get(x.id),x));}); return Array.from(m.values()); }
+
+        var onReauth = async function(a){
+          if(!clientId){ setModal('clientId'); return; }
+          try {
+            var resp = await gsiSignIn(clientId, a.email);
+            var exp = Date.now() + (resp.expires_in || 3600) * 1000;
+            setAccounts(function(p){
+              return p.map(function(x){
+                return x.id === a.id
+                  ? Object.assign({}, x, {accessToken: resp.access_token, expiresAt: exp, status: 'live'})
+                  : x;
+              });
+            });
+            showToast('Đã đăng nhập lại: ' + a.email);
+            setTimeout(function(){ refreshAll(true); }, 400);
+          } catch(e) {
+            showToast('Đăng nhập thất bại: ' + e.message);
+          }
+        };
 
         var filtered = useMemo(function(){
           var list=emails;
@@ -563,6 +667,7 @@
             renameId:renameId, renameValue:renameValue, setRenameId:setRenameId, setRenameValue:setRenameValue,
             onRenameSave:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{displayName:v}):x;});}); setRenameId(null); },
             onDeleteAccount:deleteAccount, onEditAccount:function(a){setEditingAccountId(a.id);},
+            onReauth:onReauth,
             onDeleteEmail:deleteEmail, onBulkRead:bulkMarkRead, onBulkDelete:bulkDelete,
             selectedCount:selectedIds.size, onClearSelection:function(){setSelectedIds(new Set());}
           }),
@@ -637,7 +742,15 @@
                   : h('button',{class:'pill '+(props.activeAccountId===a.id?'active':''),style:{background:rgba(a.color,.12),borderColor:darken(a.color,.3),color:a.color},onClick:function(){props.setActiveAccountId(props.activeAccountId===a.id?null:a.id);},onDblClick:function(){props.setRenameId(a.id);props.setRenameValue(a.displayName);},title:a.email+(a.tag?' • '+a.tag:'')},
                       a.displayName,
                       unread>0 && h('span',{class:'unread-badge'},unread),
-                      a.status==='dead' && h('span',{style:{marginLeft:'4px',color:'var(--danger)',fontSize:'10px'}},'✕')
+                      a.status==='needs-reauth'
+                        ? h('button',{
+                            onClick:function(ev){ ev.stopPropagation(); props.onReauth(a); },
+                            title:'Cần đăng nhập lại — nhấp để xác thực',
+                            style:{marginLeft:'4px',color:'var(--warning)',fontSize:'11px',fontWeight:'700',background:'none',border:'none',cursor:'pointer',padding:'0 2px'}
+                          },'⚠')
+                        : a.status==='dead'
+                          ? h('span',{style:{marginLeft:'4px',color:'var(--danger)',fontSize:'10px'}},'✕')
+                          : null
                     ),
                 h('div',{class:'pill-actions'},
                   h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
@@ -742,7 +855,12 @@
             var el=document.createElement('div');
             el.className='img-block'; el.contentEditable='false'; el.style.width='320px'; el.style.height='auto';
             el.innerHTML='<img src="data:'+f.type+';base64,'+b64+'" alt=""><caption contenteditable="true">Nhập chú thích...</caption>';
-            (function(imgel){ imgEl.querySelector('img').onclick=function(){ var url=imgEl.querySelector('img').src; window.open().document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+url+'" style="max-width:100%;max-height:100vh"></body></html>'); }; })(el);
+            (function(imgEl){
+              imgEl.querySelector('img').onclick = function(){
+                var url = imgEl.querySelector('img').src;
+                window.open().document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+url+'" style="max-width:100%;max-height:100vh"></body></html>');
+              };
+            })(el);
             var sel=window.getSelection(); if(sel.rangeCount){ var r=sel.getRangeAt(0); r.deleteContents(); r.insertNode(el); r.setStartAfter(el); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
           }
           saveContent();
@@ -777,7 +895,13 @@
                 ? h('div',{style:{padding:'20px',textAlign:'center',color:'var(--text-3)',fontSize:'12px'}},'Chưa có ghi chú nào')
                 : filteredNotes.map(function(n){
                     var acc=props.accounts.find(function(a){return a.id===n.accountId;});
-                    return h('div',{key:n.id,class:'nb-note-item '+(activeNote===n.id?'active':''),onClick:function(){setActiveNote(n.id);setMdValue(n.markdown||'');},onContextMenu:function(ev){ev.preventDefault(); if(confirm('Xóa ghi chú?')) deleteNote(n.id);}},
+                    return h('div',{key:n.id,class:'nb-note-item '+(activeNote===n.id?'active':''),
+                      onClick:function(){
+                        setActiveNote(n.id);
+                        setMdValue(n.markdown||'');
+                        if (window.innerWidth < 768) setSidebarOpen(false);
+                      },
+                      onContextMenu:function(ev){ev.preventDefault(); if(confirm('Xóa ghi chú?')) deleteNote(n.id);}},
                       h('div',{class:'nb-note-title'},(n.pinned?'📌 ':'')+(n.title||'(Chưa đặt tên)')),
                       h('div',{class:'nb-note-meta'},
                         h('span',null,formatDate(n.updatedAt)),
@@ -1113,10 +1237,8 @@
         );
       }
 
-      // Mount
       render(h(App), document.getElementById('app'));
 
-      // Load Prism for notebook code blocks (optional, lazy)
       setTimeout(function(){
         if(window.Prism) return;
         var s1=document.createElement('script'); s1.src='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js';
