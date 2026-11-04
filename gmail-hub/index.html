@@ -213,6 +213,39 @@
   </div>
   <div id="app"></div>
 
+  <script type="text/plain" id="cf-worker-tpl">
+// Cloudflare Email Worker — OTP -> Telegram / Discord
+// Secrets (Settings > Variables): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK (tuỳ chọn)
+export default {
+  async email(message, env, ctx) {
+    const raw = await new Response(message.raw).text();
+    const subject = message.headers.get("subject") || "";
+    // Bỏ header MIME + thẻ HTML, ưu tiên mã đứng riêng 4-8 số
+    const body = raw.split(/\r?\n\r?\n/).slice(1).join(" ").replace(/<[^>]+>/g, " ");
+    const hit = (subject + " " + body).match(/(?<![\d#.])(\d{4,8})(?![\d.])/);
+    const otp = hit ? hit[1] : null;
+    if (otp) {
+      const text = `🔐 OTP ${otp}\nTừ: ${message.from}\nĐến: ${message.to}\nSubject: ${subject}`;
+      const jobs = [];
+      if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
+        jobs.push(fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text })
+        }));
+      }
+      if (env.DISCORD_WEBHOOK) {
+        jobs.push(fetch(env.DISCORD_WEBHOOK, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: text })
+        }));
+      }
+      ctx.waitUntil(Promise.allSettled(jobs));
+    }
+    // Vẫn chuyển tiếp về Gmail chính (địa chỉ phải được verify trong Email Routing)
+    await message.forward("leha.golfcare02@gmail.com");
+  }
+};
+</script>
   <script src="https://unpkg.com/preact@10.19.6/dist/preact.umd.js"></script>
   <script src="https://unpkg.com/preact@10.19.6/hooks/dist/hooks.umd.js"></script>
   <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
@@ -445,7 +478,7 @@
         var emState = useState(function(){ return loadJSON(LS.EMAILS,[]); }); var emails=emState[0], setEmails=emState[1];
         var nState = useState(function(){ return loadJSON(LS.NOTES,{}); }); var notes=nState[0], setNotes=nState[1];
         var sigState = useState(function(){ return loadJSON(LS.SIGNATURES,{}); }); var signatures=sigState[0], setSignatures=sigState[1];
-        var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash'}); }); var settings=settingsState[0], setSettings=settingsState[1];
+        var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash',cfEnabled:false,cfTgToken:'',cfTgChat:'',cfDiscord:''}); }); var settings=settingsState[0], setSettings=settingsState[1];
         var nbState = useState(function(){ return loadJSON(LS.NOTEBOOK,{notes:[],folders:['Inbox'],activeId:null}); }); var notebook=nbState[0], setNotebook=nbState[1];
         var vState = useState([]); var vault=vState[0], setVault=vState[1];
         var vpState = useState(null); var vaultPass=vpState[0], setVaultPass=vpState[1];
@@ -765,7 +798,7 @@
         var unreadTotal = Object.values(unreadByAccount).reduce(function(s,v){return s+v;},0);
 
         return h('div',{class:'app',onClick:function(){ if(filterOpen) setFilterOpen(false); }},
-          h(Header,{accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){setModal('export');},onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
+          h(Header,{cfOn:!!(settings.cfEnabled&&(settings.cfTgToken||settings.cfDiscord)),accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){setModal('export');},onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
           activeTab==='gmail' && h(GmailTab,{
             accounts:accounts, filtered:filtered, search:search, setSearch:setSearch,
             activeAccountId:activeAccountId, setActiveAccountId:setActiveAccountId,
@@ -807,6 +840,7 @@
           h('div',{class:'brand'},
             h('div',{class:'brand-icon'},'G'),
             h('div',{class:'brand-text'}, h('span',{class:'brand-title'},'Gmail Hub'), h('span',{class:'brand-sub'}, props.activeTab==='notebook'?'Notebook':props.activeTab==='vault'?'Vault':'OTP Manager')),
+            props.cfOn && h('span',{title:'Cloudflare Workers đang bật',style:{fontSize:'10px',fontWeight:700,color:'#16A34A',border:'1px solid #16A34A',borderRadius:'999px',padding:'1px 6px',whiteSpace:'nowrap'}},'CF Workers: ON'),
             h('div',{class:'header-stats'}, h('span',null,props.accounts.length+' tài khoản'), h('span',null,'•'), h('span',null,props.emails.length+' email'))
           ),
           h('div',{class:'header-actions'},
@@ -1338,11 +1372,25 @@
             h('button',{class:'btn btn-sm',style:{marginTop:'6px'},onClick:props.onOpenClientId},'Cấu hình')
           ),
           h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
-            h('div',{style:{fontSize:'12px',fontWeight:700,marginBottom:'6px'}},'☁ Cloudflare Email Workers (nâng cao)'),
-            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55}},
-              'Không cần Gmail. Viết ~10 dòng JS trên Cloudflare Email Workers: mọi mail gửi tới *@domain-của-bạn sẽ được Worker đọc OTP/magic link rồi bắn thẳng Telegram/Discord. Nhanh hơn Gmail API, không cần mở app này nữa.',
-              h('br'),
-              h('span',{style:{color:'var(--text-3)'}},'Brief đầy đủ nằm trong comment đầu file hoặc hỏi AI để generate Worker code.')
+            h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'8px'}},
+              h('div',{style:{fontSize:'12px',fontWeight:700}},'☁ Cloudflare Workers OTP Auto'),
+              h('button',{style:{width:'34px',height:'20px',borderRadius:'999px',background:settings.cfEnabled?'#16A34A':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer',flexShrink:0},onClick:function(){set('cfEnabled',!settings.cfEnabled);}},
+                h('span',{style:{position:'absolute',top:'2px',left:settings.cfEnabled?'16px':'2px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}}))
+            ),
+            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.5,marginTop:'6px'}},'Mail gửi tới *@leha.world → Worker đọc OTP → bắn Telegram/Discord. Token chỉ lưu trên máy này (dùng để gửi thử); Worker đọc token từ Secrets của Cloudflare.'),
+            [['cfTgToken','Telegram Bot Token','password'],['cfTgChat','Telegram Chat ID','text'],['cfDiscord','Discord Webhook URL (tuỳ chọn)','text']].map(function(f){
+              return h('input',{key:f[0],type:f[2],class:'field-input',autocomplete:'off',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:f[1],value:settings[f[0]]||'',onInput:function(e){set(f[0],e.target.value.trim());}});
+            }),
+            h('div',{style:{display:'flex',flexWrap:'wrap',gap:'6px',marginTop:'8px'}},
+              h('button',{class:'btn btn-sm',onClick:function(){var t=document.getElementById('cf-worker-tpl').textContent.trim(); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){alert('Đã copy Workers code');}); }},'Copy Workers Code'),
+              h('button',{class:'btn btn-sm',disabled:!(settings.cfTgToken&&settings.cfTgChat),onClick:async function(){
+                try{ var r=await fetch('https://api.telegram.org/bot'+settings.cfTgToken+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:settings.cfTgChat,text:'✅ Gmail Hub: kết nối Telegram OK'})}); alert(r.ok?'Đã gửi tin thử':'Telegram từ chối ('+r.status+'), kiểm tra token/chat id'); }catch(e){ alert('Lỗi: '+e.message); }
+              }},'Gửi thử Telegram')
+            ),
+            h('ol',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55,margin:'10px 0 0',paddingLeft:'16px'}},
+              h('li',null,'Cloudflare → domain leha.world → Email → Email Routing → Enable, verify địa chỉ Gmail đích.'),
+              h('li',null,'Workers & Pages → Create Worker → dán code vừa copy → thêm Secrets: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK.'),
+              h('li',null,'Email Routing → Routing rules → Catch-all → Send to a Worker → chọn Worker. Rồi bật công tắc ở trên.')
             )
           )
         );
