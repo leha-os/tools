@@ -155,6 +155,60 @@
   </div>
   <div id="app"></div>
 
+  <script type="text/plain" id="auth-worker-tpl">
+// Gmail Hub Auth Worker — đăng nhập 1 lần, tự gia hạn token (không popup)
+// Variables: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (Secret), ALLOWED_ORIGIN (vd: https://leha.world)
+const SCOPE = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+const TOKEN_URL = "https://oauth2.googleapis.com/token";
+const form = (o) => new URLSearchParams(o);
+
+export default {
+  async fetch(req, env) {
+    const url = new URL(req.url);
+    const cors = {
+      "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN,
+      "Access-Control-Allow-Headers": "content-type",
+      "Access-Control-Allow-Methods": "POST,OPTIONS",
+    };
+    if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+    const redirect_uri = url.origin + "/callback";
+
+    if (url.pathname === "/login") {
+      const q = form({ client_id: env.GOOGLE_CLIENT_ID, redirect_uri, response_type: "code", scope: SCOPE,
+                       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
+      const hint = url.searchParams.get("hint");
+      if (hint) q.set("login_hint", hint);
+      return Response.redirect("https://accounts.google.com/o/oauth2/v2/auth?" + q, 302);
+    }
+
+    if (url.pathname === "/callback") {
+      const code = url.searchParams.get("code");
+      let msg;
+      if (!code) {
+        msg = { type: "gh-auth", error: url.searchParams.get("error") || "no_code" };
+      } else {
+        const r = await fetch(TOKEN_URL, { method: "POST", body: form({ code, redirect_uri, grant_type: "authorization_code",
+          client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET }) });
+        const t = await r.json();
+        msg = t.error ? { type: "gh-auth", error: t.error } : { type: "gh-auth", tokens: t };
+      }
+      const data = JSON.stringify(msg).replace(/</g, "\\u003c");
+      const html = "<" + "script>opener&&opener.postMessage(" + data + "," + JSON.stringify(env.ALLOWED_ORIGIN) + ");close()<" + "/script>Xong, bạn có thể đóng cửa sổ này.";
+      return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
+    }
+
+    if (url.pathname === "/refresh" && req.method === "POST") {
+      const { refresh_token } = await req.json();
+      const r = await fetch(TOKEN_URL, { method: "POST", body: form({ refresh_token, grant_type: "refresh_token",
+        client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET }) });
+      const t = await r.json();
+      const out = t.error ? { error: t.error } : { access_token: t.access_token, expires_in: t.expires_in };
+      return new Response(JSON.stringify(out), { status: t.error ? 400 : 200, headers: { ...cors, "content-type": "application/json" } });
+    }
+    return new Response("Gmail Hub Auth OK");
+  },
+};
+</script>
   <script type="text/plain" id="cf-worker-tpl">
 // Cloudflare Email Worker — OTP -> Telegram / Discord
 // Secrets (Settings > Variables): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK (tuỳ chọn)
@@ -298,7 +352,36 @@ export default {
       var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly','https://www.googleapis.com/auth/gmail.send','https://www.googleapis.com/auth/gmail.modify','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'].join(' ');
       var gisP=null;
       function loadGis(){ if(gisP) return gisP; if(window.google&&window.google.accounts&&window.google.accounts.oauth2) return gisP=Promise.resolve(); gisP=new Promise(function(res,rej){ var ex=document.querySelector('script[src*="accounts.google.com/gsi/client"]'); if(ex){ex.addEventListener('load',function(){res();}); ex.addEventListener('error',function(){rej(new Error('GIS load err'));}); return;} var s=document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.async=true; s.defer=true; s.onload=function(){res();}; s.onerror=function(){rej(new Error('GIS load err'));}; document.head.appendChild(s); setTimeout(function(){rej(new Error('GIS timeout'));},10000); }); return gisP; }
-      async function gsiSignIn(cid,hint){ await loadGis(); if(!window.google||!window.google.accounts||!window.google.accounts.oauth2) throw new Error('GIS unavailable'); return new Promise(function(res,rej){ var c=window.google.accounts.oauth2.initTokenClient({client_id:cid,scope:SCOPES,hint:hint||'',callback:function(r){ if(r.error) return rej(new Error(r.error)); res(r); },error_callback:function(e){rej(new Error((e&&e.message)||'OAuth error'));}}); c.requestAccessToken({prompt:hint?'none':'select_account consent',hint:hint}); }); }
+
+      function authWorker(){ return String(loadJSON(LS.SETTINGS,{}).authWorkerUrl||'').trim().replace(/\/+$/,''); }
+      function friendlyAuthError(e){
+        var m=(e&&e.message)||String(e);
+        if(/popup/i.test(m)) return 'Cửa sổ đăng nhập bị đóng hoặc bị chặn. Cho phép popup cho trang này rồi bấm lại.';
+        return m;
+      }
+      // Đăng nhập qua Auth Worker: nhận access_token + refresh_token (gia hạn sau này không cần popup)
+      function workerLogin(base,hint){
+        return new Promise(function(res,rej){
+          var w=window.open(base+'/login'+(hint?'?hint='+encodeURIComponent(hint):''),'ghAuth','width=480,height=680');
+          if(!w){ rej(new Error('popup blocked')); return; }
+          var origin=new URL(base).origin, done=false, t;
+          function cleanup(){ window.removeEventListener('message',onMsg); clearInterval(t); }
+          function onMsg(ev){
+            if(ev.origin!==origin||!ev.data||ev.data.type!=='gh-auth') return;
+            done=true; cleanup();
+            if(ev.data.error) rej(new Error(ev.data.error)); else res(ev.data.tokens);
+          }
+          window.addEventListener('message',onMsg);
+          t=setInterval(function(){ if(w.closed&&!done){ cleanup(); rej(new Error('Popup window closed')); } },500);
+        });
+      }
+      async function workerRefresh(base,rt){
+        var r=await fetch(base+'/refresh',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({refresh_token:rt})});
+        var j=await r.json().catch(function(){return {};});
+        if(!r.ok||j.error) throw new Error(j.error||('HTTP '+r.status));
+        return j;
+      }
+      async function gsiSignIn(cid,hint,interactive){ await loadGis(); if(!window.google||!window.google.accounts||!window.google.accounts.oauth2) throw new Error('GIS unavailable'); return new Promise(function(res,rej){ var c=window.google.accounts.oauth2.initTokenClient({client_id:cid,scope:SCOPES,hint:hint||'',callback:function(r){ if(r.error) return rej(new Error(r.error)); res(r); },error_callback:function(e){rej(new Error((e&&e.message)||'OAuth error'));}}); c.requestAccessToken({prompt:hint?(interactive?'':'none'):'select_account consent',hint:hint}); }); }
       async function fetchUserInfo(t){ var r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('userinfo failed'); return r.json(); }
       async function gmailList(t,q,max){ max=max||30; var u='https://www.googleapis.com/gmail/v1/users/me/messages?maxResults='+max+'&q='+encodeURIComponent(q); var r=await fetch(u,{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('List '+r.status); var j=await r.json(); return j.messages||[]; }
       async function gmailGet(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'?format=full',{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Get '+r.status); return r.json(); }
@@ -379,7 +462,7 @@ export default {
         var emState = useState(function(){ return loadJSON(LS.EMAILS,[]); }); var emails=emState[0], setEmails=emState[1];
         var nState = useState(function(){ return loadJSON(LS.NOTES,{}); }); var notes=nState[0], setNotes=nState[1];
         var sigState = useState(function(){ return loadJSON(LS.SIGNATURES,{}); }); var signatures=sigState[0], setSignatures=sigState[1];
-        var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash',cfEnabled:false,cfTgToken:'',cfTgChat:'',cfDiscord:''}); }); var settings=settingsState[0], setSettings=settingsState[1];
+        var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash',authWorkerUrl:'',cfEnabled:false,cfTgToken:'',cfTgChat:'',cfDiscord:''}); }); var settings=settingsState[0], setSettings=settingsState[1];
 
         var grState = useState(function(){ return loadJSON('gmail_hub_groups',[]); }); var groups=grState[0], setGroups=grState[1];
         var plState = useState(function(){ return loadJSON('gmail_hub_pills',[]); }); var pills=plState[0], setPills=plState[1];
@@ -470,6 +553,19 @@ export default {
           opts = opts || {silent: true};
           var token = account.accessToken;
 
+          if (!isTokenValid(account) && account.refreshToken && authWorker()) {
+            try {
+              var rr = await workerRefresh(authWorker(), account.refreshToken);
+              var expW = Date.now() + (rr.expires_in || 3600) * 1000;
+              token = rr.access_token;
+              account = Object.assign({}, account, {accessToken: token, expiresAt: expW, status: 'live'});
+              setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {accessToken: token, expiresAt: expW, status: 'live'}) : a; }); });
+            } catch(we) {
+              console.warn('[REFRESH] worker refresh failed', account.email, we.message);
+              if (/invalid_grant/i.test(we.message)) setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {status: 'needs-reauth'}) : a; }); });
+              return;
+            }
+          }
           if (!isTokenValid(account)) {
             console.log('[REFRESH] token invalid for', account.email, 'expiresAt=', account.expiresAt);
             if (account.status === 'needs-reauth') return;
@@ -528,18 +624,19 @@ export default {
         },[clientId,accounts.length,settings.pollInterval]);
 
         var addAccount = async function(){
-          if(!clientId){ setModal('clientId'); return; }
+          var wb=authWorker();
+          if(!clientId && !wb){ setModal('clientId'); return; }
           setBusy(true);
           try{
-            var resp=await gsiSignIn(clientId); var token=resp.access_token; var info=await fetchUserInfo(token);
+            var resp; if(wb){ resp=await workerLogin(wb); } else { resp=await gsiSignIn(clientId); } var token=resp.access_token; var info=await fetchUserInfo(token);
             var id=info.email||('acc_'+Date.now());
             var existing=accounts.find(function(a){return a.email===info.email;});
             var color=existing?existing.color:COLORS[accounts.length%COLORS.length];
-            var newAcc={id:id,email:info.email,displayName:(existing&&existing.displayName)||info.name||info.email,color:color,accessToken:token,expiresAt:Date.now()+(resp.expires_in||3600)*1000,tag:(existing&&existing.tag)||'',status:'live'};
-            setAccounts(function(prev){ var ex=prev.find(function(a){return a.email===info.email;}); if(ex) return prev.map(function(a){return a.email===info.email?Object.assign({},a,{accessToken:token,expiresAt:newAcc.expiresAt,status:'live'}):a;}); return prev.concat([newAcc]); });
+            var newAcc={id:id,email:info.email,displayName:(existing&&existing.displayName)||info.name||info.email,color:color,accessToken:token,refreshToken:resp.refresh_token||undefined,expiresAt:Date.now()+(resp.expires_in||3600)*1000,tag:(existing&&existing.tag)||'',status:'live'};
+            setAccounts(function(prev){ var ex=prev.find(function(a){return a.email===info.email;}); if(ex) return prev.map(function(a){return a.email===info.email?Object.assign({},a,{accessToken:token,expiresAt:newAcc.expiresAt,status:'live'},resp.refresh_token?{refreshToken:resp.refresh_token}:{}):a;}); return prev.concat([newAcc]); });
             showToast('Đã thêm '+info.email);
             await fetchAccountEmails(newAcc,token);
-          }catch(e){ showToast('Lỗi: '+((e&&e.message)||'OAuth')); }
+          }catch(e){ showToast('Lỗi: '+friendlyAuthError(e)); }
           finally{ setBusy(false); }
         };
 
@@ -589,7 +686,7 @@ export default {
         var doExport = async function(pw,silent){
           if(!pw||pw.length<4){ showToast('Mật khẩu phải ≥ 4 ký tự'); return; }
           var data={version:3,exportedAt:new Date().toISOString(),
-            accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,expiresAt:a.expiresAt};}),
+            accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,refreshToken:a.refreshToken,expiresAt:a.expiresAt};}),
             emails:emails, notes:notes, signatures:signatures, settings:settings, clientId:clientId, groups:groups, pills:pills};
           try{
             var enc=await encData(data,pw);
@@ -674,21 +771,22 @@ export default {
         };
 
         var onReauth = async function(a){
-          if(!clientId){ setModal('clientId'); return; }
+          var wb=authWorker();
+          if(!clientId && !wb){ setModal('clientId'); return; }
           try {
-            var resp = await gsiSignIn(clientId, a.email);
+            var resp = wb ? await workerLogin(wb, a.email) : await gsiSignIn(clientId, a.email, true);
             var exp = Date.now() + (resp.expires_in || 3600) * 1000;
             setAccounts(function(p){
               return p.map(function(x){
                 return x.id === a.id
-                  ? Object.assign({}, x, {accessToken: resp.access_token, expiresAt: exp, status: 'live'})
+                  ? Object.assign({}, x, {accessToken: resp.access_token, expiresAt: exp, status: 'live'}, resp.refresh_token ? {refreshToken: resp.refresh_token} : {})
                   : x;
               });
             });
             showToast('Đã đăng nhập lại: ' + a.email);
             setTimeout(function(){ refreshAll(true); }, 400);
           } catch(e) {
-            showToast('Đăng nhập thất bại: ' + e.message);
+            showToast('Đăng nhập thất bại: ' + friendlyAuthError(e));
           }
         };
 
@@ -1017,6 +1115,19 @@ export default {
             h('label',{class:'field-label'},'Client ID'),
             h('div',{class:'field-help'},props.clientId?'✓ Đã cấu hình':'⚠ Chưa cấu hình'),
             h('button',{class:'btn btn-sm',style:{marginTop:'6px'},onClick:props.onOpenClientId},'Cấu hình')
+          ),
+          h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
+            h('div',{style:{fontSize:'12px',fontWeight:700}},'🔑 Đăng nhập 1 lần (Auth Worker)'),
+            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.5,marginTop:'6px'}},'Google chỉ cấp token 1 giờ. Auth Worker giữ client secret và gia hạn token ngầm, nên mỗi Gmail chỉ cần đăng nhập 1 lần.'),
+            h('input',{class:'field-input',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:'https://gmail-auth.TENBAN.workers.dev',value:settings.authWorkerUrl||'',onInput:function(e){set('authWorkerUrl',e.target.value.trim());}}),
+            h('button',{class:'btn btn-sm',style:{marginTop:'8px'},onClick:function(){var t=document.getElementById('auth-worker-tpl').textContent.trim(); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){alert('Đã copy Auth Worker code');}); }},'Copy Auth Worker Code'),
+            h('ol',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55,margin:'10px 0 0',paddingLeft:'16px'}},
+              h('li',null,'Cloudflare → Workers & Pages → Create Worker → dán code vừa copy → Deploy.'),
+              h('li',null,'Worker → Settings → Variables: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (Secret), ALLOWED_ORIGIN = địa chỉ trang này (vd https://leha.world, không có dấu / cuối).'),
+              h('li',null,'Google Cloud → Credentials → OAuth Client (loại Web application) → thêm Authorized redirect URI: https://<worker>.workers.dev/callback.'),
+              h('li',null,'OAuth consent screen: chuyển sang In production, nếu để Testing thì refresh token hết hạn sau 7 ngày.'),
+              h('li',null,'Dán URL Worker vào ô trên, rồi đăng nhập lại từng Gmail 1 lần.')
+            )
           ),
           h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
             h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'8px'}},
