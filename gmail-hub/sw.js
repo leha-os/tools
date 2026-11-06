@@ -2,7 +2,7 @@
 // - Trang chính (index.html): luôn thử mạng trước, lỗi mạng mới dùng bản cache.
 // - Thư viện CDN / file tĩnh: dùng cache cho nhanh, đồng thời tự cập nhật ngầm.
 // - Không bao giờ trả index.html thay cho file JS/CSS (từng gây lỗi "Không tải được ứng dụng").
-const CACHE = 'gmail-hub-v8.1';
+const CACHE = 'gmail-hub-v9.0';
 const NO_CACHE = ['googleapis.com', 'accounts.google.com', '/gsi/', 'telegram', 'discord.com', 'discordapp.com'];
 
 self.addEventListener('install', () => self.skipWaiting());
