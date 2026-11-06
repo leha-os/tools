@@ -104,9 +104,9 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .icon{display:inline-block;vertical-align:middle;flex-shrink:0}
     .status-dot{width:6px;height:6px;border-radius:999px;flex-shrink:0}.status-dot.live{background:var(--success)}.status-dot.dead{background:var(--danger)}.status-dot.warn{background:var(--warning)}
-    .bulk-bar{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:#11110F;color:#fff;box-shadow:0 10px 15px -3px rgba(0,0,0,.2)}
-    .bulk-bar button{color:#fff;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:600}.bulk-bar button:hover{background:rgba(255,255,255,.15)}
-    .bulk-count{font-size:11.5px;padding:0 6px;opacity:.9}
+    .bulk-bar{width:max-content;max-width:calc(100vw - 24px);white-space:nowrap;position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:#11110F;color:#fff;box-shadow:0 10px 15px -3px rgba(0,0,0,.2)}
+    .bulk-bar button{flex-shrink:0;white-space:nowrap;color:#fff;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:600}.bulk-bar button:hover{background:rgba(255,255,255,.15)}
+    .bulk-count{white-space:nowrap;flex-shrink:0;font-size:11.5px;padding:0 6px;opacity:.9}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;height:calc(var(--nav-h) + var(--safe-bottom));padding-bottom:var(--safe-bottom);background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;justify-content:space-around}
     .nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--text-3);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;position:relative;transition:color .15s;background:none;border:none;cursor:pointer}
     .nav-tab.active{color:#fff}
@@ -391,6 +391,10 @@ export default {
       async function gmailModify(t,id,add,rm){ add=add||[]; rm=rm||[]; var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/modify',{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({addLabelIds:add,removeLabelIds:rm})}); if(!r.ok) throw new Error('Modify'); return r.json(); }
       async function gmailTrash(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/trash',{method:'POST',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Trash'); return r.json(); }
       async function gmailUntrash(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/untrash',{method:'POST',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Untrash'); return r.json(); }
+      async function gmailRemove(t,id,perm){
+        if(perm){ try{ await gmailDelete(t,id); return 'deleted'; }catch(e){} } // xóa vĩnh viễn cần quyền rộng hơn -> tự chuyển thùng rác
+        await gmailTrash(t,id); return 'trashed';
+      }
       async function gmailDelete(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Delete'); return true; }
 
       function parseMsg(msg,accId){
@@ -658,25 +662,7 @@ export default {
           showToast('Đã xóa tài khoản');
         };
 
-        var deleteEmail = async function(email){
-          var acc=accounts.find(function(a){return a.id===email.accountId;}); if(!acc) return;
-          var willPermanently=settings.deleteMode==='delete';
-          setEmails(function(prev){return prev.filter(function(e){return e.id!==email.id;});});
-          var apiOk=false;
-          try{
-            if(acc.accessToken){
-              if(willPermanently){ await gmailDelete(acc.accessToken,email.id); } else { await gmailTrash(acc.accessToken,email.id); }
-              apiOk=true;
-            }
-          }catch(e){}
-          var undo=async function(){
-            setEmails(function(prev){return prev.concat([email]);});
-            if(apiOk && !willPermanently && acc.accessToken){ try{ await gmailUntrash(acc.accessToken,email.id); }catch(e){} }
-            showToast('Đã khôi phục');
-          };
-          showToast(willPermanently?'Đã xóa vĩnh viễn':'Đã chuyển vào thùng rác',{duration:4000,undo:undo});
-        };
-
+        var deleteEmail = function(email){ return deleteMany([email]); };
         var syncRead = function(ids){ ids.slice(0,60).forEach(function(id){ var e=emailsRef.current.find(function(x){return x.id===id;}); var acc=e&&accounts.find(function(a){return a.id===e.accountId;}); if(acc&&acc.accessToken) gmailModify(acc.accessToken,id,[],['UNREAD']).catch(function(){}); }); };
         var bulkMarkRead = function(){ var ids=Array.from(selectedIds); markReadLocal(ids); syncRead(ids); setSelectedIds(new Set()); showToast('Đã đánh dấu đã đọc'); };
         var markAllRead = function(){ var ids=filtered.filter(function(e){return e.isUnread;}).map(function(e){return e.id;}); if(!ids.length){ showToast('Không có mail chưa đọc'); return; } markReadLocal(ids); syncRead(ids); setFilterOpen(false); showToast('Đã đọc '+ids.length+' mail'); };
@@ -685,16 +671,21 @@ export default {
           var perm=settings.deleteMode==='delete', idset=new Set(list.map(function(e){return e.id;}));
           setEmails(function(prev){ return prev.filter(function(e){return !idset.has(e.id);}); });
           setSelectedIds(new Set());
-          var ok=[];
+          var done=[], failed=[];
           for(var i=0;i<list.length;i+=5){
             await Promise.all(list.slice(i,i+5).map(async function(e){
-              var acc=accounts.find(function(a){return a.id===e.accountId;}); if(!acc||!acc.accessToken) return;
-              try{ if(perm) await gmailDelete(acc.accessToken,e.id); else await gmailTrash(acc.accessToken,e.id); ok.push(e); }catch(err){}
+              var acc=accounts.find(function(a){return a.id===e.accountId;});
+              if(!acc||!acc.accessToken){ failed.push(e); return; }
+              try{ var how=await gmailRemove(acc.accessToken,e.id,perm); done.push({e:e,how:how}); }catch(err){ failed.push(e); }
             }));
           }
-          showToast((perm?'Đã xóa vĩnh viễn ':'Đã chuyển thùng rác ')+list.length+' mail',{duration:6000,undo:async function(){
-            setEmails(function(prev){ return prev.concat(list); });
-            if(!perm) for(var q=0;q<ok.length;q++){ var a2=accounts.find(function(a){return a.id===ok[q].accountId;}); if(a2){ try{ await gmailUntrash(a2.accessToken,ok[q].id); }catch(err){} } }
+          // mail chưa xóa được bên Gmail thì hiện lại, không để lệch với Gmail
+          if(failed.length){ setEmails(function(prev){ return prev.concat(failed); }); }
+          if(!done.length){ showToast('Chưa xóa được trên Gmail ('+failed.length+' mail). Hãy bấm "Đăng nhập lại" rồi thử lại.'); return; }
+          var msg=(done.every(function(d){return d.how==='deleted';})?'Đã xóa vĩnh viễn ':'Đã chuyển vào thùng rác Gmail: ')+done.length+' mail'+(failed.length?' (lỗi '+failed.length+')':'');
+          showToast(msg,{duration:6000,undo:async function(){
+            setEmails(function(prev){ return prev.concat(done.map(function(d){return d.e;})); });
+            for(var q=0;q<done.length;q++){ if(done[q].how!=='trashed') continue; var a2=accounts.find(function(a){return a.id===done[q].e.accountId;}); if(a2){ try{ await gmailUntrash(a2.accessToken,done[q].e.id); }catch(err){} } }
             showToast('Đã khôi phục');
           }});
         };
@@ -705,17 +696,16 @@ export default {
 
 
         var doExport = async function(pw,silent){
-          if(!pw||pw.length<4){ showToast('Mật khẩu phải ≥ 4 ký tự'); return; }
           var data={version:3,exportedAt:new Date().toISOString(),
             accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,refreshToken:a.refreshToken,expiresAt:a.expiresAt};}),
             emails:emails, notes:notes, signatures:signatures, settings:settings, clientId:clientId, groups:groups, pills:pills};
           try{
-            var enc=await encData(data,pw);
+            var enc=(pw&&pw.length>=4)?await encData(data,pw):data;
             var blob=new Blob([JSON.stringify(enc,null,2)],{type:'application/json'});
             var url=URL.createObjectURL(blob); var a=document.createElement('a');
             a.href=url; a.download='gmail-hub-backup-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(url);
             localStorage.setItem(LS.LAST_BACKUP,String(Date.now()));
-            if(!silent) showToast('Đã xuất backup mã hóa');
+            if(!silent) showToast((pw&&pw.length>=4)?'Đã xuất backup (có mật khẩu)':'Đã xuất backup. File chứa token đăng nhập, hãy giữ kín');
           }catch(e){ showToast('Lỗi: '+e.message); }
         };
         var doImport = function(){
@@ -725,9 +715,10 @@ export default {
             var r=new FileReader();
             r.onload=async function(){
               try{
-                var p=JSON.parse(r.result); if(!p.data) throw new Error('File không hợp lệ');
-                var pw=prompt('Mật khẩu giải mã:'); if(!pw) return;
-                var data=await decData(p,pw);
+                var p=JSON.parse(r.result), data;
+                if(p.salt&&p.iv&&p.data){ var pw=prompt('File có mật khẩu. Nhập mật khẩu:'); if(!pw) return; data=await decData(p,pw); }
+                else if(p.accounts||p.emails){ data=p; }
+                else throw new Error('File không hợp lệ');
                 console.log('[IMPORT] decrypted ok, accounts:', (data.accounts||[]).length, 'clientId:', !!data.clientId);
 
                 // Force-write everything to localStorage first so state survives any reload
@@ -841,7 +832,7 @@ export default {
         var unreadTotal = Object.values(unreadByAccount).reduce(function(s,v){return s+v;},0);
 
         return h('div',{class:'app',onClick:function(){ if(filterOpen) setFilterOpen(false); }},
-          h(Header,{cfOn:!!(settings.cfEnabled&&(settings.cfTgToken||settings.cfDiscord)),accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){setModal('export');},onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
+          h(Header,{cfOn:!!(settings.cfEnabled&&(settings.cfTgToken||settings.cfDiscord)),accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){ doExport(settings.backupPassword||'',false); },onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
           h(GmailTab,{
             tabAccounts:tabAccounts, pills:pills, sections:sections, onAssignPill:assignPill, onNewPill:newPill,
             onToggleSec:function(id){ setCollapsedPills(function(p){var n=Object.assign({},p); n[id]=!n[id]; return n;}); },
@@ -876,7 +867,6 @@ export default {
           }),
           modal==='clientId' && h(ClientIdModal,{clientId:clientId,onSave:function(v){setClientId(v);localStorage.setItem(LS.CLIENT_ID,v);setModal(null);showToast('Đã lưu');},onClose:function(){setModal(null);}}),
           modal==='settings' && h(SettingsModal,{settings:settings,setSettings:setSettings,clientId:clientId,onOpenClientId:function(){setModal('clientId');},onClose:function(){setModal(null);}}),
-          modal==='export' && h(ExportModal,{onExport:doExport,onClose:function(){setModal(null);},defaultPw:settings.backupPassword}),
           editingAccount && h(AccountModal,{account:editingAccount,onClose:function(){setEditingAccountId(null);},onSave:function(patch){setAccounts(function(p){return p.map(function(a){return a.id===editingAccount.id?Object.assign({},a,patch):a;});});setEditingAccountId(null);showToast('Đã lưu');}}),
           toast && h('div',{class:'toast'}, h('span',null,toast.msg), toast.undo && h('button',{onClick:function(){toast.undo();setToast(null);}},'Hoàn tác'))
         );
@@ -1192,17 +1182,6 @@ export default {
               h('li',null,'Workers & Pages → Create Worker → dán code vừa copy → thêm Secrets: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK.'),
               h('li',null,'Email Routing → Routing rules → Catch-all → Send to a Worker → chọn Worker. Rồi bật công tắc ở trên.')
             )
-          )
-        );
-      }
-
-      function ExportModal(props){
-        var p=useState(props.defaultPw||''); var pw=p[0], setPw=p[1];
-        return h(ModalShell,{title:'Xuất backup mã hóa',onClose:props.onClose,footer:h('div',{style:{display:'flex',gap:'8px'}},h('button',{class:'btn',onClick:props.onClose},'Hủy'),h('button',{class:'btn btn-primary',onClick:function(){props.onExport(pw,false);}},'Tải xuống'))},
-          h('div',{class:'field'},
-            h('label',{class:'field-label'},'Mật khẩu mã hóa'),
-            h('input',{class:'field-input',type:'password',value:pw,onInput:function(e){setPw(e.target.value);},placeholder:'Tối thiểu 4 ký tự'}),
-            h('div',{class:'field-help'},'Backup gồm: accounts, emails, notes, signatures, nhóm tab, pill. AES-256-GCM.')
           )
         );
       }
