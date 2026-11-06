@@ -1,47 +1,39 @@
-// sw.js — Gmail Hub V7.3
-const CACHE = 'gmail-hub-v7.3';
-const STATIC_ASSETS = ['./', './index.html'];
+// sw.js — Gmail Hub V8.1
+// - Trang chính (index.html): luôn thử mạng trước, lỗi mạng mới dùng bản cache.
+// - Thư viện CDN / file tĩnh: dùng cache cho nhanh, đồng thời tự cập nhật ngầm.
+// - Không bao giờ trả index.html thay cho file JS/CSS (từng gây lỗi "Không tải được ứng dụng").
+const CACHE = 'gmail-hub-v8.1';
+const NO_CACHE = ['googleapis.com', 'accounts.google.com', '/gsi/', 'telegram', 'discord.com', 'discordapp.com'];
 
-self.addEventListener('install', e => {
-  self.skipWaiting();
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(STATIC_ASSETS)).catch(()=>{})
-  );
-});
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-    )).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
-  const url = req.url;
+  if (NO_CACHE.some(x => req.url.includes(x))) return;
 
-  // ⛔ TUYỆT ĐỐI KHÔNG CACHE
-  if (url.includes('googleapis.com') ||
-      url.includes('accounts.google.com') ||
-      url.includes('/gsi/') ||
-      url.includes('telegram') ||
-      url.includes('discord.com') ||
-      url.includes('discordapp.com')) {
+  const put = res => {
+    if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {}); }
+    return res;
+  };
+
+  if (req.mode === 'navigate') {
+    e.respondWith(fetch(req).then(put).catch(() => caches.match(req).then(r => r || caches.match('./'))));
     return;
   }
 
   e.respondWith(
     caches.match(req).then(cached => {
-      if (cached) return cached;
-      return fetch(req).then(res => {
-        if (res && res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(req, clone)).catch(()=>{});
-        }
-        return res;
-      }).catch(() => caches.match('./index.html'));
+      const net = fetch(req).then(put).catch(() => cached);
+      return cached || net;
     })
   );
 });
@@ -51,11 +43,8 @@ self.addEventListener('message', e => {
   if (m.type === 'CLEAR_CACHE_AFTER_IMPORT') {
     caches.keys()
       .then(keys => Promise.all(keys.map(k => caches.delete(k))))
-      .then(() => {
-        console.log('[SW] Cleared all caches after import');
-        if (e.ports && e.ports[0]) e.ports[0].postMessage({ok:true});
-      })
-      .catch(() => { if (e.ports && e.ports[0]) e.ports[0].postMessage({ok:false}); });
+      .then(() => { if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: true }); })
+      .catch(() => { if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: false }); });
     return;
   }
   if (m.type === 'SKIP_WAITING') self.skipWaiting();

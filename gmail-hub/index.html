@@ -43,11 +43,9 @@
     .search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:4px;border-radius:999px;color:var(--text-3)}
     .search-clear:hover{background:var(--surface-2)}
     .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-bottom:10px}
-    .pill-group{display:flex;align-items:center;gap:4px;position:relative}
     .dot{width:6px;height:6px;border-radius:999px;flex-shrink:0}
     .pill{display:inline-flex;align-items:center;height:22px;padding:0 10px;border:1px solid;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;transition:box-shadow .12s}
     .pill.active{box-shadow:0 0 0 2px var(--text)}.pill-edit{height:22px;min-width:72px;padding:0 10px;border:1px solid;border-radius:999px;font-size:12px;font-weight:500;background:var(--surface)}
-    .pill-actions{display:flex;gap:0;opacity:0;transition:opacity .12s}.pill-group:hover .pill-actions,.pill-group:focus-within .pill-actions{opacity:1}
     .pill-x{padding:4px;color:var(--text-3);border-radius:4px}.pill-x:hover{color:var(--text);background:var(--surface-2)}
     .unread-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:14px;padding:0 4px;margin-left:4px;border-radius:999px;background:var(--danger);color:#fff;font-size:9.5px;font-weight:700}
     .table-header{max-width:1280px;margin:0 auto;padding:0 12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface-2)}
@@ -106,8 +104,6 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .icon{display:inline-block;vertical-align:middle;flex-shrink:0}
     .status-dot{width:6px;height:6px;border-radius:999px;flex-shrink:0}.status-dot.live{background:var(--success)}.status-dot.dead{background:var(--danger)}.status-dot.warn{background:var(--warning)}
-    .code-block{font-family:ui-monospace,monospace;font-size:11px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px;overflow-x:auto;white-space:pre;line-height:1.5}
-    .hint-list{padding-left:18px;margin:8px 0;font-size:12px;color:var(--text-2);line-height:1.6}.hint-list li{margin:3px 0}
     .bulk-bar{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:#11110F;color:#fff;box-shadow:0 10px 15px -3px rgba(0,0,0,.2)}
     .bulk-bar button{color:#fff;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:600}.bulk-bar button:hover{background:rgba(255,255,255,.15)}
     .bulk-count{font-size:11.5px;padding:0 6px;opacity:.9}
@@ -120,86 +116,30 @@
     .swipe-wrap{position:relative;overflow:hidden}
     .swipe-delete-bg{position:absolute;inset:0;background:var(--danger);color:#fff;display:flex;align-items:center;padding-left:16px;font-weight:600;font-size:12px;gap:6px;pointer-events:none}
     .swipe-content{position:relative;background:var(--surface);will-change:transform}
-    .swipe-hint{display:none;font-size:10px;color:var(--text-3);padding:6px 12px;background:var(--surface-2);text-align:center}
+
+    .modal.email{height:min(86dvh,780px);max-height:86dvh}
+    @media(max-width:767px){.email-bd{padding:0;align-items:stretch}.modal.email{height:100dvh;max-height:100dvh;border-radius:0;width:100%;max-width:100%}.modal{max-height:92dvh}}
+    .bottom-nav{display:flex;align-items:stretch}
+    .nav-scroll{flex:1;min-width:0;display:flex;overflow-x:auto;scrollbar-width:none}.nav-scroll::-webkit-scrollbar{display:none}
+    .nav-scroll .nav-tab{flex:0 0 auto;min-width:78px;max-width:150px;padding:0 12px}
+    .nav-scroll .nav-tab.active::before{inset:7px 4px}
+    .nav-label{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+    .nav-add{flex:0 0 48px;font-size:20px;color:var(--text-2);background:none;border:none;border-left:1px solid var(--border)}
+    .filter-btn{height:36px;flex-shrink:0;white-space:nowrap}
+    .filter-pop{position:absolute;top:42px;right:0;z-index:40;width:min(340px,94vw);max-height:min(60vh,420px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 28px -8px rgba(0,0,0,.2);padding:8px}
+    .pill-chip{font-size:11px;font-weight:600;border:1px solid;border-radius:999px;padding:2px 9px;background:transparent;cursor:pointer;white-space:nowrap}
+    .pill-head{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;cursor:pointer}
+    .pill-caret{width:12px;color:var(--text-3)}.pill-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pill-count{font-size:10.5px;font-weight:500;color:var(--text-3)}
     @media(max-width:767px){.swipe-hint{display:block}}
-    .nb-layout{display:flex;min-height:calc(100vh - var(--header-h) - var(--nav-h) - var(--safe-top) - var(--safe-bottom))}
-    .nb-sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;max-height:calc(100vh - var(--header-h) - var(--nav-h) - var(--safe-top) - var(--safe-bottom));position:sticky;top:calc(var(--header-h) + var(--safe-top))}
     @media(max-width:767px){.nb-sidebar{position:fixed;left:0;top:calc(var(--header-h) + var(--safe-top));bottom:calc(var(--nav-h) + var(--safe-bottom));z-index:40;box-shadow:2px 0 8px rgba(0,0,0,.1);transform:translateX(-100%);transition:transform .2s}.nb-sidebar.open{transform:translateX(0)}}
-    .nb-sidebar-head{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0}
-    .nb-sidebar-search{flex:1;height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);font-size:12px}
-    .nb-sidebar-list{flex:1;overflow-y:auto;padding:6px}
-    .nb-note-item{padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:2px;border:1px solid transparent}
     .nb-note-item:hover{background:var(--surface-2)}.nb-note-item.active{background:var(--surface-2);border-color:var(--border)}
-    .nb-note-title{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .nb-note-meta{font-size:10px;color:var(--text-3);margin-top:2px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-    .nb-main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--surface-2)}
-    .nb-editor-wrap{flex:1;overflow-y:auto;padding:16px}
-    .nb-editor-page{max-width:820px;margin:0 auto;background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:16px 20px;min-height:400px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    .nb-title-input{width:100%;font-size:22px;font-weight:700;border:none;background:transparent;padding:4px 0;margin-bottom:6px;outline:none}
-    .nb-toolbar{display:flex;flex-wrap:wrap;gap:2px;padding:8px 10px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:calc(var(--header-h) + var(--safe-top));z-index:20;border-radius:8px 8px 0 0;overflow-x:auto}
     .nb-tool{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;color:var(--text-2);font-size:12px;font-weight:600;flex-shrink:0}
     .nb-tool:hover{background:var(--surface-2)}.nb-tool.active{background:var(--text);color:var(--bg)}
-    .nb-tool-sep{width:1px;background:var(--border);margin:2px 3px;flex-shrink:0}
-    .nb-content-area{min-height:400px;outline:none;padding:10px 4px;font-size:14px;line-height:1.6}
-    .nb-content-area:empty:before{content:attr(data-placeholder);color:var(--text-3);pointer-events:none}
-    .nb-content-area p{margin:6px 0}
-    .nb-content-area h1{font-size:26px;font-weight:700;margin:14px 0 8px}
-    .nb-content-area h2{font-size:22px;font-weight:700;margin:12px 0 6px}
-    .nb-content-area h3{font-size:18px;font-weight:600;margin:10px 0 6px}
-    .nb-content-area h4{font-size:16px;font-weight:600;margin:8px 0 4px}
-    .nb-content-area h5{font-size:14px;font-weight:600;margin:6px 0 4px}
-    .nb-content-area h6{font-size:13px;font-weight:600;margin:6px 0 4px;color:var(--text-2)}
-    .nb-content-area ul,.nb-content-area ol{padding-left:22px;margin:6px 0}
-    .nb-content-area blockquote{border-left:3px solid var(--border-strong);padding:4px 12px;color:var(--text-2);margin:10px 0;background:var(--surface-2);border-radius:4px}
-    .nb-content-area table{border-collapse:collapse;margin:10px 0;width:100%}
-    .nb-content-area th,.nb-content-area td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
-    .nb-content-area th{background:var(--surface-2);font-weight:600}
-    .nb-content-area a{color:var(--blue);text-decoration:underline}
-    .nb-content-area img{max-width:100%;height:auto;display:block}
-    .nb-content-area pre{border-radius:6px;margin:8px 0;padding:0;background:none;overflow:visible}
-    .nb-content-area hr{border:none;border-top:1px solid var(--border);margin:14px 0}
-    .nb-content-area code:not(pre code){background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:.9em;color:var(--text)}
-    .code-block-wrapper{margin:10px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface-2)}
-    .code-block-head{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface-3);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-2)}
-    .code-block-label{flex:1;font-weight:600;font-family:ui-monospace,monospace}
-    .code-block-head select{height:22px;border:1px solid var(--border);border-radius:4px;padding:0 4px;background:var(--surface);font-size:10.5px}
-    .code-block-head button{height:22px;padding:0 6px;border-radius:4px;font-size:10.5px;font-weight:600;color:var(--text-2);background:var(--surface);border:1px solid var(--border);cursor:pointer}
-    .code-block-head button:hover{background:var(--surface-2)}
-    .code-block-body{position:relative;overflow:auto;max-height:400px}
-    .code-block-body pre{margin:0!important;border-radius:0!important;font-size:12px!important;padding:10px 12px!important;background:var(--surface)!important;line-height:1.5;min-height:48px;outline:none;white-space:pre}
-    .code-block-body pre:empty:before,.code-block-body pre[data-placeholder]:empty:before{content:attr(data-placeholder);color:var(--text-3);pointer-events:none}
     .code-block-body.collapsed pre{max-height:40px;overflow:hidden}
-    .code-block-resize{height:4px;background:var(--border);cursor:ns-resize;position:relative;display:flex;align-items:center;justify-content:center}
-    .code-block-resize::before{content:'';width:24px;height:2px;background:var(--border-strong);border-radius:2px}
-    .img-block{display:inline-block;position:relative;resize:both;overflow:hidden;max-width:300px;max-height:300px;min-width:80px;min-height:60px;border:1px dashed transparent;border-radius:6px;vertical-align:top;margin:6px 4px}
-    .img-block:hover{border-color:var(--border-strong)}
-    .img-block img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
-    .img-block caption{display:block;font-size:11px;color:var(--text-2);text-align:center;padding:2px 0;pointer-events:auto}
-    .img-block .img-controls{position:absolute;top:4px;right:4px;display:none;gap:2px}
-    .img-block:hover .img-controls{display:flex}
-    .img-block .img-controls button{height:22px;padding:0 6px;font-size:10px;border-radius:4px;background:var(--surface);border:1px solid var(--border);cursor:pointer}
-    .nb-editor-page{box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04)}
-    .nb-content-area{font-size:14px;line-height:1.65}
-    .nb-toolbar{flex-wrap:wrap;gap:2px;overflow:hidden}
     @media(max-width:767px){
-      .nb-sidebar{max-width:80vw;width:min(260px,80vw)}
       .nb-tool{width:26px;height:26px}
     }
-    .md-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%}
     @media(max-width:767px){.md-split{grid-template-columns:1fr}}
-    .md-pane{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;min-height:400px;overflow:auto}
-    .md-textarea{width:100%;height:100%;min-height:400px;font-family:ui-monospace,monospace;font-size:13px;border:none;background:transparent;outline:none;resize:none;line-height:1.6}
-    .vault-table{width:100%;max-width:1280px;margin:0 auto;border-collapse:collapse;font-size:13px}
-    .vault-table th{background:var(--surface-2);padding:6px 10px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);border-bottom:1px solid var(--border);white-space:nowrap}
-    .vault-table td{padding:6px 10px;border-bottom:1px solid var(--border);height:40px;vertical-align:middle}
-    .vault-table tr:hover td{background:var(--surface-2)}
-    .vault-cell{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
-    .vault-cell-mono{font-family:ui-monospace,monospace;font-size:11.5px}
-    .vault-actions{display:flex;gap:2px}
-    .vault-actions button{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;color:var(--text-3);background:none;border:none;cursor:pointer}
-    .vault-actions button:hover{background:var(--surface-3);color:var(--text)}
-    .vault-locked{max-width:480px;margin:80px auto;padding:24px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:12px}
-    .lock-icon{width:56px;height:56px;margin:0 auto 16px;border-radius:999px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
     .editor-toolbar{display:flex;flex-wrap:wrap;gap:2px;padding:6px 8px;border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;background:var(--surface-2)}
   </style>
 </head>
@@ -209,7 +149,9 @@
     <p>Ứng dụng cần <b>internet</b> để tải thư viện Preact từ CDN lần đầu.</p>
     <p>Nếu bạn mở bằng <code>file://</code> (double-click): hãy thử dùng <b>Chrome</b> hoặc <b>Firefox</b> mới nhất. Nếu vẫn lỗi, hãy chạy qua localhost:</p>
     <p><code>python3 -m http.server 8000</code> rồi mở <code>http://localhost:8000/</code></p>
-    <p style="margin-top:20px;font-size:12px;color:#888">Kiểm tra Console (F12) để xem lỗi chi tiết.</p>
+    <pre id="boot-detail" style="white-space:pre-wrap;font-size:11px;color:#b91c1c;margin-top:12px"></pre>
+    <p><button onclick="ghReset()" style="padding:8px 14px;border-radius:8px;border:1px solid #999;background:#fff;cursor:pointer">Xóa cache &amp; tải lại</button></p>
+    <p style="margin-top:14px;font-size:12px;color:#888">Nếu vẫn lỗi, bấm F12 để xem Console.</p>
   </div>
   <div id="app"></div>
 
@@ -248,46 +190,24 @@ export default {
 </script>
   <script src="https://unpkg.com/preact@10.19.6/dist/preact.umd.js"></script>
   <script src="https://unpkg.com/preact@10.19.6/hooks/dist/hooks.umd.js"></script>
-  <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
   <script>
-    window.addEventListener('error', function(e){ if(!document.getElementById('app').innerHTML.trim()){ document.getElementById('boot-error').style.display='block'; } });
+    window.ghReset = function(){
+      var rs = navigator.serviceWorker ? navigator.serviceWorker.getRegistrations() : Promise.resolve([]);
+      rs.then(function(r){ return Promise.all(r.map(function(x){ return x.unregister(); })); })
+        .then(function(){ return window.caches ? caches.keys() : []; })
+        .then(function(k){ return Promise.all(k.map(function(x){ return caches.delete(x); })); })
+        .then(function(){ location.reload(); });
+    };
+    window.addEventListener('error', function(e){
+      if(document.getElementById('app').innerHTML.trim()) return;
+      document.getElementById('boot-error').style.display='block';
+      if(e && e.message) document.getElementById('boot-detail').textContent = e.message + (e.lineno?' (dòng '+e.lineno+')':'');
+    });
     setTimeout(function(){ if(!document.getElementById('app').innerHTML.trim()){ document.getElementById('boot-error').style.display='block'; } }, 5000);
 
     (function(){
       'use strict';
-      /*
-       * === BRIEF: Cloudflare Email Workers (OTP không cần Gmail) ===
-       * Mục tiêu: Mail gửi tới *@yourdomain.com → Worker đọc OTP/magic link → bắn Telegram/Discord ngay.
-       * Cách làm nhanh:
-       * 1. Cloudflare Dashboard → Email → Email Routing → Enable + tạo catch-all / address.
-       * 2. Workers → Create → Email Worker (hoặc bind route).
-       * 3. Code mẫu (Worker):
-       *    export default {
-       *      async email(message, env, ctx) {
-       *        const raw = await new Response(message.raw).text();
-       *        const otp = (raw.match(/(?<!\d)(\d{6})(?!\d)/)||[])[1];
-       *        const link = (raw.match(/https?:\/\/[^\s<>"']+(?:magic|verify|confirm|login|auth|token)/i)||[])[0];
-       *        const text = `OTP: ${otp||'—'} | From: ${message.from} | Subj: ${message.headers.get('subject')||''}${link?'\n'+link:''}`;
-       *        // Telegram
-       *        if (env.TG_BOT_TOKEN && env.TG_CHAT_ID) {
-       *          await fetch(`https://api.telegram.org/bot${env.TG_BOT_TOKEN}/sendMessage`, {
-       *            method:'POST', headers:{'content-type':'application/json'},
-       *            body: JSON.stringify({chat_id:env.TG_CHAT_ID, text, disable_web_page_preview:true})
-       *          });
-       *        }
-       *        // Discord webhook (optional)
-       *        if (env.DISCORD_WEBHOOK) {
-       *          await fetch(env.DISCORD_WEBHOOK, {method:'POST', headers:{'content-type':'application/json'},
-       *            body: JSON.stringify({content: text})});
-       *        }
-       *        // message.setReject("ignored") nếu không muốn forward; hoặc message.forward("backup@...") 
-       *      }
-       *    }
-       * 4. Secrets: TG_BOT_TOKEN, TG_CHAT_ID, DISCORD_WEBHOOK.
-       * 5. Test gửi mail chứa 6 số → nhận ngay trên Telegram.
-       * Ưu điểm: zero Gmail API quota, cực nhanh, bí mật (không log qua Google).
-       */
-      if(!window.preact || !window.preactHooks || !window.htm){
+      if(!window.preact || !window.preactHooks){
         document.getElementById('boot-error').style.display='block';
         return;
       }
@@ -295,7 +215,6 @@ export default {
       var useState = window.preactHooks.useState, useEffect = window.preactHooks.useEffect,
           useRef = window.preactHooks.useRef, useMemo = window.preactHooks.useMemo,
           useCallback = window.preactHooks.useCallback;
-      var html = window.htm.bind(h);
 
       /* ============ SERVICE WORKER ============ */
       if ('serviceWorker' in navigator && location.protocol !== 'file:') {
@@ -362,10 +281,9 @@ export default {
       }
       function releaseGsiLock(){ gsiPromptLock = false; }
 
-      function genPassword(len){ len=len||20; var s='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+'; var p=''; var arr=new Uint32Array(len); crypto.getRandomValues(arr); for(var i=0;i<len;i++) p+=s[arr[i]%s.length]; return p; }
 
       /* ============ STORAGE ============ */
-      var LS = {CLIENT_ID:'gmail_hub_client_id',ACCOUNTS:'gmail_hub_accounts',EMAILS:'gmail_hub_emails',NOTES:'gmail_hub_notes',SIGNATURES:'gmail_hub_signatures',RULES:'gmail_hub_rules',SETTINGS:'gmail_hub_settings',LAST_BACKUP:'gmail_hub_last_backup',NOTEBOOK:'gmail_hub_notebook',VAULT:'gmail_hub_vault_enc',ACTIVE_TAB:'gh_activeTab'};
+      var LS = {CLIENT_ID:'gmail_hub_client_id',ACCOUNTS:'gmail_hub_accounts',EMAILS:'gmail_hub_emails',NOTES:'gmail_hub_notes',SIGNATURES:'gmail_hub_signatures',RULES:'gmail_hub_rules',SETTINGS:'gmail_hub_settings',LAST_BACKUP:'gmail_hub_last_backup',ACTIVE_TAB:'gh_activeTab'};
       function loadJSON(k,fb){ try{var v=localStorage.getItem(k); return v?JSON.parse(v):fb;}catch(e){return fb;} }
       function saveJSON(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
 
@@ -412,21 +330,6 @@ export default {
       }
 
       /* ============ MARKDOWN ============ */
-      function mdToHtml(md){
-        if(!md) return '';
-        var s = md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        s = s.replace(/```(\w+)?\n([\s\S]*?)```/g, function(_,lang,code){ return '<pre><code class="language-'+(lang||'plaintext')+'">'+code.trim()+'</code></pre>'; });
-        s = s.replace(/^###### (.+)$/gm,'<h6>$1</h6>').replace(/^##### (.+)$/gm,'<h5>$1</h5>').replace(/^#### (.+)$/gm,'<h4>$1</h4>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>');
-        s = s.replace(/^---+$/gm,'<hr>');
-        s = s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/~~(.+?)~~/g,'<del>$1</del>');
-        s = s.replace(/`([^`]+)`/g,'<code>$1</code>');
-        s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2">');
-        s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-        s = s.replace(/^[-*+] (.+)$/gm,'<li>$1</li>').replace(/^\d+\. (.+)$/gm,'<li>$1</li>');
-        s = s.replace(/(<li>[\s\S]*?<\/li>)(\s*<li>[\s\S]*?<\/li>)*/g, function(m){ return '<ul>'+m+'</ul>'; });
-        s = s.split(/\n\n+/).map(function(p){ p=p.trim(); if(!p) return ''; if(/^<(h[1-6]|ul|ol|pre|table|hr|blockquote)/.test(p)) return p; return '<p>'+p.replace(/\n/g,'<br>')+'</p>'; }).join('\n');
-        return s;
-      }
 
       /* ============ ICONS ============ */
       var ICONS = {
@@ -439,8 +342,6 @@ export default {
         trash:'M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6',
         send:'M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z',
         edit:'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z',
-        notebook:'M4 4h12a2 2 0 0 1 2 2v14H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M8 2v20 M12 7h4 M12 11h4 M12 15h4',
-        vault:'M4 4h16v16H4z M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M12 12v.01 M15.5 8.5l-1 1 M8.5 8.5l1 1',
         eye:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
         eyeOff:'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22',
         plus:'M12 5v14M5 12h14',
@@ -479,11 +380,11 @@ export default {
         var nState = useState(function(){ return loadJSON(LS.NOTES,{}); }); var notes=nState[0], setNotes=nState[1];
         var sigState = useState(function(){ return loadJSON(LS.SIGNATURES,{}); }); var signatures=sigState[0], setSignatures=sigState[1];
         var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash',cfEnabled:false,cfTgToken:'',cfTgChat:'',cfDiscord:''}); }); var settings=settingsState[0], setSettings=settingsState[1];
-        var nbState = useState(function(){ return loadJSON(LS.NOTEBOOK,{notes:[],folders:['Inbox'],activeId:null}); }); var notebook=nbState[0], setNotebook=nbState[1];
-        var vState = useState([]); var vault=vState[0], setVault=vState[1];
-        var vpState = useState(null); var vaultPass=vpState[0], setVaultPass=vpState[1];
-        var vuState = useState(false); var vaultUnlocked=vuState[0], setVaultUnlocked=vuState[1];
 
+        var grState = useState(function(){ return loadJSON('gmail_hub_groups',[]); }); var groups=grState[0], setGroups=grState[1];
+        var plState = useState(function(){ return loadJSON('gmail_hub_pills',[]); }); var pills=plState[0], setPills=plState[1];
+        var cpState = useState(function(){ return loadJSON('gmail_hub_pill_collapsed',{}); }); var collapsedPills=cpState[0], setCollapsedPills=cpState[1];
+        var geState = useState(undefined); var groupEdit=geState[0], setGroupEdit=geState[1]; // undefined=đóng, null=tạo mới, id=sửa
         var searchState = useState(''); var search=searchState[0], setSearch=searchState[1];
         var aaidState = useState(null); // null = all, or single id for backward compat
         var activeAccountId=aaidState[0], setActiveAccountId=aaidState[1];
@@ -509,7 +410,37 @@ export default {
         useEffect(function(){ saveJSON(LS.NOTES,notes); },[notes]);
         useEffect(function(){ saveJSON(LS.SIGNATURES,signatures); },[signatures]);
         useEffect(function(){ saveJSON(LS.SETTINGS,settings); },[settings]);
-        useEffect(function(){ saveJSON(LS.NOTEBOOK,notebook); },[notebook]);
+        useEffect(function(){ saveJSON('gmail_hub_groups',groups); },[groups]);
+        useEffect(function(){ saveJSON('gmail_hub_pills',pills); },[pills]);
+        useEffect(function(){ saveJSON('gmail_hub_pill_collapsed',collapsedPills); },[collapsedPills]);
+        // tab hợp lệ: 'all' hoặc id nhóm còn tồn tại
+        var curTab = (activeTab!=='all' && groups.some(function(g){return g.id===activeTab;})) ? activeTab : 'all';
+        var curGroup = groups.find(function(g){return g.id===curTab;})||null;
+        // migrate tag cũ -> pill
+        useEffect(function(){
+          var need=accounts.filter(function(a){return a.tag && a.tag.trim() && !a.pillId;}); if(!need.length) return;
+          var list=pills.slice(), map={}; list.forEach(function(x){map[x.name.toLowerCase()]=x.id;});
+          need.forEach(function(a){ var k=a.tag.trim().toLowerCase(); if(!map[k]){ var np={id:uid('pill'),name:a.tag.trim(),color:a.color}; list.push(np); map[k]=np.id; } });
+          setPills(list);
+          setAccounts(function(prev){ return prev.map(function(a){ return (a.tag&&a.tag.trim()&&!a.pillId)?Object.assign({},a,{pillId:map[a.tag.trim().toLowerCase()]}):a; }); });
+        },[accounts,pills]);
+        var PILL_COLORS=['#2563EB','#16A34A','#D97706','#DC2626','#7C3AED','#0891B2','#DB2777','#65A30D'];
+        var assignPill=function(accId,pid){ setAccounts(function(p){return p.map(function(a){return a.id===accId?Object.assign({},a,{pillId:pid||null}):a;});}); };
+        var newPill=function(name,accId){ var np={id:uid('pill'),name:name,color:PILL_COLORS[pills.length%PILL_COLORS.length]}; setPills(function(p){return p.concat([np]);}); if(accId) assignPill(accId,np.id); };
+        var updatePill=function(id,patch){ setPills(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,patch):x;});}); };
+        var deletePill=function(id){ setPills(function(p){return p.filter(function(x){return x.id!==id;});}); setAccounts(function(p){return p.map(function(a){return a.pillId===id?Object.assign({},a,{pillId:null}):a;});}); };
+        var saveGroup=function(g){ setGroups(function(p){ return p.some(function(x){return x.id===g.id;})?p.map(function(x){return x.id===g.id?g:x;}):p.concat([g]); }); setActiveTab(g.id); setGroupEdit(undefined); };
+        var deleteGroup=function(id){ setGroups(function(p){return p.filter(function(x){return x.id!==id;});}); setActiveTab('all'); setGroupEdit(undefined); };
+        var changeTab=function(id){ setActiveTab(id); setSelectedAccs(new Set()); setActiveAccountId(null); setFilterOpen(false); setSelectedIds(new Set()); };
+        // nút Back / vuốt back của điện thoại đóng email thay vì thoát app
+        useEffect(function(){
+          if(!expandedId) return;
+          history.pushState({ghEmail:1},'');
+          var onPop=function(){ setExpandedId(null); };
+          window.addEventListener('popstate',onPop);
+          return function(){ window.removeEventListener('popstate',onPop); };
+        },[expandedId]);
+        var closeEmail=function(){ if(history.state&&history.state.ghEmail) history.back(); else setExpandedId(null); };
 
         var showToast = useCallback(function(msg,opts){ opts=opts||{}; setToast(Object.assign({msg:msg},opts)); if(!opts.persist) setTimeout(function(){ setToast(null); },opts.duration||3200); },[]);
 
@@ -654,23 +585,12 @@ export default {
           setSelectedIds(new Set());
         };
 
-        var unlockVault = async function(pw){
-          try{
-            var enc=loadJSON(LS.VAULT,null);
-            if(!enc){ setVault([]); setVaultPass(pw); setVaultUnlocked(true); showToast('Đã tạo vault mới'); return; }
-            var data=await decData(enc,pw);
-            setVault(Array.isArray(data)?data:[]); setVaultPass(pw); setVaultUnlocked(true);
-            showToast('Đã mở khóa vault');
-          }catch(e){ showToast('Sai mật khẩu'); }
-        };
-        var saveVault = useCallback(async function(data){ if(!vaultPass) return; try{ var enc=await encData(data,vaultPass); saveJSON(LS.VAULT,enc); }catch(e){} },[vaultPass]);
-        var updateVault = function(fn){ setVault(function(prev){ var next=typeof fn==='function'?fn(prev):fn; saveVault(next); return next; }); };
 
         var doExport = async function(pw,silent){
           if(!pw||pw.length<4){ showToast('Mật khẩu phải ≥ 4 ký tự'); return; }
           var data={version:3,exportedAt:new Date().toISOString(),
             accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,expiresAt:a.expiresAt};}),
-            emails:emails, notes:notes, signatures:signatures, settings:settings, clientId:clientId, notebook:notebook, vault:vault};
+            emails:emails, notes:notes, signatures:signatures, settings:settings, clientId:clientId, groups:groups, pills:pills};
           try{
             var enc=await encData(data,pw);
             var blob=new Blob([JSON.stringify(enc,null,2)],{type:'application/json'});
@@ -729,15 +649,8 @@ export default {
                   saveJSON(LS.SETTINGS, data.settings);
                   setSettings(function(prev){ return Object.assign({}, prev, data.settings); });
                 }
-                if (data.notebook) {
-                  saveJSON(LS.NOTEBOOK, data.notebook);
-                  setNotebook(data.notebook);
-                }
-                if (data.vault && Array.isArray(data.vault)) {
-                  setVault(data.vault);
-                  // vault is encrypted separately; we store plaintext only in memory for now
-                  try { await saveVault(data.vault); } catch(ve){ console.warn('[IMPORT] vault save skip', ve); }
-                }
+                if (Array.isArray(data.groups)) { saveJSON('gmail_hub_groups', data.groups); setGroups(data.groups); }
+                if (Array.isArray(data.pills)) { saveJSON('gmail_hub_pills', data.pills); setPills(data.pills); }
 
                 console.log('[IMPORT] state + localStorage written, clearing SW cache…');
                 await swClearCacheAfterImport();
@@ -759,7 +672,6 @@ export default {
           };
           input.click();
         };
-        function mergeById(a,b){ var m=new Map(); a.forEach(function(x){m.set(x.id,x);}); b.forEach(function(x){m.set(x.id,Object.assign({},m.get(x.id)||{},x));}); return Array.from(m.values()); }
 
         var onReauth = async function(a){
           if(!clientId){ setModal('clientId'); return; }
@@ -782,6 +694,7 @@ export default {
 
         var filtered = useMemo(function(){
           var list=emails;
+          if (curGroup) { var gs=new Set(curGroup.accIds); list=list.filter(function(e){ return gs.has(e.accountId); }); }
           if (selectedAccs.size > 0) {
             list = list.filter(function(e){ return selectedAccs.has(e.accountId); });
           } else if (activeAccountId) {
@@ -790,16 +703,30 @@ export default {
           var q=search.trim().toLowerCase();
           if(q) list=list.filter(function(e){ var acc=accounts.find(function(a){return a.id===e.accountId;}); return (e.from||'').toLowerCase().indexOf(q)>=0||(e.subject||'').toLowerCase().indexOf(q)>=0||(e.snippet||'').toLowerCase().indexOf(q)>=0||(e.otp||'').indexOf(q)>=0||((acc&&acc.displayName)||'').toLowerCase().indexOf(q)>=0||((acc&&acc.email)||'').toLowerCase().indexOf(q)>=0; });
           return list.slice().sort(function(a,b){return b.internalDate-a.internalDate;});
-        },[emails,accounts,activeAccountId,selectedAccs,search]);
+        },[emails,accounts,activeAccountId,selectedAccs,search,curGroup]);
 
         var unreadByAccount = useMemo(function(){ var m={}; emails.forEach(function(e){ if(e.isUnread) m[e.accountId]=(m[e.accountId]||0)+1; }); return m; },[emails]);
+        var tabAccounts = curGroup ? accounts.filter(function(a){return curGroup.accIds.indexOf(a.id)>=0;}) : accounts;
+        var sections = useMemo(function(){
+          var m={};
+          filtered.forEach(function(e){ var a=accounts.find(function(x){return x.id===e.accountId;}); if(!a) return; var pid=(a.pillId&&pills.some(function(x){return x.id===a.pillId;}))?a.pillId:'none'; (m[pid]=m[pid]||[]).push(e); });
+          return pills.map(function(x){return x.id;}).concat(['none']).filter(function(id){return m[id];}).map(function(id){
+            var pl=pills.find(function(x){return x.id===id;}); var items=m[id];
+            return {id:id,name:pl?pl.name:'Chưa gán pill',color:pl?pl.color:'#9CA3AF',items:items,unread:items.filter(function(e){return e.isUnread;}).length,collapsed:pills.length>0&&!!collapsedPills[id]};
+          });
+        },[filtered,pills,accounts,collapsedPills]);
+        var groupUnread = useMemo(function(){ var r={}; groups.forEach(function(g){ r[g.id]=g.accIds.reduce(function(s,id){return s+(unreadByAccount[id]||0);},0); }); return r; },[groups,emails]);
+
         var expandedEmail = expandedId ? emails.find(function(e){return e.id===expandedId;}) : null;
         var editingAccount = editingAccountId ? accounts.find(function(a){return a.id===editingAccountId;}) : null;
         var unreadTotal = Object.values(unreadByAccount).reduce(function(s,v){return s+v;},0);
 
         return h('div',{class:'app',onClick:function(){ if(filterOpen) setFilterOpen(false); }},
           h(Header,{cfOn:!!(settings.cfEnabled&&(settings.cfTgToken||settings.cfDiscord)),accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){setModal('export');},onImport:doImport,onAdd:addAccount,busy:busy,onRefresh:function(){refreshAll(true);}}),
-          activeTab==='gmail' && h(GmailTab,{
+          h(GmailTab,{
+            tabAccounts:tabAccounts, pills:pills, sections:sections, onAssignPill:assignPill, onNewPill:newPill,
+            onToggleSec:function(id){ setCollapsedPills(function(p){var n=Object.assign({},p); n[id]=!n[id]; return n;}); },
+            onManagePills:function(){ setFilterOpen(false); setModal('pills'); },
             accounts:accounts, filtered:filtered, search:search, setSearch:setSearch,
             activeAccountId:activeAccountId, setActiveAccountId:setActiveAccountId,
             selectedAccs:selectedAccs, setSelectedAccs:setSelectedAccs,
@@ -809,21 +736,20 @@ export default {
             onExpand:function(e){ setExpandedId(e.id); if(e.isUnread){ var acc=accounts.find(function(a){return a.id===e.accountId;}); if(acc) gmailModify(acc.accessToken,e.id,[],['UNREAD']).then(function(){setEmails(function(p){return p.map(function(x){return x.id===e.id?Object.assign({},x,{isUnread:false}):x;});});}).catch(function(){}); } },
             renameId:renameId, renameValue:renameValue, setRenameId:setRenameId, setRenameValue:setRenameValue,
             onRenameSave:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{displayName:v}):x;});}); setRenameId(null); },
-            onUpdateTag:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{tag:v}):x;});}); },
             onDeleteAccount:deleteAccount, onEditAccount:function(a){setEditingAccountId(a.id);},
             onReauth:onReauth,
             onDeleteEmail:deleteEmail, onBulkRead:bulkMarkRead, onBulkDelete:bulkDelete,
             selectedCount:selectedIds.size, onClearSelection:function(){setSelectedIds(new Set());}
           }),
-          activeTab==='notebook' && h(NotebookTab,{notebook:notebook,setNotebook:setNotebook,accounts:accounts,showToast:showToast,copyText:copyText}),
-          activeTab==='vault' && h(VaultTab,{vault:vault,setVault:updateVault,unlocked:vaultUnlocked,onUnlock:unlockVault,onLock:function(){setVaultUnlocked(false);setVaultPass(null);setVault([]);},accounts:accounts,showToast:showToast,copyText:copyText}),
-          h(BottomNav,{active:activeTab,onChange:setActiveTab,unreadGmail:unreadTotal}),
+          h(BottomNav,{active:curTab,groups:groups,groupUnread:groupUnread,unreadAll:unreadTotal,onChange:changeTab,onAdd:function(){setGroupEdit(null);},onEdit:function(id){setGroupEdit(id);}}),
+          modal==='pills' && h(PillModal,{pills:pills,accounts:accounts,onNew:newPill,onUpdate:updatePill,onDelete:deletePill,onAssign:assignPill,onClose:function(){setModal(null);}}),
+          groupEdit!==undefined && h(GroupModal,{group:groupEdit?groups.find(function(g){return g.id===groupEdit;}):null,accounts:accounts,pills:pills,onSave:saveGroup,onDelete:deleteGroup,onClose:function(){setGroupEdit(undefined);}}),
           expandedEmail && h(EmailModal,{
             email:expandedEmail, account:accounts.find(function(a){return a.id===expandedEmail.accountId;}),
             note:notes[expandedEmail.accountId]||'', signature:signatures[expandedEmail.accountId]||'',
             onNoteChange:function(v){ setNotes(function(p){ var n=Object.assign({},p); n[expandedEmail.accountId]=v; return n; }); },
             onSignatureChange:function(v){ setSignatures(function(p){ var n=Object.assign({},p); n[expandedEmail.accountId]=v; return n; }); },
-            onClose:function(){setExpandedId(null);}, onCopyOtp:function(){copyText(expandedEmail.otp,'OTP');},
+            onClose:closeEmail, onCopyOtp:function(){copyText(expandedEmail.otp,'OTP');},
             onSend:async function(htmlBody,atts){ var acc=accounts.find(function(a){return a.id===expandedEmail.accountId;}); var sig=signatures[acc.id]||''; var full=htmlBody+(sig?'<br><br>--<br>'+sig:''); var raw=buildMime({to:(expandedEmail.from.match(/<(.+?)>/)||[null,expandedEmail.from])[1],subject:expandedEmail.subject.indexOf('Re:')===0?expandedEmail.subject:'Re: '+expandedEmail.subject,htmlBody:full,attachments:atts,inReplyTo:expandedEmail.messageId,references:expandedEmail.references}); await gmailSend(acc.accessToken,raw); showToast('Đã gửi'); },
             showToast:showToast
           }),
@@ -839,7 +765,7 @@ export default {
         return h('header',{class:'header'},h('div',{class:'header-inner'},
           h('div',{class:'brand'},
             h('div',{class:'brand-icon'},'G'),
-            h('div',{class:'brand-text'}, h('span',{class:'brand-title'},'Gmail Hub'), h('span',{class:'brand-sub'}, props.activeTab==='notebook'?'Notebook':props.activeTab==='vault'?'Vault':'OTP Manager')),
+            h('div',{class:'brand-text'}, h('span',{class:'brand-title'},'Gmail Hub'), h('span',{class:'brand-sub'}, 'OTP Manager')),
             props.cfOn && h('span',{title:'Cloudflare Workers đang bật',style:{fontSize:'10px',fontWeight:700,color:'#16A34A',border:'1px solid #16A34A',borderRadius:'999px',padding:'1px 6px',whiteSpace:'nowrap'}},'CF Workers: ON'),
             h('div',{class:'header-stats'}, h('span',null,props.accounts.length+' tài khoản'), h('span',null,'•'), h('span',null,props.emails.length+' email'))
           ),
@@ -854,95 +780,74 @@ export default {
       }
 
       function BottomNav(props){
-        var tabs=[
-          {id:'gmail',icon:'mail',label:'Gmail',badge:props.unreadGmail},
-          {id:'notebook',icon:'notebook',label:'Notebook'},
-          {id:'vault',icon:'vault',label:'Vault'},
-        ];
-        return h('nav',{class:'bottom-nav'}, tabs.map(function(t){
-          return h('button',{key:t.id,class:'nav-tab '+(props.active===t.id?'active':''),onClick:function(){props.onChange(t.id);}},
-            h(Ico,{d:t.icon,size:20}),
-            h('span',null,t.label),
-            t.badge>0 && h('span',{class:'nav-badge'}, t.badge>99?'99+':t.badge)
-          );
-        }));
+        var tabs=[{id:'all',label:'Tất cả',badge:props.unreadAll}].concat(props.groups.map(function(g){return {id:g.id,label:g.name,badge:props.groupUnread[g.id]||0,custom:true};}));
+        return h('nav',{class:'bottom-nav'},
+          h('div',{class:'nav-scroll'},
+            tabs.map(function(t){
+              var act=props.active===t.id;
+              return h('button',{key:t.id,class:'nav-tab '+(act?'active':''),onClick:function(){ if(act&&t.custom) props.onEdit(t.id); else props.onChange(t.id); }},
+                h('span',{class:'nav-label'},t.label+(act&&t.custom?' ✎':'')),
+                t.badge>0 && h('span',{class:'nav-badge'}, t.badge>99?'99+':t.badge)
+              );
+            })
+          ),
+          h('button',{class:'nav-add',onClick:props.onAdd,title:'Tạo tab nhóm mới'},'＋')
+        );
       }
 
       function GmailTab(props){
         return h('div',null,
           h('div',{class:'container'},
             h('div',{class:'search-wrap'},
-              h('div',{class:'search'},
-                h('span',{class:'search-icon'},h(Ico,{d:'search'})),
-                h('input',{value:props.search,onInput:function(e){props.setSearch(e.target.value);},placeholder:'Tìm kiếm email, mã OTP, tài khoản...'}),
-                props.search && h('button',{class:'search-clear',onClick:function(){props.setSearch('');}},h(Ico,{d:'x',size:12}))
-              )
-            ),
-            props.accounts.length>0 && h('div',{style:{paddingBottom:'10px',position:'relative'}},
-              h('button',{
-                class:'btn btn-sm',
-                style:{height:'28px',gap:'6px'},
-                onClick:function(){props.setFilterOpen(!props.filterOpen);}
-              },
-                'Lọc theo Gmail',
-                h('span',{style:{fontSize:'10px',opacity:.7}},'▼'),
-                (props.selectedAccs.size>0 || props.activeAccountId) && h('span',{class:'unread-badge',style:{marginLeft:'2px'}}, props.selectedAccs.size || 1)
-              ),
-              props.filterOpen && h('div',{
-                style:{
-                  position:'absolute', top:'32px', left:0, zIndex:40,
-                  width:'min(320px,92vw)', maxHeight:'300px', overflowY:'auto',
-                  background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'12px',
-                  boxShadow:'0 12px 28px -8px rgba(0,0,0,.18)', padding:'8px'
-                },
-                onClick:function(e){e.stopPropagation();}
-              },
-                h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
-                  h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set()); props.setActiveAccountId(null);}},'Tất cả'),
-                  h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set()); props.setActiveAccountId(null); props.setFilterOpen(false);}},'Xóa lọc')
+              h('div',{style:{display:'flex',gap:'8px',alignItems:'center',position:'relative'}},
+                h('div',{class:'search',style:{flex:1,minWidth:0}},
+                  h('span',{class:'search-icon'},h(Ico,{d:'search'})),
+                  h('input',{value:props.search,onInput:function(e){props.setSearch(e.target.value);},placeholder:'Tìm email, OTP, tài khoản...'}),
+                  props.search && h('button',{class:'search-clear',onClick:function(){props.setSearch('');}},h(Ico,{d:'x',size:12}))
                 ),
-                props.accounts.map(function(a){
-                  var unread=props.unreadByAccount[a.id]||0;
-                  var checked = props.selectedAccs.has(a.id) || props.activeAccountId===a.id;
-                  return h('div',{key:a.id,style:{display:'flex',alignItems:'flex-start',gap:'8px',padding:'8px 6px',borderRadius:'8px',background:checked?'var(--surface-2)':'transparent'}},
-                    h('input',{type:'checkbox',checked:checked,style:{marginTop:'3px',accentColor:a.color},
-                      onChange:function(){
-                        props.setActiveAccountId(null);
-                        props.setSelectedAccs(function(prev){
-                          var n=new Set(prev);
-                          if(n.has(a.id)) n.delete(a.id); else n.add(a.id);
-                          return n;
-                        });
-                      }
-                    }),
-                    h('div',{class:'dot',style:{background:a.color,marginTop:'6px'}}),
-                    h('div',{style:{flex:1,minWidth:0}},
-                      h('div',{style:{display:'flex',alignItems:'center',gap:'6px',flexWrap:'wrap'}},
-                        h('span',{style:{fontWeight:600,fontSize:'12.5px'}},a.displayName),
-                        unread>0 && h('span',{class:'unread-badge'},unread),
-                        a.status==='needs-reauth' && h('button',{onClick:function(ev){ev.stopPropagation();props.onReauth(a);},style:{color:'var(--warning)',fontSize:'11px',fontWeight:700,background:'none',border:'none',cursor:'pointer'}},'⚠ Reauth'),
-                        a.status==='dead' && h('span',{style:{color:'var(--danger)',fontSize:'10px'}},'✕')
+                props.accounts.length>0 && h('button',{class:'btn filter-btn',onClick:function(e){e.stopPropagation();props.setFilterOpen(!props.filterOpen);}},
+                  'Lọc ▾', (props.selectedAccs.size>0||props.activeAccountId) && h('span',{class:'unread-badge',style:{marginLeft:'4px'}},props.selectedAccs.size||1)),
+                props.filterOpen && h('div',{class:'filter-pop',onClick:function(e){e.stopPropagation();}},
+                  h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
+                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set());props.setActiveAccountId(null);}},'Bỏ lọc'),
+                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:props.onManagePills},'⚙ Quản lý pill')
+                  ),
+                  props.pills.length>0 && h('div',{style:{display:'flex',flexWrap:'wrap',gap:'5px',marginBottom:'8px'}},
+                    props.pills.map(function(pl){
+                      var ids=props.tabAccounts.filter(function(a){return a.pillId===pl.id;}).map(function(a){return a.id;});
+                      if(!ids.length) return null;
+                      var on=ids.every(function(id){return props.selectedAccs.has(id);});
+                      return h('button',{key:pl.id,class:'pill-chip'+(on?' on':''),style:{borderColor:pl.color,color:on?'#fff':pl.color,background:on?pl.color:'transparent'},
+                        onClick:function(){ props.setActiveAccountId(null); props.setSelectedAccs(function(prev){ var n=new Set(prev); ids.forEach(function(id){ if(on) n.delete(id); else n.add(id); }); return n; }); }},pl.name+' · '+ids.length);
+                    })
+                  ),
+                  props.tabAccounts.length===0 && h('div',{style:{fontSize:'12px',color:'var(--text-3)',padding:'8px'}},'Tab này chưa có mail. Bấm ✎ trên tab để chọn mail.'),
+                  props.tabAccounts.map(function(a){
+                    var unread=props.unreadByAccount[a.id]||0;
+                    var checked=props.selectedAccs.has(a.id)||props.activeAccountId===a.id;
+                    return h('div',{key:a.id,style:{display:'flex',alignItems:'flex-start',gap:'8px',padding:'8px 6px',borderRadius:'8px',background:checked?'var(--surface-2)':'transparent'}},
+                      h('input',{type:'checkbox',checked:checked,style:{marginTop:'3px',accentColor:a.color},onChange:function(){ props.setActiveAccountId(null); props.setSelectedAccs(function(prev){ var n=new Set(prev); if(n.has(a.id)) n.delete(a.id); else n.add(a.id); return n; }); }}),
+                      h('div',{class:'dot',style:{background:a.color,marginTop:'6px'}}),
+                      h('div',{style:{flex:1,minWidth:0}},
+                        h('div',{style:{display:'flex',alignItems:'center',gap:'6px',flexWrap:'wrap'}},
+                          h('span',{style:{fontWeight:600,fontSize:'12.5px'}},a.displayName),
+                          unread>0 && h('span',{class:'unread-badge'},unread),
+                          a.status==='needs-reauth' && h('button',{onClick:function(ev){ev.stopPropagation();props.onReauth(a);},style:{color:'var(--warning)',fontSize:'11px',fontWeight:700,background:'none',border:'none',cursor:'pointer'}},'⚠ Đăng nhập lại'),
+                          a.status==='dead' && h('span',{style:{color:'var(--danger)',fontSize:'10px'}},'✕')
+                        ),
+                        h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email),
+                        h(PillSelect,{value:a.pillId,pills:props.pills,accId:a.id,onChange:function(v){props.onAssignPill(a.id,v);},onNew:props.onNewPill})
                       ),
-                      h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',marginTop:'1px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email),
-                      h('input',{
-                        class:'field-input',
-                        style:{height:'24px',fontSize:'11px',marginTop:'4px',padding:'0 8px'},
-                        value:a.tag||'',
-                        placeholder:'Tag / chủ đề (Shop US, Ads...)',
-                        onInput:function(e){ if(props.onUpdateTag) props.onUpdateTag(a.id, e.target.value); },
-                        onClick:function(e){e.stopPropagation();}
-                      })
-                    ),
-                    h('div',{style:{display:'flex',gap:'2px',flexShrink:0}},
-                      h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
-                      h('button',{class:'pill-x',onClick:function(){props.onDeleteAccount(a.id);},title:'Xóa'},h(Ico,{d:'x',size:11}))
-                    )
-                  );
-                })
+                      h('div',{style:{display:'flex',gap:'2px',flexShrink:0}},
+                        h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
+                        h('button',{class:'pill-x',onClick:function(){props.onDeleteAccount(a.id);},title:'Xóa'},h(Ico,{d:'x',size:11}))
+                      )
+                    );
+                  })
+                )
               )
             )
           ),
-          h('div',{class:'swipe-hint'},'← Vuốt hàng sang phải để xóa • Hover hàng có nút 🗑'),
           h('div',{class:'table-header'},h('div',{class:'table-header-inner'},
             h('div',null,h('span',null,'Tài khoản & Nội dung')),
             h('div',null,'Mã OTP / Sao chép')
@@ -955,7 +860,17 @@ export default {
                     ? h('div',null, h('div',{class:'empty-title'},'Chưa có tài khoản'), h('div',{class:'empty-text'},'Bấm "Thêm Gmail" để đăng nhập và tự động lấy OTP.'))
                     : h('div',null, h('div',{class:'empty-title'},'Không tìm thấy email phù hợp'))
                 )
-              : props.filtered.map(function(e){
+              : props.sections.map(function(sec){
+                  var showHead=props.pills.length>0;
+                  return h('div',{key:sec.id,class:'pill-sec'},
+                    showHead && h('div',{class:'pill-head',onClick:function(){props.onToggleSec(sec.id);}},
+                      h('span',{class:'pill-caret'},sec.collapsed?'▸':'▾'),
+                      h('span',{class:'dot',style:{background:sec.color}}),
+                      h('span',{class:'pill-name'},sec.name),
+                      h('span',{class:'pill-count'},sec.items.length+' mail'),
+                      sec.unread>0 && h('span',{class:'unread-badge'},sec.unread)
+                    ),
+                    !sec.collapsed && sec.items.map(function(e){
                   var acc=props.accounts.find(function(a){return a.id===e.accountId;}); if(!acc) return null;
                   var sel=props.selectedIds.has(e.id);
                   return h(SwipeRow,{key:e.id,onDelete:function(){ if(confirm('Xóa mail này?')) props.onDeleteEmail(e); }},
@@ -981,6 +896,7 @@ export default {
                       )
                     )
                   );
+                }) );
                 })
           ),
           props.selectedCount>0 && h('div',{class:'bulk-bar'},
@@ -992,336 +908,67 @@ export default {
         );
       }
 
-      function NotebookTab(props){
-        var sob=useState(false); var sidebarOpen=sob[0], setSidebarOpen=sob[1];
-        var md=useState('rich'); var mode=md[0], setMode=md[1];
-        var sq=useState(''); var search=sq[0], setSearch=sq[1];
-        var an=useState(function(){return props.notebook.notes[0]&&props.notebook.notes[0].id||null;}); var activeNote=an[0], setActiveNote=an[1];
-        var mdv=useState(''); var mdValue=mdv[0], setMdValue=mdv[1];
-        var editorRef=useRef(null);
 
-        var note=props.notebook.notes.find(function(n){return n.id===activeNote;});
+      function PillSelect(props){
+        return h('select',{class:'field-input',style:{height:'26px',fontSize:'11px',marginTop:'4px',padding:'0 6px'},value:props.value||'',onClick:function(e){e.stopPropagation();},
+          onChange:function(e){ var v=e.target.value; if(v==='__new'){ e.target.value=props.value||''; var n=prompt('Tên pill mới:'); if(n&&n.trim()) props.onNew(n.trim(),props.accId); return; } props.onChange(v||null); }},
+          h('option',{value:''},'— Chưa gán pill —'),
+          props.pills.map(function(p){ return h('option',{key:p.id,value:p.id},p.name); }),
+          h('option',{value:'__new'},'＋ Pill mới…'));
+      }
 
-        var updateNote=function(patch){ props.setNotebook(function(nb){ return Object.assign({},nb,{notes:nb.notes.map(function(n){ return n.id===activeNote?Object.assign({},n,patch,{updatedAt:Date.now()}):n; })}); }); };
-        var createNote=function(){
-          var nn={id:uid('note'),title:'Ghi chú mới',content:'',markdown:'',tags:[],accountId:null,pinned:false,createdAt:Date.now(),updatedAt:Date.now()};
-          props.setNotebook(function(nb){ return Object.assign({},nb,{notes:[nn].concat(nb.notes)}); });
-          setActiveNote(nn.id);
-        };
-        var deleteNote=function(id){
-          if(!confirm('Xóa ghi chú này?')) return;
-          props.setNotebook(function(nb){ return Object.assign({},nb,{notes:nb.notes.filter(function(n){return n.id!==id;})}); });
-          if(activeNote===id) setActiveNote(null);
-        };
-        var exec=function(cmd,arg){ document.execCommand(cmd,false,arg); if(editorRef.current) editorRef.current.focus(); saveContent(); };
-        var saveContent=function(){ if(editorRef.current && note) updateNote({content:editorRef.current.innerHTML}); };
-        var insertCodeBlock=function(){
-          var lang=prompt('Ngôn ngữ:','javascript')||'javascript';
-          var label=prompt('Tên khối code:','Code')||'Code';
-          var el=document.createElement('div');
-          el.className='code-block-wrapper'; el.contentEditable='false';
-          el.innerHTML=
-            '<div class="code-block-head">'+
-              '<span class="code-block-label" contenteditable="true">'+esc(label)+'</span>'+
-              '<select class="code-lang">'+['javascript','typescript','html','css','json','python','java','csharp','go','rust','php','ruby','bash','sql','yaml','markdown','plaintext'].map(function(l){return '<option value="'+l+'"'+(l===lang?' selected':'')+'>'+l+'</option>';}).join('')+'</select>'+
-              '<button type="button" class="wrap-code-btn" title="Toggle wrap">Wrap</button>'+
-              '<button type="button" class="copy-code-btn">Copy</button>'+
-              '<button type="button" class="toggle-code-btn">▾</button>'+
-            '</div>'+
-            '<div class="code-block-body">'+
-              '<pre contenteditable="true" spellcheck="false" data-placeholder="Paste code here..."><code class="language-'+lang+'"></code></pre>'+
-            '</div>'+
-            '<div class="code-block-resize"></div>';
-          var pre = el.querySelector('pre');
-          var code = el.querySelector('code');
-          // Make the pre the editable surface; keep code for Prism class
-          pre.addEventListener('input', function(){ saveContent(); });
-          pre.addEventListener('focus', function(){ if(!code.textContent.trim()) code.textContent=''; });
-          el.querySelector('.copy-code-btn').onclick=function(){ navigator.clipboard.writeText(pre.innerText||''); this.textContent='✓'; var btn=this; setTimeout(function(){btn.textContent='Copy';},1000); };
-          el.querySelector('.toggle-code-btn').onclick=function(){ var b=el.querySelector('.code-block-body'); b.classList.toggle('collapsed'); this.textContent=b.classList.contains('collapsed')?'▸':'▾'; };
-          el.querySelector('.wrap-code-btn').onclick=function(){
-            var wrapped = pre.style.whiteSpace === 'pre-wrap';
-            pre.style.whiteSpace = wrapped ? 'pre' : 'pre-wrap';
-            pre.style.wordBreak = wrapped ? 'normal' : 'break-all';
-            this.textContent = wrapped ? 'Wrap' : 'No wrap';
-          };
-          el.querySelector('.code-lang').onchange=function(){ code.className='language-'+this.value; if(window.Prism) Prism.highlightElement(code); };
-          var sel=window.getSelection(); if(sel.rangeCount){ var r=sel.getRangeAt(0); r.deleteContents(); r.insertNode(el); r.setStartAfter(el); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
-          if(window.Prism) Prism.highlightAll();
-          saveContent();
-          var resize=el.querySelector('.code-block-resize'); var body=el.querySelector('.code-block-body');
-          var sy=0,sh=0;
-          resize.addEventListener('mousedown',function(ev){ sy=ev.clientY; sh=body.offsetHeight; function m(ev2){ body.style.height=Math.max(60,sh+(ev2.clientY-sy))+'px'; body.style.maxHeight='none'; } function u(){ document.removeEventListener('mousemove',m); document.removeEventListener('mouseup',u); saveContent(); } document.addEventListener('mousemove',m); document.addEventListener('mouseup',u); ev.preventDefault(); });
-        };
-        var insertImage=async function(files){
-          for(var i=0;i<(files||[]).length;i++){
-            var f=files[i]; if(!f.type.startsWith('image/')) continue;
-            var b64=await fileToB64(f);
-            var el=document.createElement('div');
-            el.className='img-block'; el.contentEditable='false';
-            el.style.width='280px'; el.style.maxWidth='300px'; el.style.maxHeight='300px'; el.style.height='auto';
-            el.innerHTML=
-              '<div class="img-controls">'+
-                '<button type="button" class="img-full">Full</button>'+
-                '<button type="button" class="img-small">Nhỏ</button>'+
-              '</div>'+
-              '<img src="data:'+f.type+';base64,'+b64+'" alt="" style="max-width:100%;max-height:280px;object-fit:contain">'+
-              '<caption contenteditable="true">Nhập chú thích...</caption>';
-            (function(imgEl){
-              imgEl.querySelector('.img-full').onclick = function(ev){
-                ev.stopPropagation();
-                imgEl.style.maxWidth='100%'; imgEl.style.width='100%'; imgEl.style.maxHeight='none';
-                imgEl.querySelector('img').style.maxHeight='none';
-              };
-              imgEl.querySelector('.img-small').onclick = function(ev){
-                ev.stopPropagation();
-                imgEl.style.maxWidth='300px'; imgEl.style.width='280px'; imgEl.style.maxHeight='300px';
-                imgEl.querySelector('img').style.maxHeight='280px';
-              };
-              imgEl.querySelector('img').onclick = function(){
-                var url = imgEl.querySelector('img').src;
-                window.open().document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+url+'" style="max-width:100%;max-height:100vh"></body></html>');
-              };
-            })(el);
-            var sel=window.getSelection(); if(sel.rangeCount){ var r=sel.getRangeAt(0); r.deleteContents(); r.insertNode(el); r.setStartAfter(el); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
-          }
-          saveContent();
-        };
-        var copyFull=async function(){
-          if(!editorRef.current) return;
-          var htm=editorRef.current.innerHTML, txt=editorRef.current.innerText;
-          try{ await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([htm],{type:'text/html'}),'text/plain':new Blob([txt],{type:'text/plain'})})]); props.showToast('Đã copy giữ định dạng'); }
-          catch(e){ await props.copyText(txt,'văn bản'); }
-        };
-        var insertTable=function(){ exec('insertHTML','<table><tr><th>Header 1</th><th>Header 2</th></tr><tr><td>Cell 1</td><td>Cell 2</td></tr></table>'); };
-        var modeChange=function(m){ if(!note) return; if(m==='markdown' && !note.markdown){ setMdValue(note.content||''); updateNote({markdown:note.content||''}); } setMode(m); };
-
-        useEffect(function(){
-          if(!note||!editorRef.current) return;
-          if(mode==='rich' && editorRef.current.innerHTML!==(note.content||'')) editorRef.current.innerHTML=note.content||'';
-        },[activeNote,mode]);
-
-        useEffect(function(){ if(!activeNote && props.notebook.notes.length>0) setActiveNote(props.notebook.notes[0].id); },[props.notebook.notes]);
-
-        var filteredNotes=props.notebook.notes.filter(function(n){ return !search.trim()||n.title.toLowerCase().indexOf(search.toLowerCase())>=0||(n.content||'').toLowerCase().indexOf(search.toLowerCase())>=0; });
-
-        return h('div',{class:'nb-layout'},
-          h('aside',{class:'nb-sidebar '+(sidebarOpen?'open':'')},
-            h('div',{class:'nb-sidebar-head'},
-              h('button',{class:'btn btn-sm',onClick:createNote},h(Ico,{d:'plus',size:12}),' Mới'),
-              h('input',{class:'nb-sidebar-search',value:search,onInput:function(e){setSearch(e.target.value);},placeholder:'Tìm...'}),
-              h('button',{class:'btn btn-icon',style:{width:'28px',height:'28px'},onClick:function(){setSidebarOpen(false);}},'✕')
-            ),
-            h('div',{class:'nb-sidebar-list'},
-              filteredNotes.length===0
-                ? h('div',{style:{padding:'20px',textAlign:'center',color:'var(--text-3)',fontSize:'12px'}},'Chưa có ghi chú nào')
-                : filteredNotes.map(function(n){
-                    var acc=props.accounts.find(function(a){return a.id===n.accountId;});
-                    return h('div',{key:n.id,class:'nb-note-item '+(activeNote===n.id?'active':''),
-                      onClick:function(){
-                        setActiveNote(n.id);
-                        setMdValue(n.markdown||'');
-                        if (window.innerWidth < 768) setSidebarOpen(false);
-                      },
-                      onContextMenu:function(ev){ev.preventDefault(); if(confirm('Xóa ghi chú?')) deleteNote(n.id);}},
-                      h('div',{class:'nb-note-title'},(n.pinned?'📌 ':'')+(n.title||'(Chưa đặt tên)')),
-                      h('div',{class:'nb-note-meta'},
-                        h('span',null,formatDate(n.updatedAt)),
-                        acc && h('span',{style:{color:acc.color}},'● '+acc.displayName)
-                      )
-                    );
-                  })
-            )
-          ),
-          h('main',{class:'nb-main'},
-            h('div',{style:{padding:'8px 12px',borderBottom:'1px solid var(--border)',background:'var(--surface)',display:'flex',alignItems:'center',gap:'6px',flexWrap:'wrap'}},
-              h('button',{class:'btn btn-icon',onClick:function(){setSidebarOpen(!sidebarOpen);}},h(Ico,{d:'menu',size:14})),
-              h('div',{style:{display:'flex',gap:'2px',padding:'2px',background:'var(--surface-2)',borderRadius:'8px'}},
-                ['rich','markdown','split'].map(function(m){ return h('button',{key:m,class:'btn btn-sm '+(mode===m?'btn-primary':''),style:{height:'24px'},onClick:function(){modeChange(m);}}, m==='rich'?'Rich':m==='markdown'?'MD':'Split'); })
-              ),
-              note && h('span',{style:{fontSize:'11px',color:'var(--text-3)'}},'Lưu: '+formatDate(note.updatedAt))
-            ),
-            !note
-              ? h('div',{class:'empty',style:{flex:'1'}}, h('div',{class:'empty-icon'},h(Ico,{d:'notebook',size:18})), h('div',{class:'empty-title'},'Chưa chọn ghi chú'), h('div',{class:'empty-text'},'Chọn ghi chú ở sidebar hoặc tạo mới.'))
-              : h('div',{class:'nb-editor-wrap'},
-                  h('div',{class:'nb-editor-page'},
-                    h('input',{class:'nb-title-input',value:note.title,onInput:function(e){updateNote({title:e.target.value});},placeholder:'Tiêu đề...'}),
-                    h('div',{style:{display:'flex',gap:'6px',marginBottom:'10px',flexWrap:'wrap'}},
-                      h('select',{class:'field-input',style:{height:'28px',fontSize:'11px',width:'auto'},value:note.accountId||'',onChange:function(e){updateNote({accountId:e.target.value||null});}},
-                        h('option',{value:''},'— Không gắn Gmail —'),
-                        props.accounts.map(function(a){return h('option',{key:a.id,value:a.id},a.displayName);})
-                      )
-                    ),
-                    mode==='rich' && h('div',null,
-                      h('div',{class:'nb-toolbar'},
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('bold');}},h('b',null,'B')),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('italic');}},h('i',null,'I')),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('underline');}},h('u',null,'U')),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('strikeThrough');}},h('s',null,'S')),
-                        h('div',{class:'nb-tool-sep'}),
-                        h('select',{class:'nb-tool',style:{width:'auto',padding:'0 4px'},onChange:function(e){exec('formatBlock',e.target.value);e.target.value='';}},
-                          h('option',{value:''},'H'), h('option',{value:'h1'},'H1'), h('option',{value:'h2'},'H2'), h('option',{value:'h3'},'H3'), h('option',{value:'h4'},'H4'), h('option',{value:'h5'},'H5'), h('option',{value:'h6'},'H6'), h('option',{value:'p'},'P')
-                        ),
-                        h('select',{class:'nb-tool',style:{width:'auto',padding:'0 4px'},onChange:function(e){exec('fontSize',e.target.value);e.target.value='';}},
-                          h('option',{value:''},'Sz'), h('option',{value:'2'},'S'), h('option',{value:'3'},'N'), h('option',{value:'4'},'L'), h('option',{value:'5'},'XL'), h('option',{value:'6'},'2XL'), h('option',{value:'7'},'3XL')
-                        ),
-                        h('input',{type:'color',class:'nb-tool',style:{padding:'0',border:'none',width:'28px'},onInput:function(e){exec('foreColor',e.target.value);},title:'Màu chữ'}),
-                        h('input',{type:'color',class:'nb-tool',style:{padding:'0',border:'none',width:'28px'},onInput:function(e){exec('hiliteColor',e.target.value);},title:'Highlight',value:'#FFFF00'}),
-                        h('div',{class:'nb-tool-sep'}),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('insertUnorderedList');}},'•'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('insertOrderedList');}},'1.'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('indent');}},'→'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('outdent');}},'←'),
-                        h('div',{class:'nb-tool-sep'}),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('justifyLeft');}},'L'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('justifyCenter');}},'C'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('justifyRight');}},'R'),
-                        h('div',{class:'nb-tool-sep'}),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('formatBlock','blockquote');}},'"'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('insertHorizontalRule');}},'—'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();var u=prompt('URL:');if(u)exec('createLink',u);}},'🔗'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();var i=document.createElement('input');i.type='file';i.accept='image/*';i.multiple=true;i.onchange=function(){insertImage(Array.from(i.files||[]));};i.click();}},'🖼'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();insertCodeBlock();}},'</>'),
-                        h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();insertTable();}},'⊞'),
-                        h('div',{class:'nb-tool-sep'}),
-                        h('button',{class:'nb-tool',title:'Copy giữ định dạng',onMouseDown:function(e){e.preventDefault();copyFull();}},h(Ico,{d:'copy',size:13}))
-                      ),
-                      h('div',{ref:function(el){ editorRef.current=el; if(el && note && el.innerHTML!==(note.content||'')) el.innerHTML=note.content||''; },
-                        class:'nb-content-area',contentEditable:true,'data-placeholder':'Bắt đầu viết...',
-                        onInput:saveContent,onBlur:saveContent,
-                        onPaste:function(e){ var items=e.clipboardData&&e.clipboardData.items; if(items){ for(var i=0;i<items.length;i++){ if(items[i].type.indexOf('image/')===0){ e.preventDefault(); insertImage([items[i].getAsFile()]); } } } },
-                        onDrop:function(e){ if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length){ e.preventDefault(); insertImage(Array.from(e.dataTransfer.files)); } }
-                      })
-                    ),
-                    mode==='markdown' && h('textarea',{class:'md-textarea',style:{width:'100%',minHeight:'400px',border:'1px solid var(--border)',borderRadius:'8px',padding:'12px',background:'var(--surface)'},value:mdValue,onInput:function(e){setMdValue(e.target.value);updateNote({markdown:e.target.value});},placeholder:'# Tiêu đề\n\nMarkdown **bold**...'}),
-                    mode==='split' && h('div',{class:'md-split'},
-                      h('div',{class:'md-pane'},h('textarea',{class:'md-textarea',style:{minHeight:'400px'},value:mdValue,onInput:function(e){setMdValue(e.target.value);updateNote({markdown:e.target.value});},placeholder:'Markdown...'})),
-                      h('div',{class:'md-pane',dangerouslySetInnerHTML:{__html:mdToHtml(mdValue)}})
-                    )
-                  )
-                )
-          )
+      function PillModal(props){
+        return h(ModalShell,{title:'Quản lý pill',onClose:props.onClose,footer:h('button',{class:'btn btn-primary',onClick:props.onClose},'Xong')},
+          h('div',{class:'field-help',style:{marginBottom:'8px'}},'Pill là nhãn tự đặt (Shop US, Ads, Khách sỉ…). Mỗi mail gán 1 pill; trong danh sách, mail được gom theo pill và thu gọn được.'),
+          props.pills.map(function(p){
+            return h('div',{key:p.id,style:{display:'flex',gap:'6px',alignItems:'center',marginBottom:'6px'}},
+              h('input',{type:'color',value:p.color,style:{width:'30px',height:'30px',padding:0,border:'none',background:'none'},onInput:function(e){props.onUpdate(p.id,{color:e.target.value});}}),
+              h('input',{class:'field-input',style:{flex:1,height:'30px'},value:p.name,onInput:function(e){props.onUpdate(p.id,{name:e.target.value});}}),
+              h('button',{class:'btn btn-sm',onClick:function(){ if(confirm('Xóa pill "'+p.name+'"? Các mail sẽ về "Chưa gán pill".')) props.onDelete(p.id); },title:'Xóa'},'🗑')
+            );
+          }),
+          h('button',{class:'btn btn-sm',style:{marginBottom:'12px'},onClick:function(){ var n=prompt('Tên pill mới:'); if(n&&n.trim()) props.onNew(n.trim()); }},'＋ Thêm pill'),
+          props.accounts.length>0 && h('div',{style:{fontSize:'11px',fontWeight:700,margin:'4px 0',color:'var(--text-2)'}},'Gán pill cho từng mail'),
+          props.accounts.map(function(a){
+            return h('div',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'4px'}},
+              h('div',{class:'dot',style:{background:a.color}}),
+              h('div',{style:{flex:1,minWidth:0,fontSize:'12px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.displayName),
+              h('div',{style:{width:'140px',flexShrink:0}},h(PillSelect,{value:a.pillId,pills:props.pills,accId:a.id,onChange:function(v){props.onAssign(a.id,v);},onNew:props.onNew}))
+            );
+          })
         );
       }
 
-      function VaultTab(props){
-        var pwState=useState(''); var pw=pwState[0], setPw=pwState[1];
-        var sq=useState(''); var search=sq[0], setSearch=sq[1];
-        var revState=useState({}); var revealed=revState[0], setRevealed=revState[1];
-        var sa=useState(false); var showAdd=sa[0], setShowAdd=sa[1];
-        var sb=useState(false); var showBulk=sb[0], setShowBulk=sb[1];
-        var ne=useState({shop:'',url:'',username:'',password:'',twofa:'',apiKey:'',proxy:'',cookie:'',note:'',status:'live',accountId:''}); var newEntry=ne[0], setNewEntry=ne[1];
-        var bt=useState(''); var bulkText=bt[0], setBulkText=bt[1];
-
-        if(!props.unlocked){
-          return h('div',{class:'vault-locked'},
-            h('div',{class:'lock-icon'},h(Ico,{d:'lock',size:24})),
-            h('div',{style:{fontSize:'16px',fontWeight:'700',marginBottom:'6px'}},'Kho mật khẩu đã mã hóa'),
-            h('div',{style:{fontSize:'12px',color:'var(--text-2)',marginBottom:'16px'}},'Nhập mật khẩu để mở khóa (AES-256-GCM).'),
-            h('input',{type:'password',class:'field-input',style:{marginBottom:'10px',textAlign:'center'},value:pw,onInput:function(e){setPw(e.target.value);},onKeyDown:function(e){if(e.key==='Enter')props.onUnlock(pw);},placeholder:'Mật khẩu vault...'}),
-            h('button',{class:'btn btn-primary',style:{width:'100%',height:'36px'},onClick:function(){props.onUnlock(pw);}},'Mở khóa / Tạo mới'),
-            h('div',{style:{marginTop:'12px',fontSize:'11px',color:'var(--text-3)'}},'Mã hóa AES-256-GCM. Nếu quên mật khẩu, không thể khôi phục.')
-          );
-        }
-
-        var filtered=props.vault.filter(function(v){ var q=search.trim().toLowerCase(); if(!q) return true; return (v.shop||'').toLowerCase().indexOf(q)>=0||(v.username||'').toLowerCase().indexOf(q)>=0||(v.note||'').toLowerCase().indexOf(q)>=0||(v.proxy||'').toLowerCase().indexOf(q)>=0; });
-
-        var addEntry=function(){ var e=Object.assign({id:uid('v'),createdAt:Date.now()},newEntry); props.setVault(function(prev){return [e].concat(prev);}); setNewEntry({shop:'',url:'',username:'',password:'',twofa:'',apiKey:'',proxy:'',cookie:'',note:'',status:'live',accountId:''}); setShowAdd(false); props.showToast('Đã thêm'); };
-        var deleteEntry=function(id){ if(!confirm('Xóa entry này?')) return; props.setVault(function(prev){return prev.filter(function(v){return v.id!==id;});}); };
-        var copyFull=function(v){ props.copyText(v.username+':'+v.password+':'+(v.proxy||'')+':'+(v.twofa||''),'full'); };
-        var bulkImport=function(){
-          var lines=bulkText.split('\n').map(function(l){return l.trim();}).filter(Boolean);
-          var entries=[];
-          for(var i=0;i<lines.length;i++){
-            var parts=lines[i].split(/[:|]/).map(function(x){return x.trim();});
-            if(parts.length<2) continue;
-            entries.push({id:uid('v'),shop:parts[0],url:'',username:parts[0],password:parts[1],twofa:'',apiKey:'',proxy:parts[2]||'',cookie:'',note:'imported',status:'live',accountId:'',createdAt:Date.now()});
-          }
-          props.setVault(function(prev){return entries.concat(prev);});
-          setBulkText(''); setShowBulk(false);
-          props.showToast('Đã import '+entries.length+' entries');
-        };
-
-        return h('div',{style:{padding:'12px'}},
-          h('div',{style:{maxWidth:'1280px',margin:'0 auto'}},
-            h('div',{style:{display:'flex',gap:'6px',marginBottom:'10px',flexWrap:'wrap',alignItems:'center'}},
-              h('div',{class:'search',style:{flex:'1',minWidth:'200px'}},
-                h('span',{class:'search-icon'},h(Ico,{d:'search'})),
-                h('input',{value:search,onInput:function(e){setSearch(e.target.value);},placeholder:'Tìm shop, user, proxy...'})
-              ),
-              h('button',{class:'btn btn-sm',onClick:props.onLock},h(Ico,{d:'lock',size:12}),' Khóa'),
-              h('button',{class:'btn btn-primary btn-sm',onClick:function(){setShowAdd(true);}},h(Ico,{d:'plus',size:12}),' Thêm'),
-              h('button',{class:'btn btn-sm',onClick:function(){setShowBulk(true);}},'Bulk')
-            ),
-            h('div',{style:{overflowX:'auto',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:'8px'}},
-              h('table',{class:'vault-table'},
-                h('thead',null,h('tr',null,
-                  h('th',{style:{width:'36px'}}),
-                  h('th',null,'Shop / Tài khoản'),
-                  h('th',null,'User / Email'),
-                  h('th',null,'Pass / Token'),
-                  h('th',null,'Proxy / IP'),
-                  h('th',null,'Ghi chú'),
-                  h('th',{style:{width:'180px'}},'Hành động')
-                )),
-                h('tbody',null,
-                  filtered.length===0
-                    ? h('tr',null,h('td',{colspan:'7',style:{textAlign:'center',padding:'40px',color:'var(--text-3)'}},'Chưa có entry nào'))
-                    : filtered.map(function(v){
-                        var acc=props.accounts.find(function(a){return a.id===v.accountId;});
-                        var rev=revealed[v.id];
-                        return h('tr',{key:v.id},
-                          h('td',null,h('span',{class:'status-dot '+(v.status==='live'?'live':v.status==='dead'?'dead':'warn')})),
-                          h('td',{class:'vault-cell',title:v.shop}, acc&&h('span',{style:{display:'inline-block',width:'6px',height:'6px',borderRadius:'999px',background:acc.color,marginRight:'4px'}}), h('b',null,v.shop||'—')),
-                          h('td',{class:'vault-cell vault-cell-mono',title:v.username},v.username||'—'),
-                          h('td',{class:'vault-cell vault-cell-mono'},
-                            h('span',{style:{display:'inline-flex',alignItems:'center',gap:'4px'}}, rev?v.password:'••••••••',
-                              h('button',{class:'vault-actions',style:{width:'auto',height:'auto',padding:'0 2px'},onClick:function(){setRevealed(function(r){var n=Object.assign({},r); n[v.id]=!n[v.id]; return n;});}}, rev?h(Ico,{d:'eyeOff',size:12}):h(Ico,{d:'eye',size:12}))
-                            )
-                          ),
-                          h('td',{class:'vault-cell vault-cell-mono',title:v.proxy},v.proxy||'—'),
-                          h('td',{class:'vault-cell',title:v.note},v.note||'—'),
-                          h('td',null,
-                            h('div',{class:'vault-actions'},
-                              h('button',{title:'Copy user:pass',onClick:function(){props.copyText(v.username+':'+v.password,'user:pass');}},h(Ico,{d:'copy',size:12})),
-                              h('button',{title:'Copy full',onClick:function(){copyFull(v);}},'F'),
-                              h('button',{title:'Copy pass',onClick:function(){props.copyText(v.password,'pass');}},'P'),
-                              h('button',{title:'Xóa',onClick:function(){deleteEntry(v.id);}},h(Ico,{d:'trash',size:12}))
-                            )
-                          )
-                        );
-                      })
-                )
-              )
-            )
+      function GroupModal(props){
+        var g=props.group;
+        var nm=useState(g?g.name:''); var name=nm[0], setName=nm[1];
+        var sl=useState(function(){ return new Set(g?g.accIds:[]); }); var sel=sl[0], setSel=sl[1];
+        var toggle=function(id){ setSel(function(p){ var n=new Set(p); if(n.has(id)) n.delete(id); else n.add(id); return n; }); };
+        var save=function(){ if(!name.trim()){ alert('Nhập tên tab'); return; } props.onSave({id:g?g.id:uid('grp'),name:name.trim(),accIds:Array.from(sel)}); };
+        return h(ModalShell,{title:g?'Sửa tab':'Tạo tab mới',onClose:props.onClose,
+          footer:[g && h('button',{key:'d',class:'btn',style:{marginRight:'auto',color:'var(--danger)'},onClick:function(){ if(confirm('Xóa tab "'+g.name+'"? (Mail không bị xóa)')) props.onDelete(g.id); }},'Xóa tab'),
+                  h('button',{key:'c',class:'btn',onClick:props.onClose},'Hủy'), h('button',{key:'s',class:'btn btn-primary',onClick:save},'Lưu')]},
+          h('input',{class:'field-input',style:{marginBottom:'10px'},value:name,placeholder:'Tên tab (vd: Shop US)',onInput:function(e){setName(e.target.value);}}),
+          h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
+            h('button',{class:'btn btn-sm',onClick:function(){setSel(new Set(props.accounts.map(function(a){return a.id;})));}},'Chọn hết'),
+            h('button',{class:'btn btn-sm',onClick:function(){setSel(new Set());}},'Bỏ chọn'),
+            h('span',{style:{fontSize:'11px',color:'var(--text-3)',alignSelf:'center'}},sel.size+' mail')
           ),
-          showAdd && h('div',{class:'modal-backdrop',onClick:function(e){if(e.target===e.currentTarget)setShowAdd(false);}},
-            h('div',{class:'modal wide',onClick:function(e){e.stopPropagation();}},
-              h('div',{class:'modal-header'},h('div',{class:'modal-title'},'Thêm entry'),h('button',{class:'modal-close',onClick:function(){setShowAdd(false);}},'✕')),
-              h('div',{class:'modal-body'},
-                h('div',{class:'field'},h('label',{class:'field-label'},'Tên shop'),h('input',{class:'field-input',value:newEntry.shop,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{shop:e.target.value});});},placeholder:'GC Skin & Beauty'})),
-                h('div',{class:'field'},h('label',{class:'field-label'},'URL login'),h('input',{class:'field-input',value:newEntry.url,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{url:e.target.value});});}})),
-                h('div',{class:'field'},h('label',{class:'field-label'},'Gắn Gmail'),h('select',{class:'field-input',value:newEntry.accountId,onChange:function(e){setNewEntry(function(p){return Object.assign({},p,{accountId:e.target.value});});}},h('option',{value:''},'— Không —'),props.accounts.map(function(a){return h('option',{key:a.id,value:a.id},a.displayName);}))),
-                h('div',{class:'field'},h('label',{class:'field-label'},'Username'),h('input',{class:'field-input',value:newEntry.username,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{username:e.target.value});});}})),
-                h('div',{class:'field'},h('label',{class:'field-label'},'Password'),h('div',{style:{display:'flex',gap:'4px'}},h('input',{class:'field-input',value:newEntry.password,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{password:e.target.value});});}}),h('button',{class:'btn btn-sm',onClick:function(){setNewEntry(function(p){return Object.assign({},p,{password:genPassword(24)});});}},'Gen'))),
-                h('div',{class:'field'},h('label',{class:'field-label'},'2FA'),h('input',{class:'field-input',value:newEntry.twofa,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{twofa:e.target.value});});}})),
-                h('div',{class:'field'},h('label',{class:'field-label'},'Proxy (ip:port:user:pass)'),h('input',{class:'field-input',value:newEntry.proxy,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{proxy:e.target.value});});}})),
-                h('div',{class:'field'},h('label',{class:'field-label'},'Ghi chú'),h('input',{class:'field-input',value:newEntry.note,onInput:function(e){setNewEntry(function(p){return Object.assign({},p,{note:e.target.value});});}}))
-              ),
-              h('div',{class:'modal-footer'},h('button',{class:'btn',onClick:function(){setShowAdd(false);}},'Hủy'),h('button',{class:'btn btn-primary',onClick:addEntry},'Lưu'))
-            )
-          ),
-          showBulk && h('div',{class:'modal-backdrop',onClick:function(e){if(e.target===e.currentTarget)setShowBulk(false);}},
-            h('div',{class:'modal',onClick:function(e){e.stopPropagation();}},
-              h('div',{class:'modal-header'},h('div',{class:'modal-title'},'Bulk import'),h('button',{class:'modal-close',onClick:function(){setShowBulk(false);}},'✕')),
-              h('div',{class:'modal-body'},
-                h('div',{class:'field-help',style:{marginBottom:'8px'}},'Format: user:pass:proxy'),
-                h('textarea',{class:'field-input',style:{height:'200px',padding:'8px',fontFamily:'monospace'},value:bulkText,onInput:function(e){setBulkText(e.target.value);},placeholder:'user1:pass1:1.2.3.4:8080\nuser2:pass2'})
-              ),
-              h('div',{class:'modal-footer'},h('button',{class:'btn',onClick:function(){setShowBulk(false);}},'Hủy'),h('button',{class:'btn btn-primary',onClick:bulkImport},'Import'))
-            )
-          )
+          props.accounts.length===0 && h('div',{style:{fontSize:'12px',color:'var(--text-3)'}},'Chưa có Gmail nào. Hãy thêm Gmail trước.'),
+          props.accounts.map(function(a){
+            var pl=props.pills.find(function(x){return x.id===a.pillId;});
+            return h('label',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',padding:'7px 4px',borderBottom:'1px solid var(--border)',cursor:'pointer'}},
+              h('input',{type:'checkbox',checked:sel.has(a.id),onChange:function(){toggle(a.id);},style:{accentColor:a.color}}),
+              h('div',{class:'dot',style:{background:a.color}}),
+              h('div',{style:{flex:1,minWidth:0}},h('div',{style:{fontSize:'12.5px',fontWeight:600}},a.displayName),h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email)),
+              pl && h('span',{class:'pill-chip on',style:{background:pl.color,borderColor:pl.color,color:'#fff'}},pl.name)
+            );
+          })
         );
+      }
+
+      function emailDoc(html){
+        return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_blank"><style>html{color-scheme:light}body{margin:0;padding:12px;font:14px/1.55 -apple-system,system-ui,sans-serif;color:#111;background:#fff;overflow-wrap:anywhere;word-break:break-word}*{max-width:100%;box-sizing:border-box}img,video{height:auto!important}table{width:auto!important}pre{white-space:pre-wrap}a{color:#2563eb}</style></head><body>'+html+'</body></html>';
       }
 
       function ModalShell(props){
@@ -1402,7 +1049,7 @@ export default {
           h('div',{class:'field'},
             h('label',{class:'field-label'},'Mật khẩu mã hóa'),
             h('input',{class:'field-input',type:'password',value:pw,onInput:function(e){setPw(e.target.value);},placeholder:'Tối thiểu 4 ký tự'}),
-            h('div',{class:'field-help'},'Backup gồm: accounts, emails, notes, signatures, notebook, vault. AES-256-GCM.')
+            h('div',{class:'field-help'},'Backup gồm: accounts, emails, notes, signatures, nhóm tab, pill. AES-256-GCM.')
           )
         );
       }
@@ -1430,9 +1077,10 @@ export default {
         var addFiles=async function(files){ var list=[]; for(var i=0;i<files.length;i++){ var f=files[i]; var b64=await fileToB64(f); list.push({name:f.name,type:f.type,data:b64}); } setAttachments(function(prev){return prev.concat(list);}); };
         var handleSend=async function(){ if(!replyHtml.trim()&&!props.signature){ props.showToast('Nội dung trống'); return; } setSending(true); try{ await props.onSend(replyHtml,attachments); setReplyHtml(''); setAttachments([]); setTab('email'); }catch(e){ props.showToast('Gửi thất bại: '+e.message); } finally{ setSending(false); } };
 
-        return h('div',{class:'modal-backdrop',onClick:function(e){if(e.target===e.currentTarget)props.onClose();}},
-          h('div',{class:'modal wide',onClick:function(e){e.stopPropagation();},style:{maxHeight:'90vh'}},
+        return h('div',{class:'modal-backdrop email-bd',onClick:function(e){if(e.target===e.currentTarget)props.onClose();}},
+          h('div',{class:'modal wide email',onClick:function(e){e.stopPropagation();},},
             h('div',{class:'modal-header'},
+              h('button',{class:'modal-close',onClick:props.onClose,title:'Quay lại',style:{fontSize:'18px',flexShrink:0}},'←'),
               h('div',{style:{minWidth:'0',flex:'1'}},
                 h('div',{class:'modal-title',style:{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},props.email.subject),
                 h('div',{style:{fontSize:'11px',color:'var(--text-2)',marginTop:'2px'}},formatFull(props.email.internalDate))
@@ -1449,7 +1097,7 @@ export default {
               h('button',{class:'tab '+(tab==='note'?'active':''),onClick:function(){setTab('note');}},'Ghi chú'),
               h('button',{class:'tab '+(tab==='reply'?'active':''),onClick:function(){setTab('reply');}},'Trả lời')
             ),
-            tab==='email' && h('div',{style:{padding:'16px',overflowY:'auto',flex:'1'},dangerouslySetInnerHTML:{__html:props.email.bodyHtml||props.email.snippet}}),
+            tab==='email' && h('iframe',{sandbox:'allow-popups allow-popups-to-escape-sandbox',style:{flex:'1',width:'100%',border:'none',background:'#fff',minHeight:0},srcdoc:emailDoc(props.email.bodyHtml||props.email.snippet||'')}),
             tab==='note' && h('div',{style:{padding:'16px',overflowY:'auto',flex:'1'}},
               h('div',{class:'field-help',style:{marginBottom:'8px'}},'Ghi chú cho '+((props.account&&props.account.displayName)||'')+' — tự lưu.'),
               h('div',{class:'editor-toolbar'},
@@ -1483,21 +1131,6 @@ export default {
 
       render(h(App), document.getElementById('app'));
 
-      setTimeout(function(){
-        if(window.Prism) return;
-        var s1=document.createElement('script'); s1.src='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js';
-        s1.onload=function(){
-          var langs=['javascript','typescript','html','css','json','python','java','csharp','go','rust','php','ruby','bash','sql','yaml','markdown','plaintext'];
-          var loaded=0;
-          langs.forEach(function(l){
-            var s=document.createElement('script');
-            s.src='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-'+l+'.min.js';
-            s.onload=s.onerror=function(){ loaded++; if(loaded===langs.length && window.Prism) Prism.highlightAll(); };
-            document.head.appendChild(s);
-          });
-        };
-        document.head.appendChild(s1);
-      }, 2000);
     })();
   </script>
 </body>
