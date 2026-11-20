@@ -896,7 +896,41 @@ export default {
           }
         }, [clientId, fetchAccountEmails, showToast]);
 
-        var refreshAll = useCallback(async function(manual){
+     var refreshAll = useCallback(async function(manual){
+          var gistId = settings.bridgeUrl;
+          var ghToken = settings.bridgeKey;
+          if (gistId && ghToken) {
+            try {
+              var gr = await fetch("https://api.github.com/gists/" + gistId, {
+                headers: { "Authorization": "Bearer " + ghToken, "Accept": "application/vnd.github+json" }
+              });
+              if (gr.ok) {
+                var gjson = await gr.json();
+                var rawContent = gjson.files && gjson.files["sync.json"] && gjson.files["sync.json"].content;
+                if (rawContent) {
+                  var sdata = JSON.parse(rawContent);
+                  if (sdata.accounts && sdata.accounts.length) {
+                    setAccounts(function(prev) {
+                      var map = {};
+                      prev.forEach(function(a) { map[a.id] = a; });
+                      sdata.accounts.forEach(function(a) { map[a.id] = Object.assign({}, map[a.id], a); });
+                      return Object.values(map);
+                    });
+                  }
+                  if (sdata.emails && sdata.emails.length) {
+                    setEmails(function(prev) {
+                      var extIds = new Set(sdata.accounts.map(function(a) { return a.id; }));
+                      var kept = prev.filter(function(e) { return !extIds.has(e.accountId); });
+                      return kept.concat(sdata.emails);
+                    });
+                  }
+                  if (manual) showToast("Đã đồng bộ từ Extension");
+                  return;
+                }
+              }
+            } catch (e) {}
+          }
+
           if(refreshLock.current||(!clientId&&!bridgeCfg().url)) return;
           refreshLock.current=true;
           try{
@@ -906,7 +940,7 @@ export default {
           }
           finally{ refreshLock.current=false; }
           if(manual) showToast('Đã làm mới '+accountsRef.current.length+' tài khoản');
-        },[clientId,refreshAccount,showToast]);
+        },[clientId,refreshAccount,showToast,settings.bridgeUrl,settings.bridgeKey]);
 
         useEffect(function(){
           if((!clientId&&!bridgeCfg().url)||accounts.length===0) return;
