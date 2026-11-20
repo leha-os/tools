@@ -1,0 +1,16 @@
+{
+  "name": "[LEHA] Gmail Hubs PRO",
+  "short_name": "Gmail Hubs",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAFAF8",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "./icon128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

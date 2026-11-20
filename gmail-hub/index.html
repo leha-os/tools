@@ -4,48 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#FAFAF8">
-  <title>Gmail Hub — MMO Suite</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="[LEHA] Gmail Hubs">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" href="./icon128.png">
+  <link rel="apple-touch-icon" href="./icon128.png">
+  <title>[LEHA] Gmail Hubs PRO</title>
   <style>
-    :root{--bg:#FAFAF8;--surface:#FFF;--surface-2:#F5F5F3;--surface-3:#EFEEE9;--border:#E8E6E1;--border-strong:#D8D5CF;--text:#11110F;--text-2:#6B6A67;--text-3:#9C9B99;--yellow:#FFF2A8;--yellow-border:#E8D96E;--danger:#DC2626;--success:#16A34A;--warning:#D97706;--blue:#2563EB;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--nav-h:56px;--header-h:52px;}
-    @media (prefers-color-scheme:dark){:root{--bg:#0F0F0F;--surface:#161616;--surface-2:#1E1E1E;--surface-3:#252525;--border:#262626;--border-strong:#333;--text:#F5F5F3;--text-2:#9A9996;--text-3:#5A5A58;--yellow:#3A3510;--yellow-border:#5A4E1A;--danger:#EF4444;--success:#22C55E;--warning:#F59E0B;--blue:#60A5FA;}}
+    :root{--bg:#FAFAF8;--surface:#FFF;--surface-2:#F5F5F3;--surface-3:#EFEEE9;--border:#E8E6E1;--border-strong:#D8D5CF;--text:#11110F;--text-2:#6B6A67;--text-3:#9C9B99;--yellow:#FFF2A8;--yellow-border:#E8D96E;--danger:#DC2626;--success:#16A34A;--warning:#D97706;--blue:#2563EB;--accent:#4f46e5;--accent-soft:#eef2ff;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--nav-h:56px;--header-h:52px;}
+    body.dark-mode{--bg:#0F0F0F;--surface:#161616;--surface-2:#1E1E1E;--surface-3:#252525;--border:#262626;--border-strong:#333;--text:#F5F5F3;--text-2:#9A9996;--text-3:#5A5A58;--yellow:#3A3510;--yellow-border:#5A4E1A;--danger:#EF4444;--success:#22C55E;--warning:#F59E0B;--blue:#60A5FA;--accent:#818cf8;--accent-soft:#312e81;}
     *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
     html,body{margin:0;padding:0;height:100%}
-    body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.4;overflow-x:hidden}
+    body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.4;overflow-x:hidden;transition:background-color .15s,color .15s}
     button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
     input,textarea,select{font:inherit;color:inherit}
     input:focus,textarea:focus,select:focus{outline:none}
     a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
     ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:999px}
     #boot-error{position:fixed;inset:0;background:#fff;color:#111;padding:40px 20px;font-family:system-ui;text-align:center;z-index:9999;display:none}
-    #boot-error h2{color:#DC2626;margin:0 0 12px;font-size:20px}
-    #boot-error p{max-width:600px;margin:8px auto;line-height:1.6;color:#444}
-    #boot-error code{background:#F5F5F3;padding:2px 6px;border-radius:4px;font-family:ui-monospace,monospace}
     .app{display:flex;flex-direction:column;min-height:100vh;padding-bottom:calc(var(--nav-h) + var(--safe-bottom))}
     .header{position:sticky;top:var(--safe-top);z-index:30;background:var(--surface);border-bottom:1px solid var(--border)}
     .header-inner{max-width:1280px;margin:0 auto;height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 12px}
-    .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .brand-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#11110F;color:#fff;border-radius:8px;font-weight:700;font-size:13px;flex-shrink:0}
-    .brand-text{display:flex;flex-direction:column;line-height:1;min-width:0}
-    .brand-title{font-size:13px;font-weight:700;letter-spacing:-.025em;white-space:nowrap}
-    .brand-sub{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-top:1px;white-space:nowrap}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .brand-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;border-radius:8px;font-weight:700;font-size:13px;flex-shrink:0;overflow:hidden}
+    .brand-icon img{width:100%;height:100%;object-fit:cover;display:block}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+    .brand-title-row{display:flex;align-items:center;gap:6px}
+    .brand-title{font-size:13.5px;font-weight:700;letter-spacing:-.025em;white-space:nowrap}
+    .badge-pro{font-size:9.5px;font-weight:800;background:var(--accent-soft);color:var(--accent);padding:2px 6px;border-radius:6px;letter-spacing:.03em}
+    .brand-sub{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-top:2px;white-space:nowrap}
     .header-stats{margin-left:12px;padding-left:12px;border-left:1px solid var(--border);display:none;align-items:center;gap:8px;color:var(--text-3);font-size:11px}
     @media(min-width:768px){.header-stats{display:flex}.header-inner{padding:0 16px}}
     .header-actions{display:flex;align-items:center;gap:6px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:28px;padding:0 12px;border:1px solid var(--border);border-radius:999px;font-size:11.5px;font-weight:600;color:var(--text-2);background:transparent;white-space:nowrap;transition:background-color .12s}
-    .btn:hover{background:var(--surface-2)}.btn-primary{background:#11110F;color:#fff;border-color:#11110F}.btn-primary:hover{opacity:.9;background:#11110F}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:28px;padding:0 11px;border:1px solid var(--border);border-radius:999px;font-size:11.5px;font-weight:600;color:var(--text-2);background:transparent;white-space:nowrap;transition:background-color .12s}
+    .btn:hover{background:var(--surface-2)}.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text)}.btn-primary:hover{opacity:.9}
     .btn-sm{height:26px;padding:0 10px;font-size:11px}.btn-icon{width:28px;height:28px;padding:0}
-    .btn:disabled{opacity:.5;cursor:not-allowed}.btn-danger{color:var(--danger);border-color:var(--danger)}
     .container{max-width:1280px;margin:0 auto;padding:0 12px}@media(min-width:768px){.container{padding:0 16px}}
     .search-wrap{padding:12px 0 10px}.search{position:relative}
     .search input{width:100%;height:36px;padding:0 32px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-size:13px}
-    .search input:focus{box-shadow:0 0 0 1px rgba(0,0,0,.1)}
     .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none}
     .search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:4px;border-radius:999px;color:var(--text-3)}
-    .search-clear:hover{background:var(--surface-2)}
-    .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-bottom:10px}
     .dot{width:6px;height:6px;border-radius:999px;flex-shrink:0}
-    .pill{display:inline-flex;align-items:center;height:22px;padding:0 10px;border:1px solid;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;transition:box-shadow .12s}
-    .pill.active{box-shadow:0 0 0 2px var(--text)}.pill-edit{height:22px;min-width:72px;padding:0 10px;border:1px solid;border-radius:999px;font-size:12px;font-weight:500;background:var(--surface)}
     .pill-x{padding:4px;color:var(--text-3);border-radius:4px}.pill-x:hover{color:var(--text);background:var(--surface-2)}
     .unread-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:14px;padding:0 4px;margin-left:4px;border-radius:999px;background:var(--danger);color:#fff;font-size:9.5px;font-weight:700}
     .table-header{max-width:1280px;margin:0 auto;padding:0 12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface-2)}
@@ -54,33 +54,32 @@
     .table-header-inner>*:first-child{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
     .table-header-inner>*:last-child{width:140px;flex-shrink:0;text-align:right;padding-right:4px}
     .row-list{max-width:1280px;margin:0 auto}
-    .row{display:flex;align-items:center;gap:8px;height:36px;padding:6px 12px;background:var(--surface);border-bottom:1px solid var(--border);cursor:pointer;font-size:13px;line-height:1;transition:background-color .1s}
+    .row{display:flex;align-items:center;gap:8px;height:38px;padding:6px 12px;background:var(--surface);border-bottom:1px solid var(--border);cursor:pointer;font-size:13px;line-height:1;transition:background-color .1s}
     @media(min-width:768px){.row{padding:6px 16px}}
     .row:hover{background:var(--surface-2)}.row.unread{background:color-mix(in srgb,var(--yellow) 22%,var(--surface))}
-    .row.unread:hover{background:color-mix(in srgb,var(--yellow) 32%,var(--surface))}.row.selected{background:color-mix(in srgb,var(--text) 8%,var(--surface))}
+    .row.selected{background:color-mix(in srgb,var(--text) 8%,var(--surface))}
     .row-left{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
     .row-check{width:16px;height:16px;flex-shrink:0;opacity:0;cursor:pointer;accent-color:var(--text)}
     .row-list:hover .row-check,.row.selected .row-check,.row-check:checked{opacity:1}
     @media(max-width:767px){.row-check{opacity:1}}
     .row-account{display:none;height:20px;align-items:center;border:1px solid;border-radius:999px;padding:0 8px;font-size:11px;font-weight:500;line-height:1;white-space:nowrap;flex-shrink:0}
     @media(min-width:768px){.row-account{display:inline-flex}}
-    .row-content{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .row-from{font-weight:600;color:var(--text)}.row-sep{margin:0 4px;color:var(--text-3)}.row-subject{color:var(--text-2)}
-    .row-date{margin-left:8px;font-size:11px;color:var(--text-3);display:none}@media(min-width:768px){.row-date{display:inline}}
-    .row-right{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+    .row-content{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+    .row-from{font-weight:600;color:var(--text);flex-shrink:0}.row-sep{margin:0 4px;color:var(--text-3);flex-shrink:0}.row-subject{color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .row-date{margin-left:8px;font-size:11px;color:var(--text-3);display:none;flex-shrink:0}@media(min-width:768px){.row-date{display:inline}}
+    .row-right{width:145px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:4px}
     .otp-badge{display:inline-flex;align-items:center;justify-content:center;min-width:56px;height:20px;padding:0 6px;border-radius:6px;border:1px solid var(--yellow-border);background:var(--yellow);color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;letter-spacing:.04em}
     .otp-none{font-size:11px;color:var(--text-3)}
     .copy-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;height:20px;width:36px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:10.5px;font-weight:600;color:var(--text-2)}
     .copy-btn:hover{background:var(--surface-2)}
     .magic-btn{display:inline-flex;align-items:center;justify-content:center;height:20px;padding:0 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:10.5px;font-weight:600;color:var(--blue);white-space:nowrap}
-    .magic-btn:hover{background:color-mix(in srgb,var(--blue) 10%,var(--surface))}
     .row-del{display:none;padding:4px;border-radius:4px;color:var(--text-3);cursor:pointer}
     .row:hover .row-del{display:inline-flex}.row-del:hover{background:color-mix(in srgb,var(--danger) 15%,var(--surface));color:var(--danger)}
+    @media(max-width:767px){.row-del{display:inline-flex}}
     .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 16px;text-align:center}
     .empty-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-3);margin-bottom:12px}
     .empty-title{font-size:13px;font-weight:600}.empty-text{font-size:12px;color:var(--text-2);margin-top:4px;max-width:360px;line-height:1.5}
     .toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:100;padding:8px 16px;border-radius:999px;background:#11110F;color:#fff;font-size:12px;font-weight:500;box-shadow:0 10px 15px -3px rgba(0,0,0,.2);max-width:calc(100vw - 32px);text-align:center;display:flex;align-items:center;gap:8px}
-    .toast button{color:#FDE047;font-weight:600;padding:0 4px}
     .modal-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:12px}
     .modal{width:100%;max-width:420px;max-height:85vh;border-radius:16px;background:var(--surface);border:1px solid var(--border);box-shadow:0 20px 25px -5px rgba(0,0,0,.15);display:flex;flex-direction:column;overflow:hidden}
     .modal.wide{max-width:640px}
@@ -95,31 +94,24 @@
     .modal-close{padding:6px;border-radius:999px;color:var(--text-3);min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}.modal-close:hover{background:var(--surface-2)}
     .field{margin-bottom:12px}.field-label{display:block;font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
     .field-input{width:100%;height:36px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px}
-    .field-input:focus{box-shadow:0 0 0 1px rgba(0,0,0,.1)}
     .field-help{font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.5}
     .tabs{display:flex;gap:2px;padding:8px 16px 0;border-bottom:1px solid var(--border);flex-shrink:0}
     .tab{padding:6px 10px;border-radius:6px 6px 0 0;font-size:12px;font-weight:600;color:var(--text-2)}
     .tab.active{background:var(--surface-2);color:var(--text)}.tab:hover:not(.active){background:var(--surface-2)}
-    .spinner{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
     .icon{display:inline-block;vertical-align:middle;flex-shrink:0}
-    .status-dot{width:6px;height:6px;border-radius:999px;flex-shrink:0}.status-dot.live{background:var(--success)}.status-dot.dead{background:var(--danger)}.status-dot.warn{background:var(--warning)}
     .bulk-bar{width:max-content;max-width:calc(100vw - 24px);white-space:nowrap;position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:#11110F;color:#fff;box-shadow:0 10px 15px -3px rgba(0,0,0,.2)}
     .bulk-bar button{flex-shrink:0;white-space:nowrap;color:#fff;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:600}.bulk-bar button:hover{background:rgba(255,255,255,.15)}
     .bulk-count{white-space:nowrap;flex-shrink:0;font-size:11.5px;padding:0 6px;opacity:.9}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;height:calc(var(--nav-h) + var(--safe-bottom));padding-bottom:var(--safe-bottom);background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;justify-content:space-around}
     .nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--text-3);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;position:relative;transition:color .15s;background:none;border:none;cursor:pointer}
-    .nav-tab.active{color:#fff}
-    .nav-tab.active::before{content:'';position:absolute;inset:6px 20px;background:#11110F;border-radius:10px;z-index:-1}
-    @media(prefers-color-scheme:dark){.nav-tab.active::before{background:var(--text)}.nav-tab.active{color:var(--bg)}}
+    .nav-tab.active{color:var(--bg)}
+    .nav-tab.active::before{content:'';position:absolute;inset:6px 20px;background:var(--text);border-radius:10px;z-index:-1}
     .nav-tab .nav-badge{position:absolute;top:6px;right:calc(50% - 20px);min-width:16px;height:14px;padding:0 4px;border-radius:999px;background:var(--danger);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
     .swipe-wrap{position:relative;overflow:hidden}
     .swipe-delete-bg{position:absolute;inset:0;background:var(--danger);color:#fff;display:flex;align-items:center;padding-left:16px;font-weight:600;font-size:12px;gap:6px;pointer-events:none}
     .swipe-content{position:relative;background:var(--surface);will-change:transform}
-
     .modal.email{height:min(86dvh,780px);max-height:86dvh}
     @media(max-width:767px){.email-bd{padding:0;align-items:stretch}.modal.email{height:100dvh;max-height:100dvh;border-radius:0;width:100%;max-width:100%}.modal{max-height:92dvh}}
-    .bottom-nav{display:flex;align-items:stretch}
     .nav-scroll{flex:1;min-width:0;display:flex;overflow-x:auto;scrollbar-width:none}.nav-scroll::-webkit-scrollbar{display:none}
     .nav-scroll .nav-tab{flex:0 0 auto;min-width:78px;max-width:150px;padding:0 12px}
     .nav-scroll .nav-tab.active::before{inset:7px 4px}
@@ -128,29 +120,19 @@
     .filter-btn{height:36px;flex-shrink:0;white-space:nowrap}
     .filter-pop{position:absolute;top:42px;right:0;z-index:40;width:min(340px,94vw);max-height:min(60vh,420px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 28px -8px rgba(0,0,0,.2);padding:8px}
     .pill-chip{font-size:11px;font-weight:600;border:1px solid;border-radius:999px;padding:2px 9px;background:transparent;cursor:pointer;white-space:nowrap}
-    .acc-screen{position:fixed;inset:0;z-index:55;background:var(--bg,var(--surface));display:flex;flex-direction:column;padding-top:var(--safe-top)}
+    .acc-screen{position:fixed;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;padding-top:var(--safe-top)}
     .acc-head{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface)}
     .acc-body{flex:1;overflow-y:auto;padding-bottom:calc(var(--safe-bottom) + 70px)}
-    .batch-table{display:flex;flex-direction:column;gap:6px}
-    .batch-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-    .batch-row .field-input{flex:1;min-width:0;height:32px;font-size:12px}
-    .batch-n{width:18px;font-size:10.5px;color:var(--text-3);text-align:right}
-    .batch-st{width:18px;text-align:center;font-weight:700}.batch-st.ok{color:#16A34A}.batch-st.err{color:var(--danger)}
-    .batch-msg{flex-basis:100%;font-size:11px;color:var(--danger);padding-left:24px}
-    .grp-chip{flex-shrink:0;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;margin-left:6px}
-    .row.sub{padding-left:28px;background:color-mix(in srgb,var(--surface-2) 60%,var(--surface))}
+    /* NÚT GOM NHÓM / COLLAPSE NỔI BẬT DỄ NHẬN BIẾT */
+    .grp-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);cursor:pointer;margin-left:8px;transition:all .15s}
+    .grp-chip:hover{background:var(--accent);color:#fff}
+    .grp-chip.is-open{background:var(--accent);color:#fff}
+    .row.is-grouped-parent{border-left:3px solid var(--accent)}
+    .row.sub{padding-left:28px;background:color-mix(in srgb,var(--accent-soft) 35%,var(--surface));border-left:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
     .pill-head{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;cursor:pointer}
     .pill-caret{width:12px;color:var(--text-3)}.pill-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pill-count{font-size:10.5px;font-weight:500;color:var(--text-3)}
-    @media(max-width:767px){.swipe-hint{display:block}}
-    @media(max-width:767px){.nb-sidebar{position:fixed;left:0;top:calc(var(--header-h) + var(--safe-top));bottom:calc(var(--nav-h) + var(--safe-bottom));z-index:40;box-shadow:2px 0 8px rgba(0,0,0,.1);transform:translateX(-100%);transition:transform .2s}.nb-sidebar.open{transform:translateX(0)}}
-    .nb-note-item:hover{background:var(--surface-2)}.nb-note-item.active{background:var(--surface-2);border-color:var(--border)}
     .nb-tool{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;color:var(--text-2);font-size:12px;font-weight:600;flex-shrink:0}
-    .nb-tool:hover{background:var(--surface-2)}.nb-tool.active{background:var(--text);color:var(--bg)}
-    .code-block-body.collapsed pre{max-height:40px;overflow:hidden}
-    @media(max-width:767px){
-      .nb-tool{width:26px;height:26px}
-    }
-    @media(max-width:767px){.md-split{grid-template-columns:1fr}}
+    .nb-tool:hover{background:var(--surface-2)}
     .editor-toolbar{display:flex;flex-wrap:wrap;gap:2px;padding:6px 8px;border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;background:var(--surface-2)}
   </style>
 </head>
@@ -158,276 +140,17 @@
   <div id="boot-error">
     <h2>⚠️ Không tải được ứng dụng</h2>
     <p>Ứng dụng cần <b>internet</b> để tải thư viện Preact từ CDN lần đầu.</p>
-    <p>Nếu bạn mở bằng <code>file://</code> (double-click): hãy thử dùng <b>Chrome</b> hoặc <b>Firefox</b> mới nhất. Nếu vẫn lỗi, hãy chạy qua localhost:</p>
-    <p><code>python3 -m http.server 8000</code> rồi mở <code>http://localhost:8000/</code></p>
     <pre id="boot-detail" style="white-space:pre-wrap;font-size:11px;color:#b91c1c;margin-top:12px"></pre>
     <p><button onclick="ghReset()" style="padding:8px 14px;border-radius:8px;border:1px solid #999;background:#fff;cursor:pointer">Xóa cache &amp; tải lại</button></p>
-    <p style="margin-top:14px;font-size:12px;color:#888">Nếu vẫn lỗi, bấm F12 để xem Console.</p>
   </div>
   <div id="app"></div>
 
-  <script type="text/plain" id="bridge-worker-tpl">
-// Gmail Hub Mail Bridge — IMAP/SMTP qua mật khẩu ứng dụng (không cần OAuth, không cần Test User)
-// Variables: ALLOWED_ORIGIN (vd https://leha.world), APP_KEY (chuỗi bí mật tự đặt, dán cùng vào app)
-import { connect } from "cloudflare:sockets";
-const enc = new TextEncoder(), dec = new TextDecoder();
-const MAXBODY = 150000;
-
-class Conn {
-  constructor(sock) { this.sock = sock; this.r = sock.readable.getReader(); this.w = sock.writable.getWriter(); this.buf = new Uint8Array(0); }
-  async fill() {
-    const { value, done } = await this.r.read();
-    if (done) throw new Error("Máy chủ mail đóng kết nối");
-    const n = new Uint8Array(this.buf.length + value.length); n.set(this.buf); n.set(value, this.buf.length); this.buf = n;
-  }
-  async readLine() {
-    let from = 0;
-    for (;;) {
-      for (let i = from; i < this.buf.length - 1; i++) {
-        if (this.buf[i] === 13 && this.buf[i + 1] === 10) { const l = dec.decode(this.buf.subarray(0, i)); this.buf = this.buf.subarray(i + 2); return l; }
-      }
-      from = Math.max(0, this.buf.length - 1);
-      await this.fill();
-    }
-  }
-  async readBytes(n) { while (this.buf.length < n) await this.fill(); const o = this.buf.slice(0, n); this.buf = this.buf.subarray(n); return o; }
-  async write(s) { await this.w.write(typeof s === "string" ? enc.encode(s) : s); }
-  close() { try { this.sock.close(); } catch (e) {} }
-}
-
-const q = (s) => '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
-function b64(u8) { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
-
-class Imap {
-  constructor(c) { this.c = c; this.n = 0; }
-  static async open(email, pass) {
-    const c = new Conn(connect({ hostname: "imap.gmail.com", port: 993 }, { secureTransport: "on" }));
-    const im = new Imap(c);
-    await c.readLine();
-    try { await im.cmd("LOGIN " + q(email) + " " + q(pass)); }
-    catch (e) { c.close(); throw new Error("AUTHENTICATIONFAILED: sai email hoặc mật khẩu ứng dụng"); }
-    return im;
-  }
-  async readResp() {
-    let text = ""; const lits = [];
-    for (;;) {
-      const l = await this.c.readLine(); const m = /\{(\d+)\}$/.exec(l);
-      if (!m) return { text: text + l, lits };
-      text += l.slice(0, m.index) + "\u0001" + lits.length + "\u0001";
-      lits.push(await this.c.readBytes(+m[1]));
-    }
-  }
-  async cmd(line) {
-    const tag = "A" + ++this.n; await this.c.write(tag + " " + line + "\r\n");
-    const out = [];
-    for (;;) {
-      const r = await this.readResp();
-      if (r.text.startsWith(tag + " ")) { if (!/^\S+ OK/.test(r.text)) throw new Error(r.text); return out; }
-      out.push(r);
-    }
-  }
-  async select(box) {
-    const out = await this.cmd("SELECT " + (box ? q(box) : "INBOX"));
-    const uv = out.map((r) => /UIDVALIDITY (\d+)/.exec(r.text)).find(Boolean);
-    return uv ? uv[1] : "0";
-  }
-  async trashBox() {
-    const out = await this.cmd('LIST "" "*"');
-    for (const r of out) { const m = /^\* LIST \(([^)]*)\) (?:"[^"]*"|NIL) (.+)$/.exec(r.text); if (m && /\\Trash/i.test(m[1])) return m[2].replace(/^"|"$/g, ""); }
-    return "[Gmail]/Trash";
-  }
-  close() { try { this.c.write("Z LOGOUT\r\n"); } catch (e) {} this.c.close(); }
-}
-
-const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const imapDate = (d) => d.getUTCDate() + "-" + MON[d.getUTCMonth()] + "-" + d.getUTCFullYear();
-
-async function sync(b) {
-  const im = await Imap.open(b.email, b.password);
-  try {
-    const uv = await im.select();
-    const since = new Date(Date.now() - (b.days || 30) * 86400000);
-    const s = await im.cmd("UID SEARCH SINCE " + imapDate(since));
-    let uids = []; for (const r of s) if (/^\* SEARCH/.test(r.text)) uids = r.text.replace("* SEARCH", "").trim().split(/\s+/).filter(Boolean).map(Number);
-    uids = uids.sort((a, z) => z - a).slice(0, b.limit || 40);
-    const have = new Set(b.have || []);
-    const items = [];
-    if (uids.length) {
-      const fl = await im.cmd("UID FETCH " + uids.join(",") + " (UID FLAGS INTERNALDATE)");
-      for (const r of fl) {
-        const u = /UID (\d+)/.exec(r.text); if (!u) continue;
-        const f = /FLAGS \(([^)]*)\)/.exec(r.text), d = /INTERNALDATE "([^"]+)"/.exec(r.text);
-        items.push({ uid: +u[1], seen: !!(f && /\\Seen/.test(f[1])), date: d ? d[1] : "" });
-      }
-      const fresh = uids.filter((u) => !have.has(u));
-      for (let i = 0; i < fresh.length; i += 10) {
-        const part = fresh.slice(i, i + 10);
-        const out = await im.cmd("UID FETCH " + part.join(",") + " (UID BODY.PEEK[]<0." + MAXBODY + ">)");
-        for (const r of out) {
-          const u = /UID (\d+)/.exec(r.text), l = /\u0001(\d+)\u0001/.exec(r.text);
-          if (!u || !l) continue;
-          const it = items.find((x) => x.uid === +u[1]); if (it) it.raw = b64(r.lits[+l[1]]);
-        }
-      }
-    }
-    return { uv, items };
-  } finally { im.close(); }
-}
-
-async function act(b) {
-  const im = await Imap.open(b.email, b.password);
-  try {
-    await im.select();
-    const set = (b.uids || []).join(","); if (!set) return { ok: true };
-    if (b.op === "read") await im.cmd("UID STORE " + set + " +FLAGS.SILENT (\\Seen)");
-    else if (b.op === "unread") await im.cmd("UID STORE " + set + " -FLAGS.SILENT (\\Seen)");
-    else if (b.op === "trash") {
-      const box = await im.trashBox();
-      await im.cmd("UID COPY " + set + " " + q(box));
-      await im.cmd("UID STORE " + set + " +FLAGS.SILENT (\\Deleted)");
-      await im.cmd("EXPUNGE");
-    } else throw new Error("op không hợp lệ");
-    return { ok: true };
-  } finally { im.close(); }
-}
-
-async function smtpReply(c) {
-  let code, last;
-  do { last = await c.readLine(); code = last.slice(0, 3); } while (last[3] === "-");
-  return { code, text: last };
-}
-async function smtpCmd(c, line, want) {
-  await c.write(line + "\r\n"); const r = await smtpReply(c);
-  if (!want.includes(r.code)) throw new Error("SMTP: " + r.text); return r;
-}
-async function send(b) {
-  const c = new Conn(connect({ hostname: "smtp.gmail.com", port: 465 }, { secureTransport: "on" }));
-  try {
-    await smtpReply(c);
-    await smtpCmd(c, "EHLO bridge", ["250"]);
-    await smtpCmd(c, "AUTH PLAIN " + btoa("\0" + b.email + "\0" + b.password), ["235"]);
-    await smtpCmd(c, "MAIL FROM:<" + b.email + ">", ["250"]);
-    for (const t of b.to || []) await smtpCmd(c, "RCPT TO:<" + t + ">", ["250", "251"]);
-    await smtpCmd(c, "DATA", ["354"]);
-    let raw = (b.raw || "").replace(/\r?\n/g, "\r\n").replace(/^\./gm, "..");
-    if (!/^From:/im.test(raw)) raw = "From: " + b.email + "\r\n" + raw;
-    await c.write(raw + "\r\n.\r\n");
-    const r = await smtpReply(c); if (r.code !== "250") throw new Error("SMTP: " + r.text);
-    try { await c.write("QUIT\r\n"); } catch (e) {}
-    return { ok: true };
-  } finally { c.close(); }
-}
-
-export default {
-  async fetch(req, env) {
-    const cors = { "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*", "Access-Control-Allow-Headers": "content-type,x-key", "Access-Control-Allow-Methods": "POST,OPTIONS" };
-    const json = (o, st = 200) => new Response(JSON.stringify(o), { status: st, headers: { ...cors, "content-type": "application/json" } });
-    if (req.method === "OPTIONS") return new Response(null, { headers: cors });
-    if (req.method !== "POST") return new Response("Gmail Hub Mail Bridge OK");
-    if (env.APP_KEY && req.headers.get("x-key") !== env.APP_KEY) return json({ error: "Sai APP_KEY" }, 401);
-    try {
-      const b = await req.json(); const p = new URL(req.url).pathname;
-      if (!b.email || !b.password) return json({ error: "Thiếu email hoặc mật khẩu" }, 400);
-      b.password = String(b.password).replace(/\s+/g, "");
-      if (p === "/verify") { const im = await Imap.open(b.email, b.password); im.close(); return json({ ok: true }); }
-      if (p === "/sync") return json(await sync(b));
-      if (p === "/act") return json(await act(b));
-      if (p === "/send") return json(await send(b));
-      return json({ error: "Không có đường dẫn này" }, 404);
-    } catch (e) { return json({ error: String(e.message || e) }, 502); }
-  },
-};
-</script>
-  <script type="text/plain" id="auth-worker-tpl">
-// Gmail Hub Auth Worker — đăng nhập 1 lần, tự gia hạn token (không popup)
-// Variables: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (Secret), ALLOWED_ORIGIN (vd: https://leha.world)
-const SCOPE = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
-const TOKEN_URL = "https://oauth2.googleapis.com/token";
-const form = (o) => new URLSearchParams(o);
-
-export default {
-  async fetch(req, env) {
-    const url = new URL(req.url);
-    const cors = {
-      "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN,
-      "Access-Control-Allow-Headers": "content-type",
-      "Access-Control-Allow-Methods": "POST,OPTIONS",
-    };
-    if (req.method === "OPTIONS") return new Response(null, { headers: cors });
-    const redirect_uri = url.origin + "/callback";
-
-    if (url.pathname === "/login") {
-      const q = form({ client_id: env.GOOGLE_CLIENT_ID, redirect_uri, response_type: "code", scope: SCOPE,
-                       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
-      const hint = url.searchParams.get("hint");
-      if (hint) q.set("login_hint", hint);
-      return Response.redirect("https://accounts.google.com/o/oauth2/v2/auth?" + q, 302);
-    }
-
-    if (url.pathname === "/callback") {
-      const code = url.searchParams.get("code");
-      let msg;
-      if (!code) {
-        msg = { type: "gh-auth", error: url.searchParams.get("error") || "no_code" };
-      } else {
-        const r = await fetch(TOKEN_URL, { method: "POST", body: form({ code, redirect_uri, grant_type: "authorization_code",
-          client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET }) });
-        const t = await r.json();
-        msg = t.error ? { type: "gh-auth", error: t.error } : { type: "gh-auth", tokens: t };
-      }
-      const data = JSON.stringify(msg).replace(/</g, "\\u003c");
-      const html = "<" + "script>opener&&opener.postMessage(" + data + "," + JSON.stringify(env.ALLOWED_ORIGIN) + ");close()<" + "/script>Xong, bạn có thể đóng cửa sổ này.";
-      return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
-    }
-
-    if (url.pathname === "/refresh" && req.method === "POST") {
-      const { refresh_token } = await req.json();
-      const r = await fetch(TOKEN_URL, { method: "POST", body: form({ refresh_token, grant_type: "refresh_token",
-        client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET }) });
-      const t = await r.json();
-      const out = t.error ? { error: t.error } : { access_token: t.access_token, expires_in: t.expires_in };
-      return new Response(JSON.stringify(out), { status: t.error ? 400 : 200, headers: { ...cors, "content-type": "application/json" } });
-    }
-    return new Response("Gmail Hub Auth OK");
-  },
-};
-</script>
-  <script type="text/plain" id="cf-worker-tpl">
-// Cloudflare Email Worker — OTP -> Telegram / Discord
-// Secrets (Settings > Variables): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK (tuỳ chọn)
-export default {
-  async email(message, env, ctx) {
-    const raw = await new Response(message.raw).text();
-    const subject = message.headers.get("subject") || "";
-    // Bỏ header MIME + thẻ HTML, ưu tiên mã đứng riêng 4-8 số
-    const body = raw.split(/\r?\n\r?\n/).slice(1).join(" ").replace(/<[^>]+>/g, " ");
-    const hit = (subject + " " + body).match(/(?<![\d#.])(\d{4,8})(?![\d.])/);
-    const otp = hit ? hit[1] : null;
-    if (otp) {
-      const text = `🔐 OTP ${otp}\nTừ: ${message.from}\nĐến: ${message.to}\nSubject: ${subject}`;
-      const jobs = [];
-      if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
-        jobs.push(fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text })
-        }));
-      }
-      if (env.DISCORD_WEBHOOK) {
-        jobs.push(fetch(env.DISCORD_WEBHOOK, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: text })
-        }));
-      }
-      ctx.waitUntil(Promise.allSettled(jobs));
-    }
-    // Vẫn chuyển tiếp về Gmail chính (địa chỉ phải được verify trong Email Routing)
-    await message.forward("leha.golfcare02@gmail.com");
-  }
-};
-</script>
   <script src="https://unpkg.com/preact@10.19.6/dist/preact.umd.js"></script>
   <script src="https://unpkg.com/preact@10.19.6/hooks/dist/hooks.umd.js"></script>
   <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('./sw.js').catch(function(){});
+    }
     window.ghReset = function(){
       var rs = navigator.serviceWorker ? navigator.serviceWorker.getRegistrations() : Promise.resolve([]);
       rs.then(function(r){ return Promise.all(r.map(function(x){ return x.unregister(); })); })
@@ -438,9 +161,8 @@ export default {
     window.addEventListener('error', function(e){
       if(document.getElementById('app').innerHTML.trim()) return;
       document.getElementById('boot-error').style.display='block';
-      if(e && e.message) document.getElementById('boot-detail').textContent = e.message + (e.lineno?' (dòng '+e.lineno+')':'');
+      if(e && e.message) document.getElementById('boot-detail').textContent = e.message;
     });
-    setTimeout(function(){ if(!document.getElementById('app').innerHTML.trim()){ document.getElementById('boot-error').style.display='block'; } }, 5000);
 
     (function(){
       'use strict';
@@ -448,331 +170,281 @@ export default {
         document.getElementById('boot-error').style.display='block';
         return;
       }
-      var h = window.preact.h, Fragment = window.preact.Fragment, render = window.preact.render;
+      var h = window.preact.h, render = window.preact.render;
       var useState = window.preactHooks.useState, useEffect = window.preactHooks.useEffect,
           useRef = window.preactHooks.useRef, useMemo = window.preactHooks.useMemo,
           useCallback = window.preactHooks.useCallback;
 
-      /* ============ SERVICE WORKER ============ */
-      if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-        navigator.serviceWorker.register('./sw.js').then(function(reg){
-          console.log('[SW] registered:', reg.scope);
-        }).catch(function(e){ console.warn('[SW] register failed:', e); });
-
-        navigator.serviceWorker.addEventListener('controllerchange', function(){
-          var key = 'gh_sw_ctrl_reload';
-          if (sessionStorage.getItem(key)) return;
-          sessionStorage.setItem(key, '1');
-          window.location.reload();
-        });
-      }
-      function swClearCacheAfterImport(){
-        return new Promise(function(resolve){
-          if (!navigator.serviceWorker || !navigator.serviceWorker.controller){ resolve(); return; }
-          try{
-            var ch = new MessageChannel();
-            var done = false;
-            ch.port1.onmessage = function(){ if(!done){ done = true; resolve(); } };
-            navigator.serviceWorker.controller.postMessage(
-              {type:'CLEAR_CACHE_AFTER_IMPORT'}, [ch.port2]
-            );
-            setTimeout(function(){ if(!done){ done=true; resolve(); } }, 1500);
-          }catch(e){ resolve(); }
-        });
-      }
-
-      /* ============ UTILS ============ */
       var COLORS = ['#2563EB','#DB2777','#059669','#EA580C','#7C3AED','#0891B2','#16A34A','#DC2626','#D97706','#4F46E5'];
       function hexToRgb(hex){ var h2=hex.replace('#',''); var n=parseInt(h2,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
       function rgba(hex,a){ var c=hexToRgb(hex); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
       function darken(hex,f){ var c=hexToRgb(hex); var o=1-f; return 'rgb('+Math.max(0,Math.floor(c[0]*o))+','+Math.max(0,Math.floor(c[1]*o))+','+Math.max(0,Math.floor(c[2]*o))+')'; }
-      function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
       function uid(p){ return (p||'id')+'_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
       function formatDate(ts){ var d=new Date(ts), n=new Date(); if(d.toDateString()===n.toDateString()) return d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}); return d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'}); }
       function formatFull(ts){ return new Date(ts).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-      function extractOtp(t){ if(!t) return null; var m6=t.match(/(?<!\d)(\d{6})(?!\d)/g); if(m6) return m6[0]; var ma=t.match(/(?<!\d)(\d{4,8})(?!\d)/g); if(ma){var f=ma.filter(function(m){return !/^(19|20)\d{2}$/.test(m)||m.length>=6;}); return f[0]||null;} return null; }
-      function extractMagicLink(t){ if(!t) return null; var urls=t.match(/https?:\/\/[^\s<>"']+/g)||[]; for(var i=0;i<urls.length;i++){var c=urls[i].replace(/[.,;!?)]+$/,''); if(/magic|verify|confirm|login|signin|auth|reset|password/i.test(c)) return c;} for(var j=0;j<urls.length;j++){var c2=urls[j].replace(/[.,;!?)]+$/,''); if(/[?&](token|code|key|otp|ref|t)=/i.test(c2)&&c2.length>40) return c2;} return null; }
-      function decodeB64(d){ if(!d) return ''; try{return decodeURIComponent(escape(atob(d.replace(/-/g,'+').replace(/_/g,'/'))));}catch(e){try{return atob(d);}catch(e2){return '';}} }
-      function utf8ToB64(s){ var b=new TextEncoder().encode(s); var x=''; for(var i=0;i<b.length;i++) x+=String.fromCharCode(b[i]); return btoa(x); }
-      function utf8ToB64Url(s){ return utf8ToB64(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
-      function wrap76(s){ return s.match(/.{1,76}/g)?.join('\r\n')||s; }
-      function fileToB64(f){ return new Promise(function(res,rej){var r=new FileReader(); r.onload=function(){res(String(r.result).split(',')[1]||'');}; r.onerror=rej; r.readAsDataURL(f);}); }
 
-      /* ============ AUTH HELPERS ============ */
-      var gsiPromptLock = false, gsiPromptLockTs = 0;
-      function isTokenValid(acc){
-        if (!acc || !acc.accessToken) return false;
-        // Prefer expiresAt; give 45s buffer. If no expiresAt but token exists, treat as usable for one try.
-        if (acc.expiresAt) return (acc.expiresAt - Date.now() > 45000);
-        return true;
-      }
-      function acquireGsiLock(){
-        var now = Date.now();
-        if (gsiPromptLock && now - gsiPromptLockTs < 2500) {
-          console.log('[GSI] lock active, skip prompt');
-          return false;
-        }
-        gsiPromptLock = true; gsiPromptLockTs = now;
-        setTimeout(function(){ gsiPromptLock = false; }, 4000);
-        return true;
-      }
-      function releaseGsiLock(){ gsiPromptLock = false; }
-
-
-      /* ============ STORAGE ============ */
-      var LS = {CLIENT_ID:'gmail_hub_client_id',ACCOUNTS:'gmail_hub_accounts',EMAILS:'gmail_hub_emails',NOTES:'gmail_hub_notes',SIGNATURES:'gmail_hub_signatures',RULES:'gmail_hub_rules',SETTINGS:'gmail_hub_settings',LAST_BACKUP:'gmail_hub_last_backup',ACTIVE_TAB:'gh_activeTab'};
+      var LS = {
+        ACCOUNTS:'gmail_hub_accounts',
+        EMAILS:'gmail_hub_emails',
+        NOTES:'gmail_hub_notes',
+        SETTINGS:'gmail_hub_settings',
+        ACTIVE_TAB:'gh_activeTab',
+        DELETED_IDS:'gmail_hub_deleted_ids'
+      };
       function loadJSON(k,fb){ try{var v=localStorage.getItem(k); return v?JSON.parse(v):fb;}catch(e){return fb;} }
       function saveJSON(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
 
-      /* ============ CRYPTO ============ */
-      function a2b64(a){ var b=''; for(var i=0;i<a.length;i++) b+=String.fromCharCode(a[i]); return btoa(b); }
-      function b642a(b64){ var bin=atob(b64); var a=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); return a; }
-      async function deriveKey(pw,salt){ var km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:120000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']); }
-      async function encData(data,pw){ var salt=crypto.getRandomValues(new Uint8Array(16)); var iv=crypto.getRandomValues(new Uint8Array(12)); var key=await deriveKey(pw,salt); var enc=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))); return {v:1,alg:'AES-GCM-256-PBKDF2',salt:a2b64(salt),iv:a2b64(iv),data:a2b64(new Uint8Array(enc))}; }
-      async function decData(p,pw){ var key=await deriveKey(pw,b642a(p.salt)); var dec=await crypto.subtle.decrypt({name:'AES-GCM',iv:b642a(p.iv)},key,b642a(p.data)); return JSON.parse(new TextDecoder().decode(dec)); }
-
-      /* ============ GMAIL API ============ */
-      var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly','https://www.googleapis.com/auth/gmail.send','https://www.googleapis.com/auth/gmail.modify','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'].join(' ');
-      var gisP=null;
-      function loadGis(){ if(gisP) return gisP; if(window.google&&window.google.accounts&&window.google.accounts.oauth2) return gisP=Promise.resolve(); gisP=new Promise(function(res,rej){ var ex=document.querySelector('script[src*="accounts.google.com/gsi/client"]'); if(ex){ex.addEventListener('load',function(){res();}); ex.addEventListener('error',function(){rej(new Error('GIS load err'));}); return;} var s=document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.async=true; s.defer=true; s.onload=function(){res();}; s.onerror=function(){rej(new Error('GIS load err'));}; document.head.appendChild(s); setTimeout(function(){rej(new Error('GIS timeout'));},10000); }); return gisP; }
-
-      function authWorker(){ return String(loadJSON(LS.SETTINGS,{}).authWorkerUrl||'').trim().replace(/\/+$/,''); }
-      function friendlyAuthError(e){
-        var m=(e&&e.message)||String(e);
-        if(/popup/i.test(m)) return 'Cửa sổ đăng nhập bị đóng hoặc bị chặn. Cho phép popup cho trang này rồi bấm lại.';
-        return m;
-      }
-      // Đăng nhập qua Auth Worker: nhận access_token + refresh_token (gia hạn sau này không cần popup)
-      function workerLogin(base,hint){
-        return new Promise(function(res,rej){
-          var w=window.open(base+'/login'+(hint?'?hint='+encodeURIComponent(hint):''),'ghAuth','width=480,height=680');
-          if(!w){ rej(new Error('popup blocked')); return; }
-          var origin=new URL(base).origin, done=false, t;
-          function cleanup(){ window.removeEventListener('message',onMsg); clearInterval(t); }
-          function onMsg(ev){
-            if(ev.origin!==origin||!ev.data||ev.data.type!=='gh-auth') return;
-            done=true; cleanup();
-            if(ev.data.error) rej(new Error(ev.data.error)); else res(ev.data.tokens);
-          }
-          window.addEventListener('message',onMsg);
-          t=setInterval(function(){ if(w.closed&&!done){ cleanup(); rej(new Error('Popup window closed')); } },500);
-        });
-      }
-      async function workerRefresh(base,rt){
-        var r=await fetch(base+'/refresh',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({refresh_token:rt})});
-        var j=await r.json().catch(function(){return {};});
-        if(!r.ok||j.error) throw new Error(j.error||('HTTP '+r.status));
-        return j;
-      }
-      async function gsiSignIn(cid,hint,interactive){ await loadGis(); if(!window.google||!window.google.accounts||!window.google.accounts.oauth2) throw new Error('GIS unavailable'); return new Promise(function(res,rej){ var c=window.google.accounts.oauth2.initTokenClient({client_id:cid,scope:SCOPES,hint:hint||'',callback:function(r){ if(r.error) return rej(new Error(r.error)); res(r); },error_callback:function(e){rej(new Error((e&&e.message)||'OAuth error'));}}); c.requestAccessToken({prompt:hint?(interactive?'':'none'):'select_account consent',hint:hint}); }); }
-      async function fetchUserInfo(t){ var r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('userinfo failed'); return r.json(); }
-      async function gmailList(t,q,max){ max=max||30; var u='https://www.googleapis.com/gmail/v1/users/me/messages?maxResults='+max+'&q='+encodeURIComponent(q); var r=await fetch(u,{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('List '+r.status); var j=await r.json(); return j.messages||[]; }
-      async function gmailGet(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'?format=full',{headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Get '+r.status); return r.json(); }
-      async function gmailSend(t,raw){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/send',{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({raw:utf8ToB64Url(raw)})}); if(!r.ok){ var tx=await r.text(); throw new Error('Send '+tx.slice(0,200)); } return r.json(); }
-      async function gmailModify(t,id,add,rm){ add=add||[]; rm=rm||[]; var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/modify',{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({addLabelIds:add,removeLabelIds:rm})}); if(!r.ok) throw new Error('Modify'); return r.json(); }
-      async function gmailTrash(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/trash',{method:'POST',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Trash'); return r.json(); }
-      async function gmailUntrash(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id+'/untrash',{method:'POST',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Untrash'); return r.json(); }
-
-      /* ============ MAIL BRIDGE (IMAP / mật khẩu ứng dụng) ============ */
-      function bridgeCfg(){ var st=loadJSON(LS.SETTINGS,{}); return {url:String(st.bridgeUrl||'').trim().replace(/\/+$/,''),key:st.bridgeKey||''}; }
-      async function bridgeCall(path,body){
-        var b=bridgeCfg(); if(!b.url) throw new Error('Chưa cấu hình Mail Bridge trong Cài đặt');
-        var r=await fetch(b.url+path,{method:'POST',headers:{'content-type':'application/json','x-key':b.key},body:JSON.stringify(body)});
-        var j=await r.json().catch(function(){return {};});
-        if(!r.ok||j.error) throw new Error(j.error||('HTTP '+r.status));
-        return j;
-      }
-      function imapAct(acc,op,uids){ return bridgeCall('/act',{email:acc.email,password:acc.appPassword,op:op,uids:uids}); }
-      function b64ToBytes(b){ b=b.replace(/\s+/g,'').replace(/=+$/,''); if(b.length%4===1) b=b.slice(0,-1); var bin=atob(b), a=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); return a; }
-      function bytesToBin(a){ var s=''; for(var i=0;i<a.length;i+=0x8000) s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000)); return s; }
-      function binToBytes(s){ var a=new Uint8Array(s.length); for(var i=0;i<s.length;i++) a[i]=s.charCodeAt(i)&255; return a; }
-      function qpToBytes(str){ str=str.replace(/=\r?\n/g,''); var out=[]; for(var i=0;i<str.length;i++){ var c=str[i]; if(c==='='&&/^[0-9A-Fa-f]{2}$/.test(str.substr(i+1,2))){ out.push(parseInt(str.substr(i+1,2),16)); i+=2; } else out.push(str.charCodeAt(i)&255); } return new Uint8Array(out); }
-      function decodeCs(bytes,cs){ try{ return new TextDecoder(String(cs||'utf-8').replace(/["']/g,'')).decode(bytes); }catch(e){ return new TextDecoder('utf-8').decode(bytes); } }
-      function decodeWords(v){
-        return String(v||'').replace(/(\?=)\s+(=\?)/g,'$1$2').replace(/=\?([^?]+)\?([bBqQ])\?([^?]*)\?=/g,function(m,cs,en,t){
-          try{ return en.toLowerCase()==='b'?decodeCs(b64ToBytes(t),cs):decodeCs(qpToBytes(t.replace(/_/g,' ')),cs); }catch(e){ return m; } });
-      }
-      function splitHead(bin){
-        var m=/\r?\n\r?\n/.exec(bin), head=m?bin.slice(0,m.index):bin, body=m?bin.slice(m.index+m[0].length):'', hh={};
-        head.replace(/\r?\n[ \t]+/g,' ').split(/\r?\n/).forEach(function(l){ var i=l.indexOf(':'); if(i>0){ var k=l.slice(0,i).toLowerCase(); if(!(k in hh)) hh[k]=l.slice(i+1).trim(); } });
-        return {h:hh,body:body};
-      }
-      function hdrParam(v,name){ var m=new RegExp(name+'\\*?\\s*=\\s*("([^"]*)"|[^;\\s]+)','i').exec(v||''); return m?(m[2]!==undefined?m[2]:m[1]):''; }
-      function walkMime(bin,out){
-        var p=splitHead(bin), ct=(p.h['content-type']||'text/plain').toLowerCase();
-        if(ct.indexOf('multipart/')===0){
-          var bd=hdrParam(p.h['content-type'],'boundary'); if(!bd) return;
-          p.body.split('--'+bd).slice(1).forEach(function(part){ if(part.slice(0,2)==='--') return; walkMime(part.replace(/^\r?\n/,''),out); });
-          return;
-        }
-        var disp=p.h['content-disposition']||'';
-        if(/attachment/i.test(disp)||hdrParam(disp,'filename')){ out.att=true; return; }
-        if(ct.indexOf('text/html')!==0&&ct.indexOf('text/plain')!==0) return;
-        var cte=(p.h['content-transfer-encoding']||'7bit').toLowerCase(), bytes;
-        try{ bytes=cte==='base64'?b64ToBytes(p.body):cte==='quoted-printable'?qpToBytes(p.body):binToBytes(p.body); }catch(e){ return; }
-        var txt=decodeCs(bytes,hdrParam(p.h['content-type'],'charset')||'utf-8');
-        if(ct.indexOf('text/html')===0){ if(!out.html) out.html=txt; } else if(!out.text) out.text=txt;
-      }
-      function parseRawMail(b64,item,acc,uv){
-        var bin=bytesToBin(b64ToBytes(b64)), p=splitHead(bin), out={html:'',text:'',att:false};
-        walkMime(bin,out);
-        var subject=decodeWords(p.h.subject)||'(Không tiêu đề)', from=decodeWords(p.h.from), to=decodeWords(p.h.to);
-        var text=out.text||(out.html?out.html.replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' '):'');
-        var date=Date.parse(String(item.date||'').replace(/^(\d{1,2})-(\w{3})-(\d{4})/,'$1 $2 $3'))||Date.parse(p.h.date)||Date.now();
-        var html=out.html||(out.text?'<pre style="white-space:pre-wrap;font-family:inherit">'+esc(out.text)+'</pre>':'');
-        var snip=text.replace(/\s+/g,' ').trim().slice(0,160), msgid=p.h['message-id']||'';
-        return {id:'imap:'+acc.id+':'+uv+':'+item.uid,uid:item.uid,uv:uv,threadId:null,accountId:acc.id,from:from,to:to,subject:subject,snippet:snip,bodyHtml:html,bodyText:text,messageId:msgid,references:msgid,internalDate:date,otp:extractOtp(subject+' '+text+' '+snip),magicLink:extractMagicLink(out.html||text),isUnread:!item.seen,hasAttachments:out.att};
-      }
-      /* IndexedDB: lưu email không giới hạn (localStorage chỉ ~5MB) */
       function idbOpen(){ return new Promise(function(res,rej){ var r=indexedDB.open('gmailhub',1); r.onupgradeneeded=function(){ r.result.createObjectStore('kv'); }; r.onsuccess=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; }); }
       function idbGet(k){ return idbOpen().then(function(db){ return new Promise(function(res,rej){ var q=db.transaction('kv').objectStore('kv').get(k); q.onsuccess=function(){res(q.result);}; q.onerror=function(){rej(q.error);}; }); }); }
       function idbSet(k,v){ return idbOpen().then(function(db){ return new Promise(function(res,rej){ var t=db.transaction('kv','readwrite'); t.objectStore('kv').put(v,k); t.oncomplete=function(){res();}; t.onerror=function(){rej(t.error);}; }); }); }
-      async function gmailRemove(t,id,perm){
-        if(perm){ try{ await gmailDelete(t,id); return 'deleted'; }catch(e){} } // xóa vĩnh viễn cần quyền rộng hơn -> tự chuyển thùng rác
-        await gmailTrash(t,id); return 'trashed';
-      }
-      async function gmailDelete(t,id){ var r=await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+t}}); if(!r.ok) throw new Error('Delete'); return true; }
 
-      function parseMsg(msg,accId){
-        var H=(msg.payload&&msg.payload.headers)||[];
-        function g(n){ for(var i=0;i<H.length;i++) if(H[i].name.toLowerCase()===n.toLowerCase()) return H[i].value||''; return ''; }
-        var subject=g('Subject')||'(Không tiêu đề)', from=g('From'), to=g('To'), msgid=g('Message-ID')||g('Message-Id');
-        var date=parseInt(msg.internalDate||'0')||Date.now(), snip=msg.snippet||'';
-        var htmlBody='', text='';
-        (function w(p){ if(!p) return; if(p.body&&p.body.data&&(p.mimeType==='text/html'||p.mimeType==='text/plain')){ var d=decodeB64(p.body.data); if(p.mimeType==='text/html'&&!htmlBody) htmlBody=d; if(p.mimeType==='text/plain'&&!text) text=d; } if(p.parts) p.parts.forEach(w); })(msg.payload);
-        if(!htmlBody&&text) htmlBody='<pre style="white-space:pre-wrap;font-family:inherit">'+esc(text)+'</pre>';
-        var combined=subject+' '+text+' '+snip;
-        return {id:msg.id,threadId:msg.threadId,accountId:accId,from:from,to:to,subject:subject,snippet:snip,bodyHtml:htmlBody,bodyText:text,messageId:msgid,references:msgid,internalDate:date,otp:extractOtp(combined),magicLink:extractMagicLink(htmlBody||text),isUnread:(msg.labelIds||[]).indexOf('UNREAD')>=0,hasAttachments:!!((msg.payload&&msg.payload.parts&&msg.payload.parts.some(function(p){return p.filename;}))||(msg.payload&&msg.payload.filename))};
-      }
-      function buildMime(o){
-        var b='gh_'+Math.random().toString(36).slice(2); var L=[];
-        L.push('To: '+o.to); L.push('Subject: =?UTF-8?B?'+utf8ToB64(o.subject)+'?=');
-        if(o.inReplyTo) L.push('In-Reply-To: '+o.inReplyTo); if(o.references) L.push('References: '+o.references);
-        L.push('MIME-Version: 1.0'); L.push('Content-Type: multipart/mixed; boundary="'+b+'"'); L.push('');
-        L.push('--'+b); L.push('Content-Type: text/html; charset="UTF-8"'); L.push('Content-Transfer-Encoding: base64'); L.push(''); L.push(wrap76(utf8ToB64(o.htmlBody))); L.push('');
-        (o.attachments||[]).forEach(function(a){ L.push('--'+b); L.push('Content-Type: '+(a.type||'application/octet-stream')+'; name="'+a.name+'"'); L.push('Content-Disposition: attachment; filename="'+a.name+'"'); L.push('Content-Transfer-Encoding: base64'); L.push(''); L.push(wrap76(a.data)); L.push(''); });
-        L.push('--'+b+'--'); return L.join('\r\n');
-      }
-
-      /* ============ MARKDOWN ============ */
-
-      /* ============ ICONS ============ */
       var ICONS = {
         search:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm10 17-6-6',
         x:'M18 6 6 18M6 6l12 12',
-        copy:'M8 4h10a2 2 0 0 1 2 2v10M4 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z',
         gear:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z',
         mail:'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6',
-        check:'M20 6 9 17l-5-5',
         trash:'M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6',
-        send:'M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z',
         edit:'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z',
-        eye:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
-        eyeOff:'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22',
-        plus:'M12 5v14M5 12h14',
-        menu:'M3 6h18M3 12h18M3 18h18',
-        code:'m16 18 6-6-6-6M8 6l-6 6 6 6',
-        image:'M3 3h18v18H3zM3 15l5-5 4 4M15 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
-        table:'M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18',
-        attach:'M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48',
-        refresh:'M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10M3.51 15a9 9 0 0 0 14.85 3.36L23 14',
-        lock:'M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zM7 11V7a5 5 0 0 1 10 0v4',
+        refresh:'M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10M3.51 15a9 9 0 0 0 14.85 3.36L23 14'
       };
       function Ico(p){ var d=ICONS[p.d]||p.d; var size=p.size||14; var stroke=p.stroke||2; var paths=Array.isArray(d)?d:[d]; return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','stroke-width':stroke,'stroke-linecap':'round','stroke-linejoin':'round',class:'icon'}, paths.map(function(pp,i){ return h('path',{key:i,d:pp}); })); }
 
-      /* ============ SWIPE ROW ============ */
       function SwipeRow(props){
         var dxState = useState(0); var dx = dxState[0], setDx = dxState[1];
         var st = useRef({x:0,y:0,active:false,dragging:false,wasDragged:false});
-        var thresh=80;
-        function down(e){ if(props.disabled) return; if(e.pointerType==='mouse') return; st.current={x:e.clientX,y:e.clientY,active:true,dragging:false,wasDragged:false}; }
+        function down(e){ if(props.disabled || e.pointerType==='mouse') return; st.current={x:e.clientX,y:e.clientY,active:true,dragging:false,wasDragged:false}; }
         function move(e){ if(!st.current.active) return; var ddx=e.clientX-st.current.x, ddy=e.clientY-st.current.y; if(!st.current.dragging&&Math.abs(ddx)>8&&Math.abs(ddx)>Math.abs(ddy)){ st.current.dragging=true; st.current.wasDragged=true; try{ e.currentTarget.setPointerCapture(e.pointerId);}catch(err){} } if(st.current.dragging){ e.preventDefault(); setDx(Math.max(0,Math.min(120,ddx))); } }
-        function up(){ if(!st.current.active) return; if(st.current.dragging&&dx>thresh){ props.onDelete(); } setDx(0); st.current.active=false; st.current.dragging=false; }
+        function up(){ if(!st.current.active) return; if(st.current.dragging&&dx>80){ props.onDelete(); } setDx(0); st.current.active=false; st.current.dragging=false; }
         return h('div',{class:'swipe-wrap',onPointerDown:down,onPointerMove:move,onPointerUp:up,onPointerCancel:up,onClickCapture:function(e){ if(st.current.wasDragged){ e.stopPropagation(); e.preventDefault(); st.current.wasDragged=false; } }},
           h('div',{class:'swipe-delete-bg',style:{opacity:dx>10?1:0,transition:'opacity .1s'}}, h(Ico,{d:'trash',size:14}), ' Xóa'),
           h('div',{class:'swipe-content',style:{transform:'translateX('+dx+'px)',transition:dx===0?'transform .2s':'none'}}, props.children)
         );
       }
 
-      /* ============ MAIN APP ============ */
       function App(){
-        var tabState = useState(function(){ return loadJSON(LS.ACTIVE_TAB,'gmail'); }); var activeTab=tabState[0], setActiveTab=tabState[1];
+        var tabState = useState(function(){ return loadJSON(LS.ACTIVE_TAB,'all'); }); var activeTab=tabState[0], setActiveTab=tabState[1];
         useEffect(function(){ saveJSON(LS.ACTIVE_TAB,activeTab); },[activeTab]);
 
-        var cidState = useState(function(){ return localStorage.getItem(LS.CLIENT_ID)||''; }); var clientId=cidState[0], setClientId=cidState[1];
         var accState = useState(function(){ return loadJSON(LS.ACCOUNTS,[]); }); var accounts=accState[0], setAccounts=accState[1];
         var emState = useState(function(){ return loadJSON(LS.EMAILS,[]); }); var emails=emState[0], setEmails=emState[1];
-        // Đã đọc: lưu cục bộ, không phụ thuộc Gmail. Mail cũ lúc mới nạp không tính là "mới".
-        var readRef = useRef(loadJSON('gmail_hub_read',{}));
-        var saveRead = function(){ var m=readRef.current, k=Object.keys(m); if(k.length>8000){ k.slice(0,k.length-6000).forEach(function(x){ delete m[x]; }); } saveJSON('gmail_hub_read',m); };
-        var markReadLocal = function(ids){ var set=new Set(ids); ids.forEach(function(id){ readRef.current[id]=1; }); saveRead(); setEmails(function(p){ return p.map(function(x){ return (set.has(x.id)&&x.isUnread)?Object.assign({},x,{isUnread:false}):x; }); }); };
-        useEffect(function(){ if(localStorage.getItem('gmail_hub_read_init')) return; markReadLocal(emails.map(function(e){return e.id;})); localStorage.setItem('gmail_hub_read_init','1'); },[]);
+        var delState = useState(function(){ return loadJSON(LS.DELETED_IDS,[]); }); var deletedIds=delState[0], setDeletedIds=delState[1];
         var nState = useState(function(){ return loadJSON(LS.NOTES,{}); }); var notes=nState[0], setNotes=nState[1];
-        var sigState = useState(function(){ return loadJSON(LS.SIGNATURES,{}); }); var signatures=sigState[0], setSignatures=sigState[1];
-        var settingsState = useState(function(){ return loadJSON(LS.SETTINGS,{soundOnOtp:true,notifications:false,autoBackup:false,backupPassword:'',pollInterval:120000,deleteMode:'trash',bridgeUrl:'',bridgeKey:'',authWorkerUrl:'',cfEnabled:false,cfTgToken:'',cfTgChat:'',cfDiscord:''}); }); var settings=settingsState[0], setSettings=settingsState[1];
+        var settingsState = useState(function(){
+          return loadJSON(LS.SETTINGS,{
+            soundOnOtp:true,
+            notifications:false,
+            pollInterval:60000,
+            gistId:'',
+            githubToken:'',
+            darkMode:false
+          });
+        });
+        var settings=settingsState[0], setSettings=settingsState[1];
+
+        var readRef = useRef(loadJSON('gmail_hub_read',{}));
+        var saveRead = function(){ saveJSON('gmail_hub_read',readRef.current); };
+        var markReadLocal = function(ids){
+          var set=new Set(ids);
+          ids.forEach(function(id){ readRef.current[id]=1; });
+          saveRead();
+          setEmails(function(p){ return p.map(function(x){ return (set.has(x.id)&&x.isUnread)?Object.assign({},x,{isUnread:false}):x; }); });
+        };
 
         var grState = useState(function(){ return loadJSON('gmail_hub_groups',[]); }); var groups=grState[0], setGroups=grState[1];
         var plState = useState(function(){ return loadJSON('gmail_hub_pills',[]); }); var pills=plState[0], setPills=plState[1];
         var cpState = useState(function(){ return loadJSON('gmail_hub_pill_collapsed',{}); }); var collapsedPills=cpState[0], setCollapsedPills=cpState[1];
         var vaState = useState(null); var viewAccId=vaState[0], setViewAccId=vaState[1];
-        var addImap = function(email,password,color){
-          var id=email.toLowerCase();
-          setAccounts(function(prev){
-            if(prev.some(function(a){return a.id===id;})) return prev.map(function(a){ return a.id===id?Object.assign({},a,{type:'imap',appPassword:password,status:'live'}):a; });
-            return prev.concat([{id:id,email:email,displayName:email.split('@')[0],color:color||COLORS[prev.length%COLORS.length],type:'imap',appPassword:password,status:'live',tag:''}]);
-          });
-        };
         var ogState = useState({}); var openGroups=ogState[0], setOpenGroups=ogState[1];
-        var gmailProps = null;
-        var geState = useState(undefined); var groupEdit=geState[0], setGroupEdit=geState[1]; // undefined=đóng, null=tạo mới, id=sửa
+        var geState = useState(undefined); var groupEdit=geState[0], setGroupEdit=geState[1];
         var searchState = useState(''); var search=searchState[0], setSearch=searchState[1];
-        var aaidState = useState(null); // null = all, or single id for backward compat
-        var activeAccountId=aaidState[0], setActiveAccountId=aaidState[1];
         var filterOpenState = useState(false); var filterOpen=filterOpenState[0], setFilterOpen=filterOpenState[1];
-        var selectedAccsState = useState(new Set()); // multi-select filter
-        var selectedAccs=selectedAccsState[0], setSelectedAccs=selectedAccsState[1];
+        var selectedAccsState = useState(new Set()); var selectedAccs=selectedAccsState[0], setSelectedAccs=selectedAccsState[1];
         var eidState = useState(null); var expandedId=eidState[0], setExpandedId=eidState[1];
         var selState = useState(new Set()); var selectedIds=selState[0], setSelectedIds=selState[1];
         var toastState = useState(null); var toast=toastState[0], setToast=toastState[1];
         var modalState = useState(null); var modal=modalState[0], setModal=modalState[1];
-        var busyState = useState(false); var busy=busyState[0], setBusy=busyState[1];
-        var rnIdState = useState(null); var renameId=rnIdState[0], setRenameId=rnIdState[1];
-        var rnValState = useState(''); var renameValue=rnValState[0], setRenameValue=rnValState[1];
         var eaIdState = useState(null); var editingAccountId=eaIdState[0], setEditingAccountId=eaIdState[1];
+        var lastSyncState = useState(''); var lastSync=lastSyncState[0], setLastSync=lastSyncState[1];
+        var deferredPrompt = useRef(null);
+        var installState = useState(false); var canInstall=installState[0], setCanInstall=installState[1];
 
-        var refreshLock = useRef(false);
-        var accountsRef = useRef(accounts); accountsRef.current=accounts;
-        var emailsRef = useRef(emails); emailsRef.current=emails;
         var lastOtpIds = useRef(new Set());
+        var deletedIdsRef = useRef(deletedIds); deletedIdsRef.current = deletedIds;
+
+        useEffect(function(){
+          window.addEventListener('beforeinstallprompt', function(e){
+            e.preventDefault();
+            deferredPrompt.current = e;
+            setCanInstall(true);
+          });
+        },[]);
+
+        useEffect(function(){
+          document.body.classList.toggle('dark-mode', !!settings.darkMode);
+          var metaTheme = document.querySelector('meta[name="theme-color"]');
+          if(metaTheme) metaTheme.setAttribute('content', settings.darkMode ? '#0F0F0F' : '#FAFAF8');
+          saveJSON(LS.SETTINGS,settings);
+        },[settings]);
 
         useEffect(function(){ saveJSON(LS.ACCOUNTS,accounts); },[accounts]);
+        useEffect(function(){ saveJSON(LS.DELETED_IDS,deletedIds); },[deletedIds]);
+        useEffect(function(){ saveJSON(LS.NOTES,notes); },[notes]);
+        useEffect(function(){ saveJSON('gmail_hub_groups',groups); },[groups]);
+        useEffect(function(){ saveJSON('gmail_hub_pills',pills); },[pills]);
+        useEffect(function(){ saveJSON('gmail_hub_pill_collapsed',collapsedPills); },[collapsedPills]);
+
         var hydrated = useRef(false);
         useEffect(function(){
-          if(navigator.storage&&navigator.storage.persist) navigator.storage.persist().catch(function(){});
           idbGet('emails').then(function(v){ if(Array.isArray(v)&&v.length) setEmails(function(prev){ return prev.length?prev:v; }); }).catch(function(){}).then(function(){ hydrated.current=true; });
         },[]);
         useEffect(function(){
           if(!hydrated.current) return;
-          var t=setTimeout(function(){ idbSet('emails',emails).then(function(){ try{ localStorage.removeItem(LS.EMAILS); }catch(e){} }).catch(function(){ saveJSON(LS.EMAILS,emails.slice(0,150)); }); },600);
+          var t=setTimeout(function(){ idbSet('emails',emails).catch(function(){ saveJSON(LS.EMAILS,emails.slice(0,150)); }); },500);
           return function(){ clearTimeout(t); };
         },[emails]);
-        useEffect(function(){ saveJSON(LS.NOTES,notes); },[notes]);
-        useEffect(function(){ saveJSON(LS.SIGNATURES,signatures); },[signatures]);
-        useEffect(function(){ saveJSON(LS.SETTINGS,settings); },[settings]);
-        useEffect(function(){ saveJSON('gmail_hub_groups',groups); },[groups]);
-        useEffect(function(){ saveJSON('gmail_hub_pills',pills); },[pills]);
-        useEffect(function(){ saveJSON('gmail_hub_pill_collapsed',collapsedPills); },[collapsedPills]);
-        // tab hợp lệ: 'all' hoặc id nhóm còn tồn tại
+
+        var showToast = useCallback(function(msg){ setToast({msg:msg}); setTimeout(function(){ setToast(null); },3000); },[]);
+
+        var copyText = useCallback(async function(text,label){
+          try{
+            if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); }
+            else { var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+            showToast('Đã sao chép '+(label||''));
+          }catch(e){ showToast('Không thể sao chép'); }
+        },[showToast]);
+
+        var playBeep = useCallback(function(){
+          if(!settings.soundOnOtp) return;
+          try{ var ctx=new (window.AudioContext||window.webkitAudioContext)(); var o=ctx.createOscillator(), g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; g.gain.value=0.08; o.start(); setTimeout(function(){ o.stop(); ctx.close(); },140); }catch(e){}
+        },[settings.soundOnOtp]);
+
+        var syncFromGist = useCallback(async function(manual){
+          var gistId = (settings.gistId || '').trim();
+          var ghToken = (settings.githubToken || '').trim();
+          if(!gistId || !ghToken){
+            if(manual) showToast('Vui lòng nhập Gist ID và GitHub Token trong Cài đặt ⚙️');
+            return;
+          }
+          try{
+            var res = await fetch('https://api.github.com/gists/' + gistId + '?t=' + Date.now(), {
+              headers: {
+                'Authorization': 'Bearer ' + ghToken,
+                'Accept': 'application/vnd.github+json'
+              }
+            });
+            if(!res.ok){
+              if(manual) showToast('Lỗi kết nối GitHub Gist (' + res.status + ')');
+              return;
+            }
+            var gjson = await res.json();
+            var rawContent = gjson.files && gjson.files['sync.json'] && gjson.files['sync.json'].content;
+            if(!rawContent) return;
+
+            var sdata = JSON.parse(rawContent);
+            var remoteDeleted = Array.isArray(sdata.deletedIds) ? sdata.deletedIds : [];
+            var mergedDeletedMap = {};
+            deletedIdsRef.current.forEach(function(item){
+              var id = typeof item === 'string' ? item : item.msgId;
+              if(id) mergedDeletedMap[id] = typeof item === 'string' ? { msgId: id } : item;
+            });
+            remoteDeleted.forEach(function(item){
+              var id = typeof item === 'string' ? item : item.msgId;
+              if(id) mergedDeletedMap[id] = typeof item === 'string' ? { msgId: id } : item;
+            });
+            var mergedDeletedList = Object.values(mergedDeletedMap).slice(-300);
+            setDeletedIds(mergedDeletedList);
+
+            if(Array.isArray(sdata.accounts)){
+              setAccounts(function(prev){
+                var prevMap = {};
+                prev.forEach(function(a){ prevMap[a.id] = a; });
+                return sdata.accounts.map(function(a){
+                  var old = prevMap[a.id] || {};
+                  return Object.assign({}, old, a, {
+                    displayName: old.customRenamed ? old.displayName : a.displayName,
+                    color: old.customColor ? old.color : a.color,
+                    pillId: old.pillId || null
+                  });
+                });
+              });
+            }
+
+            if(Array.isArray(sdata.emails)){
+              var newOtpFound = null;
+              var processed = sdata.emails
+                .filter(function(m){ return !mergedDeletedMap[m.messageId || m.id]; })
+                .map(function(m){
+                  var isRead = !!readRef.current[m.id];
+                  if(m.otp && !isRead && !lastOtpIds.current.has(m.id)){
+                    lastOtpIds.current.add(m.id);
+                    newOtpFound = m;
+                  }
+                  return Object.assign({}, m, { isUnread: !isRead });
+                });
+              setEmails(processed);
+              if(newOtpFound){
+                playBeep();
+                showToast('🔑 OTP mới: ' + newOtpFound.otp);
+              }
+            }
+
+            var syncTime = sdata.syncedAt ? formatDate(sdata.syncedAt) : formatDate(Date.now());
+            setLastSync(syncTime);
+            if(manual) showToast('Đã đồng bộ từ Extension (' + syncTime + ')');
+          }catch(e){
+            if(manual) showToast('Lỗi đồng bộ: ' + e.message);
+          }
+        },[settings.gistId, settings.githubToken, showToast, playBeep]);
+
+        useEffect(function(){
+          syncFromGist(false);
+          var iv = setInterval(function(){ syncFromGist(false); }, settings.pollInterval || 60000);
+          return function(){ clearInterval(iv); };
+        },[syncFromGist, settings.pollInterval]);
+
+        // Đẩy lệnh xóa từ Web lên Gist để Extension xóa luôn trên Gmail thật
+        var deleteMany = async function(list){
+          if(!list.length) return;
+          var idset = new Set(list.map(function(e){ return e.messageId || e.id; }));
+          setEmails(function(prev){ return prev.filter(function(e){ return !idset.has(e.messageId || e.id); }); });
+          setSelectedIds(new Set());
+
+          var newDeletedItems = list.map(function(e){
+            return { msgId: e.messageId || e.id, email: e.accountId, deletedAt: Date.now() };
+          });
+          var nextDeleted = deletedIdsRef.current.concat(newDeletedItems).slice(-300);
+          setDeletedIds(nextDeleted);
+          showToast('Đã xóa & gửi lệnh đồng bộ xóa Gmail (' + list.length + ' thư)');
+
+          var gistId = (settings.gistId || '').trim();
+          var ghToken = (settings.githubToken || '').trim();
+          if(gistId && ghToken){
+            try{
+              var getRes = await fetch('https://api.github.com/gists/' + gistId + '?t=' + Date.now(), {
+                headers: { 'Authorization': 'Bearer ' + ghToken, 'Accept': 'application/vnd.github+json' }
+              });
+              if(getRes.ok){
+                var gjson = await getRes.json();
+                var raw = gjson.files && gjson.files['sync.json'] && gjson.files['sync.json'].content;
+                var currentData = raw ? JSON.parse(raw) : { accounts: [], emails: [], deletedIds: [] };
+                currentData.emails = (currentData.emails || []).filter(function(m){ return !idset.has(m.messageId || m.id); });
+                currentData.deletedIds = nextDeleted;
+                await fetch('https://api.github.com/gists/' + gistId, {
+                  method: 'PATCH',
+                  headers: {
+                    'Authorization': 'Bearer ' + ghToken,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ files: { 'sync.json': { content: JSON.stringify(currentData) } } })
+                });
+              }
+            }catch(e){}
+          }
+        };
+
         var curTab = (activeTab!=='all' && groups.some(function(g){return g.id===activeTab;})) ? activeTab : 'all';
         var curGroup = groups.find(function(g){return g.id===curTab;})||null;
-        // migrate tag cũ -> pill
-        useEffect(function(){
-          var need=accounts.filter(function(a){return a.tag && a.tag.trim() && !a.pillId;}); if(!need.length) return;
-          var list=pills.slice(), map={}; list.forEach(function(x){map[x.name.toLowerCase()]=x.id;});
-          need.forEach(function(a){ var k=a.tag.trim().toLowerCase(); if(!map[k]){ var np={id:uid('pill'),name:a.tag.trim(),color:a.color}; list.push(np); map[k]=np.id; } });
-          setPills(list);
-          setAccounts(function(prev){ return prev.map(function(a){ return (a.tag&&a.tag.trim()&&!a.pillId)?Object.assign({},a,{pillId:map[a.tag.trim().toLowerCase()]}):a; }); });
-        },[accounts,pills]);
         var PILL_COLORS=['#2563EB','#16A34A','#D97706','#DC2626','#7C3AED','#0891B2','#DB2777','#65A30D'];
         var assignPill=function(accId,pid){ setAccounts(function(p){return p.map(function(a){return a.id===accId?Object.assign({},a,{pillId:pid||null}):a;});}); };
         var newPill=function(name,accId){ var np={id:uid('pill'),name:name,color:PILL_COLORS[pills.length%PILL_COLORS.length]}; setPills(function(p){return p.concat([np]);}); if(accId) assignPill(accId,np.id); };
@@ -780,357 +452,19 @@ export default {
         var deletePill=function(id){ setPills(function(p){return p.filter(function(x){return x.id!==id;});}); setAccounts(function(p){return p.map(function(a){return a.pillId===id?Object.assign({},a,{pillId:null}):a;});}); };
         var saveGroup=function(g){ setGroups(function(p){ return p.some(function(x){return x.id===g.id;})?p.map(function(x){return x.id===g.id?g:x;}):p.concat([g]); }); setActiveTab(g.id); setGroupEdit(undefined); };
         var deleteGroup=function(id){ setGroups(function(p){return p.filter(function(x){return x.id!==id;});}); setActiveTab('all'); setGroupEdit(undefined); };
-        var changeTab=function(id){ setActiveTab(id); setSelectedAccs(new Set()); setActiveAccountId(null); setFilterOpen(false); setSelectedIds(new Set()); };
-        // nút Back / vuốt back của điện thoại đóng email thay vì thoát app
-        useEffect(function(){
-          if(!expandedId) return;
-          history.pushState({ghEmail:1},'');
-          var onPop=function(){ setExpandedId(null); };
-          window.addEventListener('popstate',onPop);
-          return function(){ window.removeEventListener('popstate',onPop); };
-        },[expandedId]);
-        var closeEmail=function(){ if(history.state&&history.state.ghEmail) history.back(); else setExpandedId(null); };
-
-        var showToast = useCallback(function(msg,opts){ opts=opts||{}; setToast(Object.assign({msg:msg},opts)); if(!opts.persist) setTimeout(function(){ setToast(null); },opts.duration||3200); },[]);
-
-        var copyText = useCallback(async function(text,label){ try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); } else { var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } showToast('Đã sao chép '+(label||'')); }catch(e){ showToast('Không thể sao chép'); } },[showToast]);
-
-        var playBeep = useCallback(function(){ if(!settings.soundOnOtp) return; try{ var ctx=new (window.AudioContext||window.webkitAudioContext)(); var o=ctx.createOscillator(), g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; g.gain.value=0.08; o.start(); setTimeout(function(){ o.stop(); ctx.close(); },140); }catch(e){} },[settings.soundOnOtp]);
-
-        var notifyBrowser = useCallback(async function(title,body){ if(!settings.notifications) return; if(!('Notification' in window)) return; if(Notification.permission==='default'){ try{ await Notification.requestPermission(); }catch(e){} } if(Notification.permission==='granted'){ try{ new Notification(title,{body:body,tag:'gmail-hub-otp'}); }catch(e){} } },[settings.notifications]);
-
-        var fetchAccountEmails = useCallback(async function(account,token){
-          var parsed=[];
-          var existing=emailsRef.current.filter(function(e){return e.accountId===account.id;});
-          var knownIds=new Set(existing.map(function(e){return e.id;}));
-          var newOtp=null, list=[];
-          if(account.type==='imap'){
-            var req=function(have){ return bridgeCall('/sync',{email:account.email,password:account.appPassword,have:have,days:30,limit:40}); };
-            var j=await req(existing.filter(function(e){return e.uv&&e.uv===account.uv;}).map(function(e){return e.uid;}));
-            if(account.uv&&j.uv!==account.uv) j=await req([]);
-            var byUid={}; existing.forEach(function(e){ if(e.uv===j.uv) byUid[e.uid]=e; });
-            parsed=j.items.map(function(it){ if(it.raw){ try{ return parseRawMail(it.raw,it,account,j.uv); }catch(err){ return null; } } var ex=byUid[it.uid]; return ex?Object.assign({},ex,{isUnread:!it.seen}):null; }).filter(Boolean);
-            parsed.forEach(function(pm){ if(pm.otp && !knownIds.has(pm.id) && !lastOtpIds.current.has(pm.id)){ if(!newOtp||pm.internalDate>newOtp.internalDate) newOtp=pm; lastOtpIds.current.add(pm.id); } });
-            if(account.uv!==j.uv) setAccounts(function(p){ return p.map(function(a){ return a.id===account.id?Object.assign({},a,{uv:j.uv,status:'live'}):a; }); });
-          } else { list=await gmailList(token,'newer_than:30d',30); }
-          for(var i=0;i<list.length;i++){
-            try{
-              var full=await gmailGet(token,list[i].id); var pm=parseMsg(full,account.id); parsed.push(pm);
-              if(pm.otp && !knownIds.has(pm.id) && !lastOtpIds.current.has(pm.id)){ if(!newOtp||pm.internalDate>newOtp.internalDate) newOtp=pm; lastOtpIds.current.add(pm.id); }
-            }catch(err){}
-          }
-          var firstSync = knownIds.size===0;
-          parsed.forEach(function(pm){ if(firstSync) readRef.current[pm.id]=1; if(readRef.current[pm.id]) pm.isUnread=false; });
-          if(firstSync) saveRead();
-          setEmails(function(prev){ return prev.filter(function(e){return e.accountId!==account.id;}).concat(parsed); });
-          if(newOtp){ playBeep(); notifyBrowser('OTP mới','Từ '+(newOtp.from||'').split('<')[0].trim()+' — '+newOtp.otp); }
-          return parsed;
-        },[playBeep,notifyBrowser]);
-
-        var refreshAccount = useCallback(async function(account, opts){
-          opts = opts || {silent: true};
-          var token = account.accessToken;
-          if (account.type === 'imap') {
-            try {
-              await fetchAccountEmails(account, null);
-              if (account.status !== 'live') setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {status: 'live'}) : a; }); });
-            } catch(e) {
-              if (/AUTHENTICATIONFAILED|Invalid credentials/i.test(e.message)) setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {status: 'needs-reauth'}) : a; }); });
-              else if (!opts.silent) showToast('Lỗi tải ' + account.email + ': ' + (e.message || ''));
-            }
-            return;
-          }
-
-          if (!isTokenValid(account) && account.refreshToken && authWorker()) {
-            try {
-              var rr = await workerRefresh(authWorker(), account.refreshToken);
-              var expW = Date.now() + (rr.expires_in || 3600) * 1000;
-              token = rr.access_token;
-              account = Object.assign({}, account, {accessToken: token, expiresAt: expW, status: 'live'});
-              setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {accessToken: token, expiresAt: expW, status: 'live'}) : a; }); });
-            } catch(we) {
-              console.warn('[REFRESH] worker refresh failed', account.email, we.message);
-              if (/invalid_grant/i.test(we.message)) setAccounts(function(p){ return p.map(function(a){ return a.id === account.id ? Object.assign({}, a, {status: 'needs-reauth'}) : a; }); });
-              return;
-            }
-          }
-          if (!isTokenValid(account)) {
-            console.log('[REFRESH] token invalid for', account.email, 'expiresAt=', account.expiresAt);
-            if (account.status === 'needs-reauth') return;
-            if (!clientId) return;
-            if (!acquireGsiLock()) return;
-
-            try {
-              var resp = await gsiSignIn(clientId, account.email);
-              token = resp.access_token;
-              var exp = Date.now() + (resp.expires_in || 3600) * 1000;
-              setAccounts(function(p){
-                return p.map(function(a){
-                  return a.id === account.id
-                    ? Object.assign({}, a, {accessToken: token, expiresAt: exp, status: 'live'})
-                    : a;
-                });
-              });
-            } catch(e) {
-              console.warn('[REFRESH] reauth failed', account.email, e.message);
-              if (opts.silent) {
-                setAccounts(function(p){
-                  return p.map(function(a){
-                    return a.id === account.id ? Object.assign({}, a, {status: 'needs-reauth'}) : a;
-                  });
-                });
-              } else {
-                showToast('Cần đăng nhập lại: ' + account.email);
-              }
-              releaseGsiLock();
-              return;
-            } finally {
-              releaseGsiLock();
-            }
-          }
-
-          try {
-            await fetchAccountEmails(account, token);
-          } catch(e) {
-            if (!opts.silent) showToast('Lỗi tải mail: ' + (e.message || ''));
-          }
-        }, [clientId, fetchAccountEmails, showToast]);
-
-     var refreshAll = useCallback(async function(manual){
-          var gistId = settings.bridgeUrl;
-          var ghToken = settings.bridgeKey;
-          if (gistId && ghToken) {
-            try {
-              var gr = await fetch("https://api.github.com/gists/" + gistId, {
-                headers: { "Authorization": "Bearer " + ghToken, "Accept": "application/vnd.github+json" }
-              });
-              if (gr.ok) {
-                var gjson = await gr.json();
-                var rawContent = gjson.files && gjson.files["sync.json"] && gjson.files["sync.json"].content;
-                if (rawContent) {
-                  var sdata = JSON.parse(rawContent);
-                  if (sdata.accounts && sdata.accounts.length) {
-                    setAccounts(function(prev) {
-                      var map = {};
-                      prev.forEach(function(a) { map[a.id] = a; });
-                      sdata.accounts.forEach(function(a) { map[a.id] = Object.assign({}, map[a.id], a); });
-                      return Object.values(map);
-                    });
-                  }
-                  if (sdata.emails && sdata.emails.length) {
-                    setEmails(function(prev) {
-                      var extIds = new Set(sdata.accounts.map(function(a) { return a.id; }));
-                      var kept = prev.filter(function(e) { return !extIds.has(e.accountId); });
-                      return kept.concat(sdata.emails);
-                    });
-                  }
-                  if (manual) showToast("Đã đồng bộ từ Extension");
-                  return;
-                }
-              }
-            } catch (e) {}
-          }
-
-          if(refreshLock.current||(!clientId&&!bridgeCfg().url)) return;
-          refreshLock.current=true;
-          try{
-            var queue=accountsRef.current.slice(), qi=0;
-            var runner=async function(){ while(qi<queue.length){ var a=queue[qi++]; try{ await refreshAccount(a,{silent:!manual}); }catch(e){} } };
-            await Promise.all([runner(),runner(),runner()]);
-          }
-          finally{ refreshLock.current=false; }
-          if(manual) showToast('Đã làm mới '+accountsRef.current.length+' tài khoản');
-        },[clientId,refreshAccount,showToast,settings.bridgeUrl,settings.bridgeKey]);
-
-        useEffect(function(){
-          if((!clientId&&!bridgeCfg().url)||accounts.length===0) return;
-          var t=setTimeout(function(){ refreshAll(false); },3000);
-          var iv=setInterval(function(){ refreshAll(false); }, settings.pollInterval||120000);
-          return function(){ clearTimeout(t); clearInterval(iv); };
-        },[clientId,accounts.length,settings.pollInterval,settings.bridgeUrl]);
-
-        var addAccount = async function(){
-          var wb=authWorker();
-          if(!clientId && !wb){ setModal('clientId'); return; }
-          setBusy(true);
-          try{
-            var resp; if(wb){ resp=await workerLogin(wb); } else { resp=await gsiSignIn(clientId); } var token=resp.access_token; var info=await fetchUserInfo(token);
-            var id=info.email||('acc_'+Date.now());
-            var existing=accounts.find(function(a){return a.email===info.email;});
-            var color=existing?existing.color:COLORS[accounts.length%COLORS.length];
-            var newAcc={id:id,email:info.email,displayName:(existing&&existing.displayName)||info.name||info.email,color:color,accessToken:token,refreshToken:resp.refresh_token||undefined,expiresAt:Date.now()+(resp.expires_in||3600)*1000,tag:(existing&&existing.tag)||'',status:'live'};
-            setAccounts(function(prev){ var ex=prev.find(function(a){return a.email===info.email;}); if(ex) return prev.map(function(a){return a.email===info.email?Object.assign({},a,{accessToken:token,expiresAt:newAcc.expiresAt,status:'live'},resp.refresh_token?{refreshToken:resp.refresh_token}:{}):a;}); return prev.concat([newAcc]); });
-            showToast('Đã thêm '+info.email);
-            await fetchAccountEmails(newAcc,token);
-          }catch(e){ showToast('Lỗi: '+friendlyAuthError(e)); }
-          finally{ setBusy(false); }
-        };
-
-        var deleteAccount = function(id){
-          if(!confirm('Xóa tài khoản này và toàn bộ email?')) return;
-          setAccounts(function(p){return p.filter(function(a){return a.id!==id;});});
-          setEmails(function(p){return p.filter(function(e){return e.accountId!==id;});});
-          showToast('Đã xóa tài khoản');
-        };
-
-        var deleteEmail = function(email){ return deleteMany([email]); };
-        var syncRead = function(ids){ ids.slice(0,60).forEach(function(id){ var e=emailsRef.current.find(function(x){return x.id===id;}); var acc=e&&accounts.find(function(a){return a.id===e.accountId;}); if(acc&&acc.type==='imap') imapAct(acc,'read',[e.uid]).catch(function(){}); else if(acc&&acc.accessToken) gmailModify(acc.accessToken,id,[],['UNREAD']).catch(function(){}); }); };
-        var bulkMarkRead = function(){ var ids=Array.from(selectedIds); markReadLocal(ids); syncRead(ids); setSelectedIds(new Set()); showToast('Đã đánh dấu đã đọc'); };
-        var markAllRead = function(){ var ids=filtered.filter(function(e){return e.isUnread;}).map(function(e){return e.id;}); if(!ids.length){ showToast('Không có mail chưa đọc'); return; } markReadLocal(ids); syncRead(ids); setFilterOpen(false); showToast('Đã đọc '+ids.length+' mail'); };
-        var deleteMany = async function(list){
-          if(!list.length) return;
-          var perm=settings.deleteMode==='delete', idset=new Set(list.map(function(e){return e.id;}));
-          setEmails(function(prev){ return prev.filter(function(e){return !idset.has(e.id);}); });
-          setSelectedIds(new Set());
-          var done=[], failed=[];
-          for(var i=0;i<list.length;i+=5){
-            await Promise.all(list.slice(i,i+5).map(async function(e){
-              var acc=accounts.find(function(a){return a.id===e.accountId;});
-              if(!acc||(!acc.accessToken&&acc.type!=='imap')){ failed.push(e); return; }
-              try{ var how=acc.type==='imap'?(await imapAct(acc,'trash',[e.uid]),'imap'):await gmailRemove(acc.accessToken,e.id,perm); done.push({e:e,how:how}); }catch(err){ failed.push(e); }
-            }));
-          }
-          // mail chưa xóa được bên Gmail thì hiện lại, không để lệch với Gmail
-          if(failed.length){ setEmails(function(prev){ return prev.concat(failed); }); }
-          if(!done.length){ showToast('Chưa xóa được trên Gmail ('+failed.length+' mail). Hãy bấm "Đăng nhập lại" rồi thử lại.'); return; }
-          var msg=(done.every(function(d){return d.how==='deleted';})?'Đã xóa vĩnh viễn ':'Đã chuyển vào thùng rác Gmail: ')+done.length+' mail'+(failed.length?' (lỗi '+failed.length+')':'');
-          showToast(msg,{duration:6000,undo:done.some(function(d){return d.how==='imap';})?undefined:async function(){
-            setEmails(function(prev){ return prev.concat(done.map(function(d){return d.e;})); });
-            for(var q=0;q<done.length;q++){ if(done[q].how!=='trashed') continue; var a2=accounts.find(function(a){return a.id===done[q].e.accountId;}); if(a2){ try{ await gmailUntrash(a2.accessToken,done[q].e.id); }catch(err){} } }
-            showToast('Đã khôi phục');
-          }});
-        };
-        var bulkDelete = function(){
-          var list=emails.filter(function(e){return selectedIds.has(e.id);});
-          if(list.length && confirm('Xóa '+list.length+' email?')) deleteMany(list);
-        };
-
-
-        var doExport = async function(pw,silent){
-          var data={version:3,exportedAt:new Date().toISOString(),
-            accounts:accounts.map(function(a){return {id:a.id,email:a.email,displayName:a.displayName,color:a.color,tag:a.tag,status:a.status,accessToken:a.accessToken,refreshToken:a.refreshToken,expiresAt:a.expiresAt,type:a.type,appPassword:a.appPassword,pillId:a.pillId};}),
-            notes:notes, signatures:signatures, settings:settings, clientId:clientId, groups:groups, pills:pills};
-          try{
-            var enc=(pw&&pw.length>=4)?await encData(data,pw):data;
-            var blob=new Blob([JSON.stringify(enc,null,2)],{type:'application/json'});
-            var url=URL.createObjectURL(blob); var a=document.createElement('a');
-            a.href=url; a.download='gmail-hub-backup-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(url);
-            localStorage.setItem(LS.LAST_BACKUP,String(Date.now()));
-            if(!silent) showToast((pw&&pw.length>=4)?'Đã xuất backup (có mật khẩu)':'Đã xuất backup. File chứa token đăng nhập, hãy giữ kín');
-          }catch(e){ showToast('Lỗi: '+e.message); }
-        };
-        var doImport = function(){
-          var input=document.createElement('input'); input.type='file'; input.accept='.json,application/json';
-          input.onchange=function(){
-            var f=input.files&&input.files[0]; if(!f) return;
-            var r=new FileReader();
-            r.onload=async function(){
-              try{
-                var p=JSON.parse(r.result), data;
-                if(p.salt&&p.iv&&p.data){ var pw=prompt('File có mật khẩu. Nhập mật khẩu:'); if(!pw) return; data=await decData(p,pw); }
-                else if(p.accounts||p.emails){ data=p; }
-                else throw new Error('File không hợp lệ');
-                console.log('[IMPORT] decrypted ok, accounts:', (data.accounts||[]).length, 'clientId:', !!data.clientId);
-
-                // Force-write everything to localStorage first so state survives any reload
-                if (data.clientId) {
-                  localStorage.setItem(LS.CLIENT_ID, data.clientId);
-                  setClientId(data.clientId);
-                }
-                if (data.accounts) {
-                  // Ensure tokens + expiresAt are kept; mark status live if token looks valid
-                  var restored = (data.accounts||[]).map(function(a){
-                    var acc = Object.assign({}, a);
-                    if (acc.accessToken && acc.expiresAt && (acc.expiresAt - Date.now() > 30000)) {
-                      acc.status = 'live';
-                    } else if (acc.accessToken) {
-                      // keep token but let refresh try silently
-                      acc.status = acc.status || 'live';
-                    }
-                    return acc;
-                  });
-                  saveJSON(LS.ACCOUNTS, restored);
-                  setAccounts(restored);
-                  console.log('[IMPORT] restored accounts with tokens:', restored.filter(function(a){return !!a.accessToken;}).length);
-                }
-                if (data.emails) {
-                  saveJSON(LS.EMAILS, data.emails);
-                  setEmails(data.emails);
-                }
-                if (data.notes) {
-                  saveJSON(LS.NOTES, data.notes);
-                  setNotes(data.notes);
-                }
-                if (data.signatures) {
-                  saveJSON(LS.SIGNATURES, data.signatures);
-                  setSignatures(data.signatures);
-                }
-                if (data.settings) {
-                  saveJSON(LS.SETTINGS, data.settings);
-                  setSettings(function(prev){ return Object.assign({}, prev, data.settings); });
-                }
-                if (Array.isArray(data.groups)) { saveJSON('gmail_hub_groups', data.groups); setGroups(data.groups); }
-                if (Array.isArray(data.pills)) { saveJSON('gmail_hub_pills', data.pills); setPills(data.pills); }
-
-                console.log('[IMPORT] state + localStorage written, clearing SW cache…');
-                await swClearCacheAfterImport();
-
-                // Debounce any GSI prompt for 3s after import
-                gsiPromptLock = true;
-                gsiPromptLockTs = Date.now();
-                setTimeout(function(){ gsiPromptLock = false; }, 3000);
-
-                showToast('Đã nhập backup — mail sẽ hiện ngay nếu token còn hạn');
-                // Soft refresh only; isTokenValid will skip prompt if tokens good
-                setTimeout(function(){ refreshAll(false); }, 800);
-              }catch(e){
-                console.error('[IMPORT] failed:', e);
-                showToast('Giải mã thất bại: '+e.message);
-              }
-            };
-            r.readAsText(f);
-          };
-          input.click();
-        };
-
-        var onReauth = async function(a){
-          if(a.type==='imap'){
-            var np=prompt('Nhập lại mật khẩu ứng dụng cho '+a.email+':'); if(!np) return;
-            try{ await bridgeCall('/verify',{email:a.email,password:np}); setAccounts(function(p){ return p.map(function(x){ return x.id===a.id?Object.assign({},x,{appPassword:np.replace(/\s+/g,''),status:'live'}):x; }); }); showToast('Đã cập nhật '+a.email); setTimeout(function(){ refreshAll(true); },300); }
-            catch(e){ showToast('Thất bại: '+e.message); }
-            return;
-          }
-          var wb=authWorker();
-          if(!clientId && !wb){ setModal('clientId'); return; }
-          try {
-            var resp = wb ? await workerLogin(wb, a.email) : await gsiSignIn(clientId, a.email, true);
-            var exp = Date.now() + (resp.expires_in || 3600) * 1000;
-            setAccounts(function(p){
-              return p.map(function(x){
-                return x.id === a.id
-                  ? Object.assign({}, x, {accessToken: resp.access_token, expiresAt: exp, status: 'live'}, resp.refresh_token ? {refreshToken: resp.refresh_token} : {})
-                  : x;
-              });
-            });
-            showToast('Đã đăng nhập lại: ' + a.email);
-            setTimeout(function(){ refreshAll(true); }, 400);
-          } catch(e) {
-            showToast('Đăng nhập thất bại: ' + friendlyAuthError(e));
-          }
-        };
+        var changeTab=function(id){ setActiveTab(id); setSelectedAccs(new Set()); setFilterOpen(false); setSelectedIds(new Set()); };
 
         var filtered = useMemo(function(){
           var list=emails;
           if (curGroup) { var gs=new Set(curGroup.accIds); list=list.filter(function(e){ return gs.has(e.accountId); }); }
-          if (selectedAccs.size > 0) {
-            list = list.filter(function(e){ return selectedAccs.has(e.accountId); });
-          } else if (activeAccountId) {
-            list = list.filter(function(e){ return e.accountId === activeAccountId; });
-          }
+          if (selectedAccs.size > 0) { list = list.filter(function(e){ return selectedAccs.has(e.accountId); }); }
           var q=search.trim().toLowerCase();
-          if(q) list=list.filter(function(e){ var acc=accounts.find(function(a){return a.id===e.accountId;}); return (e.from||'').toLowerCase().indexOf(q)>=0||(e.subject||'').toLowerCase().indexOf(q)>=0||(e.snippet||'').toLowerCase().indexOf(q)>=0||(e.otp||'').indexOf(q)>=0||((acc&&acc.displayName)||'').toLowerCase().indexOf(q)>=0||((acc&&acc.email)||'').toLowerCase().indexOf(q)>=0; });
+          if(q) list=list.filter(function(e){
+            var acc=accounts.find(function(a){return a.id===e.accountId;});
+            return (e.from||'').toLowerCase().indexOf(q)>=0||(e.subject||'').toLowerCase().indexOf(q)>=0||(e.snippet||'').toLowerCase().indexOf(q)>=0||(e.otp||'').indexOf(q)>=0||((acc&&acc.displayName)||'').toLowerCase().indexOf(q)>=0||((acc&&acc.email)||'').toLowerCase().indexOf(q)>=0;
+          });
           return list.slice().sort(function(a,b){return b.internalDate-a.internalDate;});
-        },[emails,accounts,activeAccountId,selectedAccs,search,curGroup]);
+        },[emails,accounts,selectedAccs,search,curGroup]);
 
         var unreadByAccount = useMemo(function(){ var m={}; emails.forEach(function(e){ if(e.isUnread) m[e.accountId]=(m[e.accountId]||0)+1; }); return m; },[emails]);
         var tabAccounts = curGroup ? accounts.filter(function(a){return curGroup.accIds.indexOf(a.id)>=0;}) : accounts;
@@ -1139,73 +473,107 @@ export default {
           filtered.forEach(function(e){ var a=accounts.find(function(x){return x.id===e.accountId;}); if(!a) return; var pid=(a.pillId&&pills.some(function(x){return x.id===a.pillId;}))?a.pillId:'none'; (m[pid]=m[pid]||[]).push(e); });
           return pills.map(function(x){return x.id;}).concat(['none']).filter(function(id){return m[id];}).map(function(id){
             var pl=pills.find(function(x){return x.id===id;}); var items=m[id];
-            return {id:id,name:pl?pl.name:'Chưa gán pill',color:pl?pl.color:'#9CA3AF',items:items,groups:groupBySender(items),unread:items.filter(function(e){return e.isUnread;}).length,collapsed:pills.length>0&&!!collapsedPills[id]};
+            return {id:id,name:pl?pl.name:'Chưa phân loại',color:pl?pl.color:'#9CA3AF',items:items,groups:groupBySender(items),unread:items.filter(function(e){return e.isUnread;}).length,collapsed:pills.length>0&&!!collapsedPills[id]};
           });
         },[filtered,pills,accounts,collapsedPills]);
-        var groupUnread = useMemo(function(){ var r={}; groups.forEach(function(g){ r[g.id]=g.accIds.reduce(function(s,id){return s+(unreadByAccount[id]||0);},0); }); return r; },[groups,emails]);
+        var groupUnread = useMemo(function(){ var r={}; groups.forEach(function(g){ r[g.id]=g.accIds.reduce(function(s,id){return s+(unreadByAccount[id]||0);},0); }); return r; },[groups,unreadByAccount]);
 
         var expandedEmail = expandedId ? emails.find(function(e){return e.id===expandedId;}) : null;
         var editingAccount = editingAccountId ? accounts.find(function(a){return a.id===editingAccountId;}) : null;
         var unreadTotal = Object.values(unreadByAccount).reduce(function(s,v){return s+v;},0);
 
+        var handleInstallPWA = async function(){
+          if(!deferredPrompt.current) return;
+          deferredPrompt.current.prompt();
+          await deferredPrompt.current.userChoice;
+          deferredPrompt.current = null;
+          setCanInstall(false);
+        };
+
+        var gmailProps = {
+          onOpenAccount:function(id){ setFilterOpen(false); setViewAccId(id); }, single:false,
+          tabAccounts:tabAccounts, pills:pills, sections:sections, onAssignPill:assignPill, onNewPill:newPill,
+          onToggleSec:function(id){ setCollapsedPills(function(p){var n=Object.assign({},p); n[id]=!n[id]; return n;}); },
+          onManagePills:function(){ setFilterOpen(false); setModal('pills'); },
+          accounts:accounts, filtered:filtered, search:search, setSearch:setSearch,
+          selectedAccs:selectedAccs, setSelectedAccs:setSelectedAccs,
+          filterOpen:filterOpen, setFilterOpen:setFilterOpen,
+          unreadByAccount:unreadByAccount, selectedIds:selectedIds, setSelectedIds:setSelectedIds,
+          copyText:copyText,
+          onExpand:function(e){ setExpandedId(e.id); if(e.isUnread) markReadLocal([e.id]); },
+          onEditAccount:function(a){setEditingAccountId(a.id);},
+          onDeleteEmail:function(e){ deleteMany([e]); }, onDeleteMany:deleteMany,
+          onMarkAllRead:function(){ var ids=filtered.filter(function(e){return e.isUnread;}).map(function(e){return e.id;}); markReadLocal(ids); setFilterOpen(false); showToast('Đã đánh dấu đọc tất cả'); },
+          openGroups:openGroups, onToggleGroup:function(k){ setOpenGroups(function(p){var n=Object.assign({},p); n[k]=!n[k]; return n;}); },
+          onBulkRead:function(){ markReadLocal(Array.from(selectedIds)); setSelectedIds(new Set()); },
+          onBulkDelete:function(){ deleteMany(emails.filter(function(e){return selectedIds.has(e.id);})); },
+          onSelectAll:function(){ setSelectedIds(function(prev){ return prev.size>=filtered.length?new Set():new Set(filtered.map(function(e){return e.id;})); }); },
+          selectedCount:selectedIds.size, onClearSelection:function(){setSelectedIds(new Set());}
+        };
+
         return h('div',{class:'app',onClick:function(){ if(filterOpen) setFilterOpen(false); }},
-          h(Header,{cfOn:!!(settings.cfEnabled&&(settings.cfTgToken||settings.cfDiscord)),accounts:accounts,emails:emails,activeTab:activeTab,onSettings:function(){setModal('settings');},onExport:function(){ doExport(settings.backupPassword||'',false); },onImport:doImport,onAdd:function(){setModal('batch');},busy:busy,onRefresh:function(){refreshAll(true);}}),
-          h(GmailTab,(gmailProps={
-            onOpenAccount:function(id){ setFilterOpen(false); setViewAccId(id); }, single:false,
-            tabAccounts:tabAccounts, pills:pills, sections:sections, onAssignPill:assignPill, onNewPill:newPill,
-            onToggleSec:function(id){ setCollapsedPills(function(p){var n=Object.assign({},p); n[id]=!n[id]; return n;}); },
-            onManagePills:function(){ setFilterOpen(false); setModal('pills'); },
-            accounts:accounts, filtered:filtered, search:search, setSearch:setSearch,
-            activeAccountId:activeAccountId, setActiveAccountId:setActiveAccountId,
-            selectedAccs:selectedAccs, setSelectedAccs:setSelectedAccs,
-            filterOpen:filterOpen, setFilterOpen:setFilterOpen,
-            unreadByAccount:unreadByAccount, selectedIds:selectedIds, setSelectedIds:setSelectedIds,
-            copyText:copyText,
-            onExpand:function(e){ setExpandedId(e.id); if(e.isUnread){ markReadLocal([e.id]); var acc=accounts.find(function(a){return a.id===e.accountId;}); if(acc&&acc.type==='imap') imapAct(acc,'read',[e.uid]).catch(function(){}); else if(acc&&acc.accessToken) gmailModify(acc.accessToken,e.id,[],['UNREAD']).catch(function(){}); } },
-            renameId:renameId, renameValue:renameValue, setRenameId:setRenameId, setRenameValue:setRenameValue,
-            onRenameSave:function(id,v){ setAccounts(function(p){return p.map(function(x){return x.id===id?Object.assign({},x,{displayName:v}):x;});}); setRenameId(null); },
-            onDeleteAccount:deleteAccount, onEditAccount:function(a){setEditingAccountId(a.id);},
-            onReauth:onReauth,
-            onDeleteEmail:deleteEmail, onDeleteMany:deleteMany, onMarkAllRead:markAllRead, openGroups:openGroups, onToggleGroup:function(k){ setOpenGroups(function(p){var n=Object.assign({},p); n[k]=!n[k]; return n;}); }, onBulkRead:bulkMarkRead, onBulkDelete:bulkDelete,
-            onSelectAll:function(){ setSelectedIds(function(prev){ return prev.size>=filtered.length?new Set():new Set(filtered.map(function(e){return e.id;})); }); },
-            selectedCount:selectedIds.size, onClearSelection:function(){setSelectedIds(new Set());}
-          })),
-          viewAccId && h(AccountScreen,{account:accounts.find(function(a){return a.id===viewAccId;}),emails:emails,gmailProps:gmailProps,onBack:function(){setViewAccId(null);},onRefresh:function(){ var a=accounts.find(function(x){return x.id===viewAccId;}); if(a){ showToast('Đang tải '+a.email); refreshAccount(a,{silent:false}); } },onEdit:function(){setEditingAccountId(viewAccId);},onDelete:function(){ deleteAccount(viewAccId); setViewAccId(null); }}),
-          modal==='batch' && h(BatchLoginModal,{count:accounts.length,onAdd:addImap,onDone:function(){ setTimeout(function(){ refreshAll(true); },300); },onClose:function(){setModal(null);},onOAuth:function(){ setModal(null); addAccount(); },onSettings:function(){ setModal('settings'); }}),
+          h(Header,{
+            accounts:accounts,
+            emails:emails,
+            lastSync:lastSync,
+            darkMode:!!settings.darkMode,
+            canInstall:canInstall,
+            onInstall:handleInstallPWA,
+            onToggleTheme:function(){ setSettings(function(s){ return Object.assign({},s,{darkMode:!s.darkMode}); }); },
+            onSettings:function(){setModal('settings');},
+            onRefresh:function(){syncFromGist(true);}
+          }),
+          h(GmailTab, gmailProps),
+          viewAccId && h(AccountScreen,{
+            account:accounts.find(function(a){return a.id===viewAccId;}),
+            emails:emails,
+            gmailProps:gmailProps,
+            onBack:function(){setViewAccId(null);},
+            onRefresh:function(){ syncFromGist(true); },
+            onEdit:function(){setEditingAccountId(viewAccId);}
+          }),
           h(BottomNav,{active:curTab,groups:groups,groupUnread:groupUnread,unreadAll:unreadTotal,onChange:changeTab,onAdd:function(){setGroupEdit(null);},onEdit:function(id){setGroupEdit(id);}}),
           modal==='pills' && h(PillModal,{pills:pills,accounts:accounts,onNew:newPill,onUpdate:updatePill,onDelete:deletePill,onAssign:assignPill,onClose:function(){setModal(null);}}),
           groupEdit!==undefined && h(GroupModal,{group:groupEdit?groups.find(function(g){return g.id===groupEdit;}):null,accounts:accounts,pills:pills,onSave:saveGroup,onDelete:deleteGroup,onClose:function(){setGroupEdit(undefined);}}),
           expandedEmail && h(EmailModal,{
-            email:expandedEmail, account:accounts.find(function(a){return a.id===expandedEmail.accountId;}),
-            note:notes[expandedEmail.accountId]||'', signature:signatures[expandedEmail.accountId]||'',
+            email:expandedEmail,
+            account:accounts.find(function(a){return a.id===expandedEmail.accountId;}),
+            note:notes[expandedEmail.accountId]||'',
             onNoteChange:function(v){ setNotes(function(p){ var n=Object.assign({},p); n[expandedEmail.accountId]=v; return n; }); },
-            onSignatureChange:function(v){ setSignatures(function(p){ var n=Object.assign({},p); n[expandedEmail.accountId]=v; return n; }); },
-            onDelete:function(){ if(confirm('Xóa mail này?')){ var em=expandedEmail; closeEmail(); deleteMany([em]); } },
-            onClose:closeEmail, onCopyOtp:function(){copyText(expandedEmail.otp,'OTP');},
-            onSend:async function(htmlBody,atts){ var acc=accounts.find(function(a){return a.id===expandedEmail.accountId;}); var sig=signatures[acc.id]||''; var full=htmlBody+(sig?'<br><br>--<br>'+sig:''); var raw=buildMime({to:(expandedEmail.from.match(/<(.+?)>/)||[null,expandedEmail.from])[1],subject:expandedEmail.subject.indexOf('Re:')===0?expandedEmail.subject:'Re: '+expandedEmail.subject,htmlBody:full,attachments:atts,inReplyTo:expandedEmail.messageId,references:expandedEmail.references}); if(acc.type==='imap'){ await bridgeCall('/send',{email:acc.email,password:acc.appPassword,to:[(expandedEmail.from.match(/<(.+?)>/)||[null,expandedEmail.from])[1].trim()],raw:raw}); } else { await gmailSend(acc.accessToken,raw); } showToast('Đã gửi'); },
-            showToast:showToast
+            onDelete:function(){ var em=expandedEmail; setExpandedId(null); deleteMany([em]); },
+            onClose:function(){ setExpandedId(null); },
+            onCopyOtp:function(){copyText(expandedEmail.otp,'OTP');}
           }),
-          modal==='clientId' && h(ClientIdModal,{clientId:clientId,onSave:function(v){setClientId(v);localStorage.setItem(LS.CLIENT_ID,v);setModal(null);showToast('Đã lưu');},onClose:function(){setModal(null);}}),
-          modal==='settings' && h(SettingsModal,{settings:settings,setSettings:setSettings,clientId:clientId,onOpenClientId:function(){setModal('clientId');},onClose:function(){setModal(null);}}),
-          editingAccount && h(AccountModal,{account:editingAccount,onClose:function(){setEditingAccountId(null);},onSave:function(patch){setAccounts(function(p){return p.map(function(a){return a.id===editingAccount.id?Object.assign({},a,patch):a;});});setEditingAccountId(null);showToast('Đã lưu');}}),
-          toast && h('div',{class:'toast'}, h('span',null,toast.msg), toast.undo && h('button',{onClick:function(){toast.undo();setToast(null);}},'Hoàn tác'))
+          modal==='settings' && h(SettingsModal,{settings:settings,setSettings:setSettings,onSyncNow:function(){ setModal(null); syncFromGist(true); },onClose:function(){setModal(null);}}),
+          editingAccount && h(AccountModal,{account:editingAccount,onClose:function(){setEditingAccountId(null);},onSave:function(patch){
+            setAccounts(function(p){return p.map(function(a){return a.id===editingAccount.id?Object.assign({},a,patch,{customRenamed:true,customColor:true}):a;});});
+            setEditingAccountId(null);
+            showToast('Đã lưu thay đổi');
+          }}),
+          toast && h('div',{class:'toast'}, h('span',null,toast.msg))
         );
       }
 
       function Header(props){
         return h('header',{class:'header'},h('div',{class:'header-inner'},
           h('div',{class:'brand'},
-            h('div',{class:'brand-icon'},'G'),
-            h('div',{class:'brand-text'}, h('span',{class:'brand-title'},'Gmail Hub'), h('span',{class:'brand-sub'}, 'OTP Manager')),
-            props.cfOn && h('span',{title:'Cloudflare Workers đang bật',style:{fontSize:'10px',fontWeight:700,color:'#16A34A',border:'1px solid #16A34A',borderRadius:'999px',padding:'1px 6px',whiteSpace:'nowrap'}},'CF Workers: ON'),
-            h('div',{class:'header-stats'}, h('span',null,props.accounts.length+' tài khoản'), h('span',null,'•'), h('span',null,props.emails.length+' email'))
+            h('div',{class:'brand-icon'},
+              h('img',{src:'./icon128.png',alt:'Logo',onError:function(e){ e.target.style.display='none'; e.target.parentNode.textContent='M'; }})
+            ),
+            h('div',{class:'brand-text'},
+              h('div',{class:'brand-title-row'},
+                h('span',{class:'brand-title'},'[LEHA] Gmail Hubs'),
+                h('span',{class:'badge-pro'},'PRO')
+              ),
+              h('span',{class:'brand-sub'}, props.lastSync ? ('Đồng bộ lúc ' + props.lastSync) : 'Sẵn sàng đồng bộ')
+            ),
+            h('div',{class:'header-stats'}, h('span',null,props.accounts.length+' tài khoản'), h('span',null,'•'), h('span',null,props.emails.length+' thư'))
           ),
           h('div',{class:'header-actions'},
-            h('button',{class:'btn btn-icon',onClick:props.onRefresh,title:'Làm mới'},h(Ico,{d:'refresh'})),
-            h('button',{class:'btn btn-icon',onClick:props.onSettings,title:'Cài đặt'},h(Ico,{d:'gear'})),
-            h('button',{class:'btn',onClick:props.onExport},'Xuất'),
-            h('button',{class:'btn',onClick:props.onImport},'Nhập'),
-            h('button',{class:'btn btn-primary',disabled:props.busy,onClick:props.onAdd}, props.busy?h('span',{class:'spinner'}):'＋ Thêm mail')
+            props.canInstall && h('button',{class:'btn btn-primary btn-sm',onClick:props.onInstall,title:'Cài đặt như ứng dụng'},'📲 Cài App'),
+            h('button',{class:'btn btn-icon',onClick:props.onToggleTheme,title:'Chế độ Ngày / Đêm'}, props.darkMode ? '☀️' : '🌙'),
+            h('button',{class:'btn btn-icon',onClick:props.onRefresh,title:'Đồng bộ ngay'},h(Ico,{d:'refresh'})),
+            h('button',{class:'btn btn-icon',onClick:props.onSettings,title:'Cài đặt đồng bộ'},h(Ico,{d:'gear'}))
           )
         ));
       }
@@ -1228,20 +596,28 @@ export default {
 
       function GmailTab(props){
         function renderRow(e,ctx){
-                  var acc=props.accounts.find(function(a){return a.id===e.accountId;}); if(!acc) return null;
+          var acc=props.accounts.find(function(a){return a.id===e.accountId;}); if(!acc) return null;
           var ids=ctx.ids||[e.id]; var sel=ids.every(function(i){return props.selectedIds.has(i);});
-          var delThis=function(){ if(ids.length>1){ if(confirm('Xóa '+ids.length+' mail của người gửi này?')) props.onDeleteMany(ctx.items); } else if(confirm('Xóa mail này?')) props.onDeleteEmail(e); };
+          var delThis=function(){ props.onDeleteMany(ctx.items || [e]); };
+          var isParent = ctx.count > 1;
           return h(SwipeRow,{key:e.id,onDelete:delThis},
-            h('div',{class:'row '+((e.isUnread||ctx.unreadN>0)?'unread':'')+(sel?' selected':'')+(ctx.sub?' sub':''),onClick:function(ev){ if(ev.target.closest('.copy-btn')||ev.target.closest('.magic-btn')||ev.target.closest('.row-check')||ev.target.closest('.row-del')||ev.target.closest('.row-account')) return; props.onExpand(e); }},
+            h('div',{
+              class:'row '+((e.isUnread||ctx.unreadN>0)?'unread':'')+(sel?' selected':'')+(ctx.sub?' sub':'')+(isParent?' is-grouped-parent':''),
+              onClick:function(ev){ if(ev.target.closest('.copy-btn')||ev.target.closest('.magic-btn')||ev.target.closest('.row-check')||ev.target.closest('.row-del')||ev.target.closest('.row-account')||ev.target.closest('.grp-chip')) return; props.onExpand(e); }
+            },
               h('div',{class:'row-left'},
                 h('input',{type:'checkbox',class:'row-check',checked:sel,onChange:function(){props.setSelectedIds(function(prev){var n=new Set(prev); ids.forEach(function(i){ if(sel) n.delete(i); else n.add(i); }); return n;});},onClick:function(ev){ev.stopPropagation();}}),
                 h('div',{class:'dot',style:{background:acc.color}}),
-                h('div',{class:'row-account',title:'Mở màn hình riêng của mail này',onClick:function(ev){ev.stopPropagation();props.onOpenAccount(acc.id);},style:{cursor:'pointer',background:rgba(acc.color,.12),borderColor:darken(acc.color,.3),color:acc.color}},acc.displayName),
+                h('div',{class:'row-account',title:'Mở màn hình riêng',onClick:function(ev){ev.stopPropagation();props.onOpenAccount(acc.id);},style:{cursor:'pointer',background:rgba(acc.color,.12),borderColor:darken(acc.color,.3),color:acc.color}},acc.displayName),
                 h('div',{class:'row-content'},
-                  h('span',{class:'row-from'},(e.from.split('<')[0].trim()||acc.email).slice(0,48)),
+                  h('span',{class:'row-from'},(e.from.split('<')[0].trim()||acc.email).slice(0,36)),
                   h('span',{class:'row-sep'},'—'),
                   h('span',{class:'row-subject'},e.subject),
-                  ctx.count>1 && h('span',{class:'grp-chip',onClick:function(ev){ev.stopPropagation();props.onToggleGroup(ctx.gkey);}},'×'+ctx.count+(ctx.open?' ▾':' ▸')),
+                  isParent && h('button',{
+                    class:'grp-chip'+(ctx.open?' is-open':''),
+                    title:ctx.open?'Thu gọn chuỗi thư':'Bấm để mở rộng '+ctx.count+' thư cùng người gửi',
+                    onClick:function(ev){ev.stopPropagation();props.onToggleGroup(ctx.gkey);}
+                  }, (ctx.open ? '📂 Thu gọn ('+ctx.count+') ▴' : '📁 Gom '+ctx.count+' thư ▾')),
                   h('span',{class:'row-date'},formatDate(e.internalDate))
                 )
               ),
@@ -1251,11 +627,12 @@ export default {
                   : e.magicLink
                     ? h('button',{class:'magic-btn',onClick:function(){window.open(e.magicLink,'_blank','noopener');}},'Mở Link')
                     : h('span',{class:'otp-none'},'—'),
-                h('button',{class:'row-del',onClick:function(ev){ev.stopPropagation(); delThis();},title:'Xóa'},h(Ico,{d:'trash',size:13}))
+                h('button',{class:'row-del',onClick:function(ev){ev.stopPropagation(); delThis();},title:'Xóa thư đồng bộ'},h(Ico,{d:'trash',size:13}))
               )
             )
           );
         }
+
         return h('div',null,
           h('div',{class:'container'},
             h('div',{class:'search-wrap'},
@@ -1266,44 +643,28 @@ export default {
                   props.search && h('button',{class:'search-clear',onClick:function(){props.setSearch('');}},h(Ico,{d:'x',size:12}))
                 ),
                 props.accounts.length>0 && !props.single && h('button',{class:'btn filter-btn',onClick:function(e){e.stopPropagation();props.setFilterOpen(!props.filterOpen);}},
-                  'Lọc ▾', (props.selectedAccs.size>0||props.activeAccountId) && h('span',{class:'unread-badge',style:{marginLeft:'4px'}},props.selectedAccs.size||1)),
+                  'Lọc ▾', props.selectedAccs.size>0 && h('span',{class:'unread-badge',style:{marginLeft:'4px'}},props.selectedAccs.size)),
                 props.filterOpen && h('div',{class:'filter-pop',onClick:function(e){e.stopPropagation();}},
                   h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
-                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set());props.setActiveAccountId(null);}},'Bỏ lọc'),
-                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:props.onManagePills},'⚙ Pill'),
+                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:function(){props.setSelectedAccs(new Set());}},'Bỏ lọc'),
+                    h('button',{class:'btn btn-sm',style:{flex:1},onClick:props.onManagePills},'⚙ Nhãn'),
                     h('button',{class:'btn btn-sm',style:{flex:1},onClick:props.onMarkAllRead},'✓ Đọc hết')
                   ),
-                  props.pills.length>0 && h('div',{style:{display:'flex',flexWrap:'wrap',gap:'5px',marginBottom:'8px'}},
-                    props.pills.map(function(pl){
-                      var ids=props.tabAccounts.filter(function(a){return a.pillId===pl.id;}).map(function(a){return a.id;});
-                      if(!ids.length) return null;
-                      var on=ids.every(function(id){return props.selectedAccs.has(id);});
-                      return h('button',{key:pl.id,class:'pill-chip'+(on?' on':''),style:{borderColor:pl.color,color:on?'#fff':pl.color,background:on?pl.color:'transparent'},
-                        onClick:function(){ props.setActiveAccountId(null); props.setSelectedAccs(function(prev){ var n=new Set(prev); ids.forEach(function(id){ if(on) n.delete(id); else n.add(id); }); return n; }); }},pl.name+' · '+ids.length);
-                    })
-                  ),
-                  props.tabAccounts.length===0 && h('div',{style:{fontSize:'12px',color:'var(--text-3)',padding:'8px'}},'Tab này chưa có mail. Bấm ✎ trên tab để chọn mail.'),
                   props.tabAccounts.map(function(a){
                     var unread=props.unreadByAccount[a.id]||0;
-                    var checked=props.selectedAccs.has(a.id)||props.activeAccountId===a.id;
-                    return h('div',{key:a.id,style:{display:'flex',alignItems:'flex-start',gap:'8px',padding:'8px 6px',borderRadius:'8px',background:checked?'var(--surface-2)':'transparent'}},
-                      h('input',{type:'checkbox',checked:checked,style:{marginTop:'3px',accentColor:a.color},onChange:function(){ props.setActiveAccountId(null); props.setSelectedAccs(function(prev){ var n=new Set(prev); if(n.has(a.id)) n.delete(a.id); else n.add(a.id); return n; }); }}),
-                      h('div',{class:'dot',style:{background:a.color,marginTop:'6px'}}),
+                    var checked=props.selectedAccs.has(a.id);
+                    return h('div',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',padding:'8px 6px',borderRadius:'8px',background:checked?'var(--surface-2)':'transparent'}},
+                      h('input',{type:'checkbox',checked:checked,style:{accentColor:a.color},onChange:function(){ props.setSelectedAccs(function(prev){ var n=new Set(prev); if(n.has(a.id)) n.delete(a.id); else n.add(a.id); return n; }); }}),
+                      h('div',{class:'dot',style:{background:a.color}}),
                       h('div',{style:{flex:1,minWidth:0}},
-                        h('div',{style:{display:'flex',alignItems:'center',gap:'6px',flexWrap:'wrap'}},
+                        h('div',{style:{display:'flex',alignItems:'center',gap:'6px'}},
                           h('span',{style:{fontWeight:600,fontSize:'12.5px'}},a.displayName),
-                          unread>0 && h('span',{class:'unread-badge'},unread),
-                          a.status==='needs-reauth' && h('button',{onClick:function(ev){ev.stopPropagation();props.onReauth(a);},style:{color:'var(--warning)',fontSize:'11px',fontWeight:700,background:'none',border:'none',cursor:'pointer'}},'⚠ Đăng nhập lại'),
-                          a.status==='dead' && h('span',{style:{color:'var(--danger)',fontSize:'10px'}},'✕')
+                          unread>0 && h('span',{class:'unread-badge'},unread)
                         ),
-                        h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email),
-                        h(PillSelect,{value:a.pillId,pills:props.pills,accId:a.id,onChange:function(v){props.onAssignPill(a.id,v);},onNew:props.onNewPill})
+                        h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email)
                       ),
-                      h('div',{style:{display:'flex',gap:'2px',flexShrink:0}},
-                        h('button',{class:'pill-x',onClick:function(){props.onOpenAccount(a.id);},title:'Mở màn hình riêng'},'›'),
-                        h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Sửa'},h(Ico,{d:'edit',size:11})),
-                        h('button',{class:'pill-x',onClick:function(){props.onDeleteAccount(a.id);},title:'Xóa'},h(Ico,{d:'x',size:11}))
-                      )
+                      h('button',{class:'pill-x',onClick:function(){props.onOpenAccount(a.id);},title:'Mở hộp thư riêng'},'›'),
+                      h('button',{class:'pill-x',onClick:function(){props.onEditAccount(a);},title:'Đổi tên/màu'},h(Ico,{d:'edit',size:11}))
                     );
                   })
                 )
@@ -1312,15 +673,14 @@ export default {
           ),
           h('div',{class:'table-header'},h('div',{class:'table-header-inner'},
             h('div',null,h('input',{type:'checkbox',class:'row-check',checked:props.filtered.length>0&&props.selectedCount>=props.filtered.length,onChange:props.onSelectAll,title:'Chọn tất cả'}),h('span',null,'Chọn tất cả ('+props.filtered.length+')')),
-            h('div',null,'Mã OTP / Sao chép')
+            h('div',null,'Mã OTP / Xóa')
           )),
           h('div',{class:'row-list'},
             props.filtered.length===0
               ? h('div',{class:'empty'},
                   h('div',{class:'empty-icon'},h(Ico,{d:'mail',size:18,stroke:1.5})),
-                  props.accounts.length===0
-                    ? h('div',null, h('div',{class:'empty-title'},'Chưa có tài khoản'), h('div',{class:'empty-text'},'Bấm "Thêm Gmail" để đăng nhập và tự động lấy OTP.'))
-                    : h('div',null, h('div',{class:'empty-title'},'Không tìm thấy email phù hợp'))
+                  h('div',{class:'empty-title'},'Chưa có email đồng bộ'),
+                  h('div',{class:'empty-text'},'Bấm biểu tượng Cài đặt ⚙️ góc trên để dán Gist ID và GitHub Token từ Extension.')
                 )
               : props.sections.map(function(sec){
                   var showHead=props.pills.length>0;
@@ -1337,18 +697,18 @@ export default {
                       var rows=[renderRow(g.items[0],{count:g.items.length,gkey:g.key,open:open,ids:g.items.map(function(x){return x.id;}),items:g.items,unreadN:g.items.filter(function(x){return x.isUnread;}).length})];
                       if(open) g.items.slice(1).forEach(function(x){ rows.push(renderRow(x,{sub:true})); });
                       return rows;
-                                    }) );
+                    })
+                  );
                 })
           ),
           props.selectedCount>0 && h('div',{class:'bulk-bar'},
             h('span',{class:'bulk-count'},props.selectedCount+' đã chọn'),
             h('button',{onClick:props.onBulkRead},'Đã đọc'),
-            h('button',{onClick:props.onBulkDelete},'Xóa'),
+            h('button',{onClick:props.onBulkDelete},'Xóa đồng bộ'),
             h('button',{onClick:props.onClearSelection},'Hủy')
           )
         );
       }
-
 
       function groupBySender(items){
         var gm={}, go=[];
@@ -1360,7 +720,6 @@ export default {
         return go;
       }
 
-
       function AccountScreen(props){
         var a=props.account; var st=useState(''); var q=st[0], setQ=st[1];
         if(!a) return null;
@@ -1369,7 +728,7 @@ export default {
         var shown=ql?list.filter(function(e){ return ((e.subject||'')+' '+(e.from||'')+' '+(e.snippet||'')+' '+(e.otp||'')).toLowerCase().indexOf(ql)>=0; }):list;
         var unread=list.filter(function(e){return e.isUnread;}).length;
         var gp=Object.assign({},props.gmailProps,{single:true,pills:[],accounts:[a],tabAccounts:[a],filtered:shown,search:q,setSearch:setQ,filterOpen:false,setFilterOpen:function(){},
-          selectedAccs:new Set(),activeAccountId:null,
+          selectedAccs:new Set(),
           sections:[{id:'all',name:a.displayName,color:a.color,items:shown,groups:groupBySender(shown),unread:unread,collapsed:false}]});
         return h('div',{class:'acc-screen'},
           h('div',{class:'acc-head'},
@@ -1377,88 +736,34 @@ export default {
             h('div',{class:'dot',style:{background:a.color}}),
             h('div',{style:{flex:1,minWidth:0}},
               h('div',{style:{fontWeight:700,fontSize:'14px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.displayName,unread>0&&h('span',{class:'unread-badge'},unread)),
-              h('div',{style:{fontSize:'11px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email+(a.type==='imap'?' · IMAP':' · Google')+' · '+list.length+' mail')),
-            h('button',{class:'btn btn-icon',onClick:props.onRefresh,title:'Làm mới mail này'},h(Ico,{d:'refresh'})),
-            h('button',{class:'btn btn-icon',onClick:props.onEdit,title:'Sửa'},h(Ico,{d:'edit'})),
-            h('button',{class:'btn btn-icon',onClick:props.onDelete,title:'Xóa tài khoản này',style:{color:'var(--danger)'}},h(Ico,{d:'trash'}))
+              h('div',{style:{fontSize:'11px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email+' · '+list.length+' mail')),
+            h('button',{class:'btn btn-icon',onClick:props.onRefresh,title:'Làm mới'},h(Ico,{d:'refresh'})),
+            h('button',{class:'btn btn-icon',onClick:props.onEdit,title:'Sửa'},h(Ico,{d:'edit'}))
           ),
           h('div',{class:'acc-body'},h(GmailTab,gp))
         );
       }
 
-      function BatchLoginModal(props){
-        var rs=useState(function(){ return [0,1,2,3,4].map(function(){return {email:'',pass:'',st:'',msg:''};}); }); var rows=rs[0], setRows=rs[1];
-        var ps=useState(false); var paste=ps[0], setPaste=ps[1];
-        var tx=useState(''); var text=tx[0], setText=tx[1];
-        var bz=useState(false); var busy=bz[0], setBusy=bz[1];
-        var cfg=bridgeCfg();
-        var upd=function(i,patch){ setRows(function(p){ return p.map(function(r,k){ return k===i?Object.assign({},r,patch):r; }); }); };
-        var applyPaste=function(){
-          var out=[]; text.split(/\r?\n/).forEach(function(l){ var m=/^\s*([^\s,;|:]+@[^\s,;|:]+)[\s,;|:]+(.+?)\s*$/.exec(l); if(m) out.push({email:m[1],pass:m[2].replace(/\s+/g,''),st:'',msg:''}); });
-          if(!out.length){ alert('Không đọc được dòng nào. Mỗi dòng: email  mật_khẩu_ứng_dụng'); return; }
-          setRows(function(p){ return p.filter(function(r){return r.email||r.pass;}).concat(out); }); setPaste(false); setText('');
-        };
-        var run=async function(){
-          var todo=rows.map(function(r,i){return {r:r,i:i};}).filter(function(x){ return x.r.email.trim()&&x.r.pass.trim()&&x.r.st!=='ok'; });
-          if(!todo.length){ alert('Điền ít nhất 1 dòng (email + mật khẩu ứng dụng)'); return; }
-          setBusy(true); var qi=0, base=props.count;
-          var runner=async function(){ while(qi<todo.length){ var x=todo[qi++]; var em=x.r.email.trim(), pw=x.r.pass.replace(/\s+/g,'');
-            upd(x.i,{st:'run',msg:''});
-            try{ await bridgeCall('/verify',{email:em,password:pw}); props.onAdd(em,pw,COLORS[(base+x.i)%COLORS.length]); upd(x.i,{st:'ok',msg:'Đã đăng nhập'}); }
-            catch(e){ upd(x.i,{st:'err',msg:String(e.message||e).replace(/^AUTHENTICATIONFAILED: /,'')}); } } };
-          await Promise.all([runner(),runner(),runner()]);
-          setBusy(false); props.onDone();
-        };
-        var okN=rows.filter(function(r){return r.st==='ok';}).length;
-        return h(ModalShell,{title:'Đăng nhập nhiều mail cùng lúc',onClose:props.onClose,
-          footer:h('div',{style:{display:'flex',gap:'8px',width:'100%',alignItems:'center'}},
-            h('span',{style:{fontSize:'11px',color:'var(--text-2)',flex:1}},okN>0?('Đã vào '+okN+' mail'):''),
-            h('button',{class:'btn',onClick:props.onClose},okN>0?'Xong':'Hủy'),
-            h('button',{class:'btn btn-primary',disabled:busy||!cfg.url,onClick:run},busy?h('span',{class:'spinner'}):'Đăng nhập tất cả')) },
-          !cfg.url && h('div',{style:{background:'var(--surface-2)',border:'1px solid var(--border)',borderRadius:'10px',padding:'10px',fontSize:'12px',marginBottom:'10px'}},
-            'Chưa cài Mail Bridge. ', h('button',{class:'btn btn-sm',onClick:props.onSettings},'Mở Cài đặt')),
-          h('div',{class:'field-help',style:{marginBottom:'8px'}},'Điền email và mật khẩu ứng dụng (16 ký tự Google cấp), bấm 1 nút là đăng nhập hết. Không giới hạn số mail.'),
-          h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px',flexWrap:'wrap'}},
-            h('button',{class:'btn btn-sm',onClick:function(){setPaste(!paste);}},paste?'Đóng ô dán':'📋 Dán danh sách'),
-            h('button',{class:'btn btn-sm',onClick:function(){ setRows(function(p){ return p.concat([0,1,2,3,4].map(function(){return {email:'',pass:'',st:'',msg:''};})); }); }},'＋ 5 dòng')),
-          paste && h('div',{style:{marginBottom:'8px'}},
-            h('textarea',{class:'field-input',style:{width:'100%',height:'110px',padding:'8px',fontSize:'12px'},placeholder:'mỗi dòng 1 mail:\nten1@gmail.com abcd efgh ijkl mnop\nten2@gmail.com abcdefghijklmnop',value:text,onInput:function(e){setText(e.target.value);}}),
-            h('button',{class:'btn btn-sm',style:{marginTop:'6px'},onClick:applyPaste},'Đưa vào bảng')),
-          h('div',{class:'batch-table'},
-            rows.map(function(r,i){
-              return h('div',{key:i,class:'batch-row'},
-                h('span',{class:'batch-n'},i+1),
-                h('input',{class:'field-input',type:'email',placeholder:'email@gmail.com',value:r.email,disabled:r.st==='ok',autocomplete:'off',onInput:function(e){upd(i,{email:e.target.value,st:r.st==='err'?'':r.st});}}),
-                h('input',{class:'field-input',type:'password',placeholder:'mật khẩu ứng dụng',value:r.pass,disabled:r.st==='ok',autocomplete:'off',onInput:function(e){upd(i,{pass:e.target.value,st:r.st==='err'?'':r.st});}}),
-                h('span',{class:'batch-st '+r.st,title:r.msg},r.st==='ok'?'✓':r.st==='err'?'✕':r.st==='run'?'…':''),
-                r.st==='err' && h('div',{class:'batch-msg'},r.msg));
-            })),
-          h('div',{style:{marginTop:'10px',fontSize:'11px'}},'Hoặc ',h('button',{class:'btn btn-sm',onClick:props.onOAuth},'đăng nhập bằng Google (OAuth)'))
-        );
-      }
-
       function PillSelect(props){
-        return h('select',{class:'field-input',style:{height:'26px',fontSize:'11px',marginTop:'4px',padding:'0 6px'},value:props.value||'',onClick:function(e){e.stopPropagation();},
-          onChange:function(e){ var v=e.target.value; if(v==='__new'){ e.target.value=props.value||''; var n=prompt('Tên pill mới:'); if(n&&n.trim()) props.onNew(n.trim(),props.accId); return; } props.onChange(v||null); }},
-          h('option',{value:''},'— Chưa gán pill —'),
+        return h('select',{class:'field-input',style:{height:'28px',fontSize:'11.5px',padding:'0 8px'},value:props.value||'',
+          onChange:function(e){ var v=e.target.value; if(v==='__new'){ e.target.value=props.value||''; var n=prompt('Tên nhãn mới:'); if(n&&n.trim()) props.onNew(n.trim(),props.accId); return; } props.onChange(v||null); }},
+          h('option',{value:''},'— Chưa phân loại —'),
           props.pills.map(function(p){ return h('option',{key:p.id,value:p.id},p.name); }),
-          h('option',{value:'__new'},'＋ Pill mới…'));
+          h('option',{value:'__new'},'＋ Nhãn mới…'));
       }
 
       function PillModal(props){
-        return h(ModalShell,{title:'Quản lý pill',onClose:props.onClose,footer:h('button',{class:'btn btn-primary',onClick:props.onClose},'Xong')},
-          h('div',{class:'field-help',style:{marginBottom:'8px'}},'Pill là nhãn tự đặt (Shop US, Ads, Khách sỉ…). Mỗi mail gán 1 pill; trong danh sách, mail được gom theo pill và thu gọn được.'),
+        return h(ModalShell,{title:'Quản lý nhãn phân loại',onClose:props.onClose,footer:h('button',{class:'btn btn-primary',onClick:props.onClose},'Xong')},
           props.pills.map(function(p){
             return h('div',{key:p.id,style:{display:'flex',gap:'6px',alignItems:'center',marginBottom:'6px'}},
               h('input',{type:'color',value:p.color,style:{width:'30px',height:'30px',padding:0,border:'none',background:'none'},onInput:function(e){props.onUpdate(p.id,{color:e.target.value});}}),
               h('input',{class:'field-input',style:{flex:1,height:'30px'},value:p.name,onInput:function(e){props.onUpdate(p.id,{name:e.target.value});}}),
-              h('button',{class:'btn btn-sm',onClick:function(){ if(confirm('Xóa pill "'+p.name+'"? Các mail sẽ về "Chưa gán pill".')) props.onDelete(p.id); },title:'Xóa'},'🗑')
+              h('button',{class:'btn btn-sm',onClick:function(){ props.onDelete(p.id); }},'🗑')
             );
           }),
-          h('button',{class:'btn btn-sm',style:{marginBottom:'12px'},onClick:function(){ var n=prompt('Tên pill mới:'); if(n&&n.trim()) props.onNew(n.trim()); }},'＋ Thêm pill'),
-          props.accounts.length>0 && h('div',{style:{fontSize:'11px',fontWeight:700,margin:'4px 0',color:'var(--text-2)'}},'Gán pill cho từng mail'),
+          h('button',{class:'btn btn-sm',style:{marginBottom:'12px'},onClick:function(){ var n=prompt('Tên nhãn mới:'); if(n&&n.trim()) props.onNew(n.trim()); }},'＋ Thêm nhãn'),
           props.accounts.map(function(a){
-            return h('div',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'4px'}},
+            return h('div',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'6px'}},
               h('div',{class:'dot',style:{background:a.color}}),
               h('div',{style:{flex:1,minWidth:0,fontSize:'12px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.displayName),
               h('div',{style:{width:'140px',flexShrink:0}},h(PillSelect,{value:a.pillId,pills:props.pills,accId:a.id,onChange:function(v){props.onAssign(a.id,v);},onNew:props.onNew}))
@@ -1474,29 +779,21 @@ export default {
         var toggle=function(id){ setSel(function(p){ var n=new Set(p); if(n.has(id)) n.delete(id); else n.add(id); return n; }); };
         var save=function(){ if(!name.trim()){ alert('Nhập tên tab'); return; } props.onSave({id:g?g.id:uid('grp'),name:name.trim(),accIds:Array.from(sel)}); };
         return h(ModalShell,{title:g?'Sửa tab':'Tạo tab mới',onClose:props.onClose,
-          footer:[g && h('button',{key:'d',class:'btn',style:{marginRight:'auto',color:'var(--danger)'},onClick:function(){ if(confirm('Xóa tab "'+g.name+'"? (Mail không bị xóa)')) props.onDelete(g.id); }},'Xóa tab'),
+          footer:[g && h('button',{key:'d',class:'btn',style:{marginRight:'auto',color:'var(--danger)'},onClick:function(){ props.onDelete(g.id); }},'Xóa tab'),
                   h('button',{key:'c',class:'btn',onClick:props.onClose},'Hủy'), h('button',{key:'s',class:'btn btn-primary',onClick:save},'Lưu')]},
-          h('input',{class:'field-input',style:{marginBottom:'10px'},value:name,placeholder:'Tên tab (vd: Shop US)',onInput:function(e){setName(e.target.value);}}),
-          h('div',{style:{display:'flex',gap:'6px',marginBottom:'8px'}},
-            h('button',{class:'btn btn-sm',onClick:function(){setSel(new Set(props.accounts.map(function(a){return a.id;})));}},'Chọn hết'),
-            h('button',{class:'btn btn-sm',onClick:function(){setSel(new Set());}},'Bỏ chọn'),
-            h('span',{style:{fontSize:'11px',color:'var(--text-3)',alignSelf:'center'}},sel.size+' mail')
-          ),
-          props.accounts.length===0 && h('div',{style:{fontSize:'12px',color:'var(--text-3)'}},'Chưa có Gmail nào. Hãy thêm Gmail trước.'),
+          h('input',{class:'field-input',style:{marginBottom:'10px'},value:name,placeholder:'Tên tab (vd: Công việc, Cá nhân)',onInput:function(e){setName(e.target.value);}}),
           props.accounts.map(function(a){
-            var pl=props.pills.find(function(x){return x.id===a.pillId;});
             return h('label',{key:a.id,style:{display:'flex',alignItems:'center',gap:'8px',padding:'7px 4px',borderBottom:'1px solid var(--border)',cursor:'pointer'}},
               h('input',{type:'checkbox',checked:sel.has(a.id),onChange:function(){toggle(a.id);},style:{accentColor:a.color}}),
               h('div',{class:'dot',style:{background:a.color}}),
-              h('div',{style:{flex:1,minWidth:0}},h('div',{style:{fontSize:'12.5px',fontWeight:600}},a.displayName),h('div',{style:{fontSize:'10.5px',color:'var(--text-3)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},a.email)),
-              pl && h('span',{class:'pill-chip on',style:{background:pl.color,borderColor:pl.color,color:'#fff'}},pl.name)
+              h('div',{style:{flex:1,minWidth:0}},h('div',{style:{fontSize:'12.5px',fontWeight:600}},a.displayName),h('div',{style:{fontSize:'10.5px',color:'var(--text-3)'}},a.email))
             );
           })
         );
       }
 
       function emailDoc(html){
-        return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_blank"><style>html{color-scheme:light}body{margin:0;padding:12px;font:14px/1.55 -apple-system,system-ui,sans-serif;color:#111;background:#fff;overflow-wrap:anywhere;word-break:break-word}*{max-width:100%;box-sizing:border-box}img,video{height:auto!important}table{width:auto!important}pre{white-space:pre-wrap}a{color:#2563eb}</style></head><body>'+html+'</body></html>';
+        return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_blank"><style>body{margin:0;padding:14px;font:14px/1.6 -apple-system,system-ui,sans-serif;color:#111;background:#fff;overflow-wrap:anywhere;word-break:break-word}pre{white-space:pre-wrap;font-family:inherit;margin:0}a{color:#2563eb}</style></head><body>'+html+'</body></html>';
       }
 
       function ModalShell(props){
@@ -1509,89 +806,40 @@ export default {
         );
       }
 
-      function ClientIdModal(props){
-        var v=useState(props.clientId||''); var cid=v[0], setCid=v[1];
-        return h(ModalShell,{title:'Google Client ID',onClose:props.onClose,footer:h('div',{style:{display:'flex',gap:'8px'}},h('button',{class:'btn',onClick:props.onClose},'Hủy'),h('button',{class:'btn btn-primary',onClick:function(){props.onSave(cid.trim());}},'Lưu'))},
-          h('div',{class:'field'},h('label',{class:'field-label'},'OAuth Client ID'),h('input',{class:'field-input',value:cid,onInput:function(e){setCid(e.target.value);},placeholder:'...apps.googleusercontent.com'}),h('div',{class:'field-help'},'Google Cloud → APIs → Credentials → OAuth client ID → Web application. Authorized JS origins: domain + localhost.'))
-        );
-      }
-
       function SettingsModal(props){
         var settings=props.settings, setSettings=props.setSettings;
         var set=function(k,v){ setSettings(function(s){var n=Object.assign({},s); n[k]=v; return n;}); };
-        return h(ModalShell,{title:'Cài đặt',onClose:props.onClose},
-          h('div',{style:{padding:'10px 0',borderBottom:'1px solid var(--border)'}},
-            h('div',{style:{fontSize:'13px',fontWeight:'500'}},'Âm thanh OTP'),
-            h('div',{style:{fontSize:'11px',color:'var(--text-3)',marginTop:'2px'}},'Beep khi có OTP mới'),
-            h('button',{style:{width:'34px',height:'20px',borderRadius:'999px',background:settings.soundOnOtp?'#16A34A':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer',marginTop:'6px'},onClick:function(){set('soundOnOtp',!settings.soundOnOtp);}},
-              h('span',{style:{position:'absolute',top:'2px',left:settings.soundOnOtp?'16px':'2px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}})
-            )
-          ),
-          h('div',{style:{padding:'10px 0',borderBottom:'1px solid var(--border)'}},
-            h('div',{style:{fontSize:'13px',fontWeight:'500'}},'Thông báo trình duyệt'),
-            h('div',{style:{fontSize:'11px',color:'var(--text-3)',marginTop:'2px'}},'Nhận notification OTP'),
-            h('button',{style:{width:'34px',height:'20px',borderRadius:'999px',background:settings.notifications?'#16A34A':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer',marginTop:'6px'},onClick:async function(){ if(!('Notification' in window)) return alert('Không hỗ trợ'); var p=await Notification.requestPermission(); set('notifications',p==='granted'); }},
-              h('span',{style:{position:'absolute',top:'2px',left:settings.notifications?'16px':'2px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}})
-            )
-          ),
-          h('div',{class:'field',style:{marginTop:'12px'}},
-            h('label',{class:'field-label'},'Chế độ xóa Gmail'),
-            h('select',{class:'field-input',value:settings.deleteMode,onChange:function(e){set('deleteMode',e.target.value);}},
-              h('option',{value:'trash'},'Đưa vào thùng rác (có thể khôi phục)'),
-              h('option',{value:'delete'},'Xóa vĩnh viễn')
-            )
-          ),
-          h('div',{class:'field'},
-            h('label',{class:'field-label'},'Client ID'),
-            h('div',{class:'field-help'},props.clientId?'✓ Đã cấu hình':'⚠ Chưa cấu hình'),
-            h('button',{class:'btn btn-sm',style:{marginTop:'6px'},onClick:props.onOpenClientId},'Cấu hình')
-          ),
-          h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
-            h('div',{style:{fontSize:'12px',fontWeight:700}},'📬 Mail Bridge (đăng nhập bằng mật khẩu ứng dụng)'),
-            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.5,marginTop:'6px'}},'Không cần OAuth, không cần Test User, không bị hết hạn 1 giờ. Mỗi Gmail chỉ cần mật khẩu ứng dụng.'),
-            h('input',{class:'field-input',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:'https://mail-bridge.TENBAN.workers.dev',value:settings.bridgeUrl||'',onInput:function(e){set('bridgeUrl',e.target.value.trim());}}),
-            h('input',{class:'field-input',type:'password',autocomplete:'off',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:'APP_KEY (chuỗi bí mật bạn tự đặt)',value:settings.bridgeKey||'',onInput:function(e){set('bridgeKey',e.target.value.trim());}}),
-            h('button',{class:'btn btn-sm',style:{marginTop:'8px'},onClick:function(){var t=document.getElementById('bridge-worker-tpl').textContent.trim(); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){alert('Đã copy Mail Bridge code');}); }},'Copy Mail Bridge Code'),
-            h('ol',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55,margin:'10px 0 0',paddingLeft:'16px'}},
-              h('li',null,'Cloudflare → Workers & Pages → Create Worker → dán code → Deploy.'),
-              h('li',null,'Worker → Settings → Variables: ALLOWED_ORIGIN = địa chỉ trang này (vd https://leha.world), APP_KEY = chuỗi bí mật tự đặt.'),
-              h('li',null,'Dán URL Worker và APP_KEY vào 2 ô trên.'),
-              h('li',null,'Mỗi Gmail: bật Xác minh 2 bước, vào myaccount.google.com/apppasswords tạo mật khẩu ứng dụng. Rồi bấm "＋ Thêm mail" và điền vào bảng.')
-            )
-          ),
-          h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
-            h('div',{style:{fontSize:'12px',fontWeight:700}},'🔑 Đăng nhập 1 lần (Auth Worker)'),
-            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.5,marginTop:'6px'}},'Google chỉ cấp token 1 giờ. Auth Worker giữ client secret và gia hạn token ngầm, nên mỗi Gmail chỉ cần đăng nhập 1 lần.'),
-            h('input',{class:'field-input',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:'https://gmail-auth.TENBAN.workers.dev',value:settings.authWorkerUrl||'',onInput:function(e){set('authWorkerUrl',e.target.value.trim());}}),
-            h('button',{class:'btn btn-sm',style:{marginTop:'8px'},onClick:function(){var t=document.getElementById('auth-worker-tpl').textContent.trim(); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){alert('Đã copy Auth Worker code');}); }},'Copy Auth Worker Code'),
-            h('ol',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55,margin:'10px 0 0',paddingLeft:'16px'}},
-              h('li',null,'Cloudflare → Workers & Pages → Create Worker → dán code vừa copy → Deploy.'),
-              h('li',null,'Worker → Settings → Variables: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (Secret), ALLOWED_ORIGIN = địa chỉ trang này (vd https://leha.world, không có dấu / cuối).'),
-              h('li',null,'Google Cloud → Credentials → OAuth Client (loại Web application) → thêm Authorized redirect URI: https://<worker>.workers.dev/callback.'),
-              h('li',null,'OAuth consent screen: chuyển sang In production, nếu để Testing thì refresh token hết hạn sau 7 ngày.'),
-              h('li',null,'Dán URL Worker vào ô trên, rồi đăng nhập lại từng Gmail 1 lần.')
-            )
-          ),
-          h('div',{style:{marginTop:'16px',padding:'12px',background:'var(--surface-2)',borderRadius:'10px',border:'1px solid var(--border)'}},
-            h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'8px'}},
-              h('div',{style:{fontSize:'12px',fontWeight:700}},'☁ Cloudflare Workers OTP Auto'),
-              h('button',{style:{width:'34px',height:'20px',borderRadius:'999px',background:settings.cfEnabled?'#16A34A':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer',flexShrink:0},onClick:function(){set('cfEnabled',!settings.cfEnabled);}},
-                h('span',{style:{position:'absolute',top:'2px',left:settings.cfEnabled?'16px':'2px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}}))
+        return h(ModalShell,{title:'Cài đặt đồng bộ',onClose:props.onClose,
+          footer:h('button',{class:'btn btn-primary',onClick:props.onSyncNow},'Lưu & Đồng bộ ngay')
+        },
+          h('div',{style:{padding:'12px',background:'var(--surface-2)',borderRadius:'12px',border:'1px solid var(--border)',marginBottom:'14px'}},
+            h('div',{style:{fontSize:'13px',fontWeight:700,marginBottom:'4px'}},'🔄 Đồng bộ tự động từ Extension (GitHub Gist)'),
+            h('div',{style:{fontSize:'11.5px',color:'var(--text-2)',lineHeight:1.5,marginBottom:'10px'}},'Nhập Gist ID và GitHub Token (ghp_...) đã cài trong Extension để nhận & xóa thư đồng bộ 2 chiều trên điện thoại mà không bao giờ bị Google đăng xuất.'),
+            h('div',{class:'field'},
+              h('label',{class:'field-label'},'GitHub Gist ID'),
+              h('input',{class:'field-input',placeholder:'Dán Gist ID vào đây...',value:settings.gistId||'',onInput:function(e){set('gistId',e.target.value.trim());}})
             ),
-            h('div',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.5,marginTop:'6px'}},'Mail gửi tới *@leha.world → Worker đọc OTP → bắn Telegram/Discord. Token chỉ lưu trên máy này (dùng để gửi thử); Worker đọc token từ Secrets của Cloudflare.'),
-            [['cfTgToken','Telegram Bot Token','password'],['cfTgChat','Telegram Chat ID','text'],['cfDiscord','Discord Webhook URL (tuỳ chọn)','text']].map(function(f){
-              return h('input',{key:f[0],type:f[2],class:'field-input',autocomplete:'off',style:{height:'30px',fontSize:'12px',marginTop:'6px',width:'100%'},placeholder:f[1],value:settings[f[0]]||'',onInput:function(e){set(f[0],e.target.value.trim());}});
-            }),
-            h('div',{style:{display:'flex',flexWrap:'wrap',gap:'6px',marginTop:'8px'}},
-              h('button',{class:'btn btn-sm',onClick:function(){var t=document.getElementById('cf-worker-tpl').textContent.trim(); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){alert('Đã copy Workers code');}); }},'Copy Workers Code'),
-              h('button',{class:'btn btn-sm',disabled:!(settings.cfTgToken&&settings.cfTgChat),onClick:async function(){
-                try{ var r=await fetch('https://api.telegram.org/bot'+settings.cfTgToken+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:settings.cfTgChat,text:'✅ Gmail Hub: kết nối Telegram OK'})}); alert(r.ok?'Đã gửi tin thử':'Telegram từ chối ('+r.status+'), kiểm tra token/chat id'); }catch(e){ alert('Lỗi: '+e.message); }
-              }},'Gửi thử Telegram')
+            h('div',{class:'field',style:{marginBottom:0}},
+              h('label',{class:'field-label'},'GitHub Token (No expiration)'),
+              h('input',{class:'field-input',type:'password',autocomplete:'off',placeholder:'ghp_...',value:settings.githubToken||'',onInput:function(e){set('githubToken',e.target.value.trim());}})
+            )
+          ),
+          h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'1px solid var(--border)'}},
+            h('div',null,
+              h('div',{style:{fontSize:'13px',fontWeight:'600'}},'Chế độ Ban Đêm (Dark Mode)'),
+              h('div',{style:{fontSize:'11px',color:'var(--text-3)'}},'Giao diện tối dịu mắt khi xem ban đêm')
             ),
-            h('ol',{style:{fontSize:'11px',color:'var(--text-2)',lineHeight:1.55,margin:'10px 0 0',paddingLeft:'16px'}},
-              h('li',null,'Cloudflare → domain leha.world → Email → Email Routing → Enable, verify địa chỉ Gmail đích.'),
-              h('li',null,'Workers & Pages → Create Worker → dán code vừa copy → thêm Secrets: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DISCORD_WEBHOOK.'),
-              h('li',null,'Email Routing → Routing rules → Catch-all → Send to a Worker → chọn Worker. Rồi bật công tắc ở trên.')
+            h('button',{style:{width:'38px',height:'22px',borderRadius:'999px',background:settings.darkMode?'#4f46e5':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer'},onClick:function(){set('darkMode',!settings.darkMode);}},
+              h('span',{style:{position:'absolute',top:'3px',left:settings.darkMode?'19px':'3px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}})
+            )
+          ),
+          h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0'}},
+            h('div',null,
+              h('div',{style:{fontSize:'13px',fontWeight:'600'}},'Âm thanh báo mã OTP'),
+              h('div',{style:{fontSize:'11px',color:'var(--text-3)'}},'Phát tiếng bíp khi có mã xác nhận mới')
+            ),
+            h('button',{style:{width:'38px',height:'22px',borderRadius:'999px',background:settings.soundOnOtp?'#16A34A':'var(--border-strong)',position:'relative',border:'none',cursor:'pointer'},onClick:function(){set('soundOnOtp',!settings.soundOnOtp);}},
+              h('span',{style:{position:'absolute',top:'3px',left:settings.soundOnOtp?'19px':'3px',width:'16px',height:'16px',borderRadius:'999px',background:'#fff',transition:'left .15s'}})
             )
           )
         );
@@ -1599,36 +847,25 @@ export default {
 
       function AccountModal(props){
         var n=useState(props.account.displayName); var name=n[0], setName=n[1];
-        var t=useState(props.account.tag||''); var tag=t[0], setTag=t[1];
         var c=useState(props.account.color); var color=c[0], setColor=c[1];
-        return h(ModalShell,{title:'Sửa tài khoản',onClose:props.onClose,footer:h('div',{style:{display:'flex',gap:'8px'}},h('button',{class:'btn',onClick:props.onClose},'Hủy'),h('button',{class:'btn btn-primary',onClick:function(){props.onSave({displayName:name.trim()||props.account.email,tag:tag.trim(),color:color});}},'Lưu'))},
+        return h(ModalShell,{title:'Tùy chỉnh tài khoản',onClose:props.onClose,footer:h('div',{style:{display:'flex',gap:'8px'}},h('button',{class:'btn',onClick:props.onClose},'Hủy'),h('button',{class:'btn btn-primary',onClick:function(){props.onSave({displayName:name.trim()||props.account.email,color:color});}},'Lưu'))},
           h('div',{class:'field'},h('label',{class:'field-label'},'Email'),h('div',{class:'field-help'},props.account.email)),
           h('div',{class:'field'},h('label',{class:'field-label'},'Tên hiển thị'),h('input',{class:'field-input',value:name,onInput:function(e){setName(e.target.value);}})),
-          h('div',{class:'field'},h('label',{class:'field-label'},'Tag'),h('input',{class:'field-input',value:tag,onInput:function(e){setTag(e.target.value);},placeholder:'Shopify, TikTok...'})),
-          h('div',{class:'field'},h('label',{class:'field-label'},'Màu'),h('div',{style:{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'4px'}},COLORS.map(function(cc){ return h('button',{key:cc,onClick:function(){setColor(cc);},style:{width:'24px',height:'24px',borderRadius:'999px',background:cc,border:color===cc?'2px solid var(--text)':'2px solid transparent',cursor:'pointer'}}); })))
+          h('div',{class:'field'},h('label',{class:'field-label'},'Màu nhận diện'),h('div',{style:{display:'flex',gap:'6px',flexWrap:'wrap',marginTop:'4px'}},COLORS.map(function(cc){ return h('button',{key:cc,onClick:function(){setColor(cc);},style:{width:'24px',height:'24px',borderRadius:'999px',background:cc,border:color===cc?'2px solid var(--text)':'2px solid transparent',cursor:'pointer'}}); })))
         );
       }
 
       function EmailModal(props){
         var tabState=useState('email'); var tab=tabState[0], setTab=tabState[1];
-        var rhState=useState(''); var replyHtml=rhState[0], setReplyHtml=rhState[1];
-        var atState=useState([]); var attachments=atState[0], setAttachments=atState[1];
-        var sdState=useState(false); var sending=sdState[0], setSending=sdState[1];
-        var seState=useState(false); var showSigEditor=seState[0], setShowSigEditor=seState[1];
-
-        var exec=function(cmd,arg){ document.execCommand(cmd,false,arg); };
-        var addFiles=async function(files){ var list=[]; for(var i=0;i<files.length;i++){ var f=files[i]; var b64=await fileToB64(f); list.push({name:f.name,type:f.type,data:b64}); } setAttachments(function(prev){return prev.concat(list);}); };
-        var handleSend=async function(){ if(!replyHtml.trim()&&!props.signature){ props.showToast('Nội dung trống'); return; } setSending(true); try{ await props.onSend(replyHtml,attachments); setReplyHtml(''); setAttachments([]); setTab('email'); }catch(e){ props.showToast('Gửi thất bại: '+e.message); } finally{ setSending(false); } };
-
         return h('div',{class:'modal-backdrop email-bd',onClick:function(e){if(e.target===e.currentTarget)props.onClose();}},
-          h('div',{class:'modal wide email',onClick:function(e){e.stopPropagation();},},
+          h('div',{class:'modal wide email',onClick:function(e){e.stopPropagation();}},
             h('div',{class:'modal-header'},
               h('button',{class:'modal-close',onClick:props.onClose,title:'Quay lại',style:{fontSize:'18px',flexShrink:0}},'←'),
               h('div',{style:{minWidth:'0',flex:'1'}},
                 h('div',{class:'modal-title',style:{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},props.email.subject),
                 h('div',{style:{fontSize:'11px',color:'var(--text-2)',marginTop:'2px'}},formatFull(props.email.internalDate))
               ),
-              props.onDelete && h('button',{class:'modal-close',onClick:props.onDelete,title:'Xóa mail này',style:{color:'var(--danger)'}},h(Ico,{d:'trash',size:16})),
+              props.onDelete && h('button',{class:'modal-close',onClick:props.onDelete,title:'Xóa thư đồng bộ',style:{color:'var(--danger)'}},h(Ico,{d:'trash',size:16})),
               h('button',{class:'modal-close',onClick:props.onClose},h(Ico,{d:'x',size:16}))
             ),
             h('div',{style:{padding:'12px 16px',borderBottom:'1px solid var(--border)',flexShrink:'0',fontSize:'12px',color:'var(--text-2)',display:'flex',flexDirection:'column',gap:'4px'}},
@@ -1637,44 +874,19 @@ export default {
               props.email.otp && h('div',{style:{display:'flex',alignItems:'center',gap:'6px'}},h('span',{style:{color:'var(--text-3)',minWidth:'40px',display:'inline-block'}},'OTP: '),h('span',{class:'otp-badge'},props.email.otp),h('button',{class:'copy-btn',onClick:props.onCopyOtp},'Copy'))
             ),
             h('div',{class:'tabs'},
-              h('button',{class:'tab '+(tab==='email'?'active':''),onClick:function(){setTab('email');}},'Email'),
-              h('button',{class:'tab '+(tab==='note'?'active':''),onClick:function(){setTab('note');}},'Ghi chú'),
-              h('button',{class:'tab '+(tab==='reply'?'active':''),onClick:function(){setTab('reply');}},'Trả lời')
+              h('button',{class:'tab '+(tab==='email'?'active':''),onClick:function(){setTab('email');}},'Nội dung thư'),
+              h('button',{class:'tab '+(tab==='note'?'active':''),onClick:function(){setTab('note');}},'Ghi chú riêng')
             ),
             tab==='email' && h('iframe',{sandbox:'allow-popups allow-popups-to-escape-sandbox',style:{flex:'1',width:'100%',border:'none',background:'#fff',minHeight:0},srcdoc:emailDoc(props.email.bodyHtml||props.email.snippet||'')}),
             tab==='note' && h('div',{style:{padding:'16px',overflowY:'auto',flex:'1'}},
-              h('div',{class:'field-help',style:{marginBottom:'8px'}},'Ghi chú cho '+((props.account&&props.account.displayName)||'')+' — tự lưu.'),
-              h('div',{class:'editor-toolbar'},
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('bold');}},h('b',null,'B')),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('italic');}},h('i',null,'I')),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('underline');}},h('u',null,'U')),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('insertUnorderedList');}},'•'),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('insertOrderedList');}},'1.'),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();var u=prompt('URL:');if(u)exec('createLink',u);}},'🔗')
-              ),
-              h('div',{contentEditable:true,style:{border:'1px solid var(--border)',borderRadius:'0 0 8px 8px',background:'var(--surface)',padding:'8px 12px',minHeight:'200px',fontSize:'13px',lineHeight:'1.5'},onInput:function(e){props.onNoteChange(e.currentTarget.innerHTML);},dangerouslySetInnerHTML:{__html:props.note}})
-            ),
-            tab==='reply' && h('div',{style:{padding:'16px',overflowY:'auto',flex:'1'}},
-              h('div',{style:{fontSize:'12px',color:'var(--text-2)',marginBottom:'8px'}},'Trả lời: ',h('b',null,props.email.from)),
-              h('div',{class:'editor-toolbar'},
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('bold');}},h('b',null,'B')),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('italic');}},h('i',null,'I')),
-                h('button',{class:'nb-tool',onMouseDown:function(e){e.preventDefault();exec('underline');}},h('u',null,'U'))
-              ),
-              h('div',{contentEditable:true,style:{minHeight:'140px',border:'1px solid var(--border)',borderRadius:'0 0 8px 8px',background:'var(--surface)',padding:'8px 12px',fontSize:'13px',lineHeight:'1.5'},onInput:function(e){setReplyHtml(e.currentTarget.innerHTML);}}),
-              attachments.length>0 && h('div',{style:{display:'flex',flexWrap:'wrap',gap:'4px',marginTop:'8px'}},attachments.map(function(a,i){ return h('span',{key:i,style:{display:'inline-flex',alignItems:'center',gap:'4px',padding:'3px 8px',borderRadius:'6px',border:'1px solid var(--border)',background:'var(--surface-2)',fontSize:'11px'}},a.name,h('button',{style:{color:'var(--danger)'},onClick:function(){setAttachments(function(p){return p.filter(function(_,j){return j!==i;});});}},'×')); })),
-              h('div',{style:{display:'flex',gap:'6px',marginTop:'8px',flexWrap:'wrap'}},
-                h('label',{class:'btn btn-sm',style:{cursor:'pointer'}},h(Ico,{d:'attach',size:12}),h('input',{type:'file',multiple:true,style:{display:'none'},onChange:function(e){addFiles(Array.from(e.target.files||[]));}})),
-                h('button',{class:'btn btn-sm',onClick:function(){setShowSigEditor(!showSigEditor);}},showSigEditor?'Ẩn chữ ký':'Chữ ký'),
-                h('button',{class:'btn btn-primary btn-sm',style:{marginLeft:'auto'},disabled:sending,onClick:handleSend},sending?h('span',{class:'spinner'}):'Gửi')
-              )
+              h('div',{class:'field-help',style:{marginBottom:'8px'}},'Ghi chú cho '+((props.account&&props.account.displayName)||'')+' — tự động lưu cục bộ.'),
+              h('div',{contentEditable:true,style:{border:'1px solid var(--border)',borderRadius:'8px',background:'var(--surface)',padding:'10px 12px',minHeight:'200px',fontSize:'13px',lineHeight:'1.5'},onInput:function(e){props.onNoteChange(e.currentTarget.innerHTML);},dangerouslySetInnerHTML:{__html:props.note}})
             )
           )
         );
       }
 
       render(h(App), document.getElementById('app'));
-
     })();
   </script>
 </body>
